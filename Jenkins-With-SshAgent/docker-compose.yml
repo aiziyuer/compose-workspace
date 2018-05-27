@@ -1,0 +1,49 @@
+version: '2'
+
+
+services:
+
+    squid:
+      build: ./squid
+      image: aiziyuer/squid
+      privileged: true
+      ports:
+      - "2122:22"
+      networks:
+        test1:
+            ipv4_address: 10.10.111.2
+        test2:
+            ipv4_address: 10.10.222.2
+
+    jenkins:
+      build: ./jenkins
+      image: aiziyuer/jenkins
+      privileged: true
+      ports:
+      - "2222:22"
+      networks:
+        test1:
+          ipv4_address: 10.10.111.3
+
+    sshserver:
+      build: ./sshserver
+      image: aiziyuer/sshserver
+      privileged: true
+      ports:
+      - "2322:22"
+      networks:
+        test2:
+          ipv4_address: 10.10.222.3
+
+# 定义默认的网络
+networks:
+  test1:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.111.0/24
+  test2:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.222.0/24
