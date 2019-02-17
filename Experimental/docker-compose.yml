@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+
+    centos7-systemd:
+      build: ./centos7-systemd
+      privileged: true
