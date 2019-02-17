@@ -5,7 +5,7 @@ before=basic.service
 [Service]
 Type=oneshot
 # faq reference: https://unix.stackexchange.com/questions/146995/inherit-environment-variables-in-systemd-docker-container?answertab=active#tab-top
-ExecStart=tr '\000' '\n' < /proc/1/environ >/etc/environment
+ExecStart=bash -x /usr/local/bin/container-environment-inject.bash
 TimeoutSec=0
 RemainAfterExit=yes
 
