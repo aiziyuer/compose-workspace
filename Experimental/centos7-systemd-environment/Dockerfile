@@ -14,6 +14,9 @@ RUN yum -y install net-tools tcpdump telnet lsof wget curl \
 && yum install -y epel-release \
 && yum clean all
 
+# 复写sshd的service文件
+COPY config/usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/sshd.service
+
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\
