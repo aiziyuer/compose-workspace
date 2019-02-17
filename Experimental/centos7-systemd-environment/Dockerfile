@@ -39,6 +39,10 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
+# 定制SSH
+RUN echo "\n" >>/etc/ssh/sshd_config \
+&&  echo "UseDNS no" >>/etc/ssh/sshd_config \
+&&  echo "AllowTcpForwarding yes" >>/etc/ssh/sshd_config
 
 # 设置开机自启动的服务, 这里就以sshd来做测试
 RUN \
