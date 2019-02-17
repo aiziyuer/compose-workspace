@@ -17,5 +17,8 @@ docker-compose build  --no-cache centos7-systemd-environment
 
 # 启动某个应用
 docker-compose up -d centos7-systemd-environment
- 
+
+# 进入某个应用容器
+docker-compose exec centos7-systemd-environment bash
+
 ```
