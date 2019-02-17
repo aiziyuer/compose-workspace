@@ -28,4 +28,7 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 RUN \
 	systemctl enable sshd
 
+# 避免出现僵尸进程: https://developers.redhat.com/blog/2016/09/13/running-systemd-in-a-non-privileged-container/
+STOPSIGNAL SIGRTMIN+3
+
 CMD ["/usr/sbin/init"]
