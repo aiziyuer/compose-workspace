@@ -24,7 +24,7 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 
-# starup service
+# 设置开机自启动的服务, 这里就以sshd来做测试
 RUN \
 	systemctl enable sshd
 
