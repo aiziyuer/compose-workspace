@@ -21,4 +21,7 @@ docker-compose up -d centos7-systemd-environment
 # 进入某个应用容器
 docker-compose exec centos7-systemd-environment bash
 
+# 停止应用
+docker-compose down -v 
+
 ```
