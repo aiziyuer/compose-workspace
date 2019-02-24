@@ -6,8 +6,10 @@ services:
       container_name: redis
       build: ./redis
       privileged: true
+      volumes:
+       - ./run/var/lib/redis:/var/lib/redis:z
       environment:
-       - DEBUG=aiziyuer 
+       - DEBUG=aiziyuer
     
     nginx:
       container_name: nginx
