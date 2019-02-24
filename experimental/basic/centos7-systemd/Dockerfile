@@ -1,4 +1,4 @@
-FROM centos/systemd
+FROM centos:7
 
 # initial pass
 RUN echo 'root:root' | chpasswd

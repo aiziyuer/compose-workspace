@@ -1,4 +1,4 @@
-FROM centos/systemd
+FROM centos:7
 
 
 # 设置环境全英文避免出错
