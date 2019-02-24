@@ -1,6 +1,14 @@
 version: '2'
 
 services:
+ 
+     # 测试用的服务
+     nginx:
+      container_name: nginx
+      build: ./nginx
+      #privileged: true
+      ports:
+       - 20080:80
     
     redis:
       container_name: redis
@@ -12,8 +20,6 @@ services:
        - ./run/var/lib/redis:/var/lib/redis:z
       ports:
        - 16379:6379
-      environment:
-       - DEBUG=aiziyuer
     
     openresty:
       container_name: openresty
@@ -25,6 +31,4 @@ services:
        - 10080:80
       links:
        - "redis"
-      environment:
-       - DEBUG=aiziyuer
-    
+
