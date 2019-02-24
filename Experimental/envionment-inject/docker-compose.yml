@@ -1,13 +1,8 @@
 version: '2'
 
 services:
-
     centos7-systemd:
       build: ./centos7-systemd
-      privileged: true
-
-    centos7-systemd-environment:
-      build: ./centos7-systemd-environment
       privileged: true
       environment:
        - DEBUG=aiziyuer
