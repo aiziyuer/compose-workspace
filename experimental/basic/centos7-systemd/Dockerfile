@@ -10,7 +10,6 @@ rpm --rebuilddb  \
 
 # tools
 RUN yum -y install net-tools tcpdump telnet lsof wget curl \
-&& yum -y install openssh-server \
 && yum install -y epel-release \
 && yum clean all
 
@@ -24,8 +23,7 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 
-# starup service
-RUN \
-	systemctl enable sshd
+# 避免出现僵尸进程: https://developers.redhat.com/blog/2016/09/13/running-systemd-in-a-non-privileged-container/
+STOPSIGNAL SIGRTMIN+3
 
 CMD ["/usr/sbin/init"]
