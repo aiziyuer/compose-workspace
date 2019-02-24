@@ -11,7 +11,6 @@ RUN echo 'root:root' | chpasswd
 
 RUN rpm --rebuilddb \
 && yum install -y epel-release  \
-&& yum -y update  \
 && yum -y install vim net-tools tcpdump telnet lsof wget curl \
 && yum -y install openssh-server \
 && yum -y install nginx \ 

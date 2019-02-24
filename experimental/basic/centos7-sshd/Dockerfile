@@ -14,7 +14,6 @@ COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
 
 RUN \
 rpm --rebuilddb  \
-&& yum -y update  \
 && yum clean all
 
 # 必要的定位用工具

@@ -6,7 +6,6 @@ RUN echo 'root:root' | chpasswd
 
 RUN \
 rpm --rebuilddb  \
-&& yum -y update  \
 && yum clean all
 
 # tools
