@@ -31,4 +31,5 @@ services:
        - 10080:80
       links:
        - "redis"
+       - "nginx"
 
