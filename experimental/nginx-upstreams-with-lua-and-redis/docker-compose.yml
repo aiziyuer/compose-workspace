@@ -8,6 +8,8 @@ services:
       privileged: true
       volumes:
        - ./run/var/lib/redis:/var/lib/redis:z
+      ports:
+       - 16379:6379
       environment:
        - DEBUG=aiziyuer
     
