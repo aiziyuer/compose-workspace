@@ -3,12 +3,14 @@ version: '2'
 services:
     
     redis:
+      container_name: redis
       build: ./redis
       privileged: true
       environment:
-       - DEBUG=aiziyuer  
+       - DEBUG=aiziyuer 
     
     nginx:
+      container_name: nginx
       build: ./nginx
       privileged: true
       environment:
