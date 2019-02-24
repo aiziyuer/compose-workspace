@@ -16,7 +16,7 @@ RUN rpm --rebuilddb \
 && yum install -y epel-release  \
 && yum -y install vim net-tools tcpdump telnet lsof wget curl lrzsz \
 && yum -y install openssh-server \
-&& yum -y install nginx \ 
+&& yum -y install openresty \ 
 && yum clean all
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
@@ -35,8 +35,7 @@ RUN printf "\n" >>/etc/ssh/sshd_config \
 
 # 设置开机自启动的服务, 这里就以sshd来做测试
 RUN \
-	systemctl enable sshd \
-&&	systemctl enable nginx
+	systemctl enable sshd 
 
 # 避免出现僵尸进程: https://developers.redhat.com/blog/2016/09/13/running-systemd-in-a-non-privileged-container/
 STOPSIGNAL SIGRTMIN+3
