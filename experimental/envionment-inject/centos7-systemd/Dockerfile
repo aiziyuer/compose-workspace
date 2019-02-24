@@ -9,6 +9,9 @@ ENV LC_ALL=en_US.utf8 \
 # initial pass
 RUN echo 'root:root' | chpasswd
 
+# 覆盖源
+COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
+
 RUN \
 rpm --rebuilddb  \
 && yum -y update  \
@@ -21,11 +24,11 @@ RUN yum -y install vim net-tools tcpdump telnet lsof wget curl \
 && yum clean all
 
 # 复写sshd的service文件
-COPY config/usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/sshd.service
+COPY usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/sshd.service
 
 # 加入环境变量注入服务
-COPY config/etc/systemd/system/container-environment-inject.service /etc/systemd/system/container-environment-inject.service
-COPY config/usr/local/bin/* /usr/local/bin/
+COPY etc/systemd/system/container-environment-inject.service /etc/systemd/system/container-environment-inject.service
+COPY usr/local/bin/* /usr/local/bin/
 
 # 为/usr/local/bin下的文件添加执行权限
 RUN chmod u+x /usr/local/bin/*

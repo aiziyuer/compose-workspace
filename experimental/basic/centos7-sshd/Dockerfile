@@ -9,6 +9,9 @@ ENV LC_ALL=en_US.utf8 \
 # initial pass
 RUN echo 'root:root' | chpasswd
 
+# 覆盖源
+COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
+
 RUN \
 rpm --rebuilddb  \
 && yum -y update  \
