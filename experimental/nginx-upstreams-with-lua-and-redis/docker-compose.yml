@@ -2,8 +2,8 @@ version: '2'
 
 services:
  
-     # 测试用的服务
-     nginx:
+    # 测试用的服务
+    nginx:
       container_name: nginx
       build: ./nginx
       #privileged: true
