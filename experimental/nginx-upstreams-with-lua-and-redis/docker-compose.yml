@@ -5,7 +5,7 @@ services:
     redis:
       container_name: redis
       build: ./redis
-      privileged: true
+      #privileged: true
       volumes:
        - ./configuation/redis/etc/redis.conf:/etc/redis.conf
        - ./configuation/redis/usr/lib/systemd/system/redis.service:/usr/lib/systemd/system/redis.service
@@ -18,7 +18,9 @@ services:
     nginx:
       container_name: nginx
       build: ./nginx
-      privileged: true
+      #privileged: true
+      ports:
+       - 10080:80
       environment:
        - DEBUG=aiziyuer
     
