@@ -23,6 +23,8 @@ services:
        - ./configuation/openresty/usr/local/openresty/nginx/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
       ports:
        - 10080:80
+      links:
+       - "redis"
       environment:
        - DEBUG=aiziyuer
     
