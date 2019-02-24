@@ -4,3 +4,6 @@ services:
     centos7-systemd:
       build: ./centos7-systemd
       privileged: true
+    centos7-sshd:
+      build: ./centos7-systemd
+      privileged: true
