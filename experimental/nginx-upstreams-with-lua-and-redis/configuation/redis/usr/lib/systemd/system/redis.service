@@ -8,8 +8,8 @@ Wants=network-online.target
 ExecStart=/usr/bin/redis-server /etc/redis.conf --supervised systemd
 ExecStop=/usr/libexec/redis-shutdown
 Type=notify
-User=redis
-Group=redis
+User=root
+Group=root
 RuntimeDirectory=redis
 RuntimeDirectoryMode=0755
 
