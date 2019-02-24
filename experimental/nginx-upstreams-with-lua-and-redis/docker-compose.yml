@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+    
+    regids:
+      build: ./nginx
+      privileged: true
+      environment:
+       - DEBUG=aiziyuer  
+    
+    nginx:
+      build: ./nginx
+      privileged: true
+      environment:
+       - DEBUG=aiziyuer
+    
