@@ -8,6 +8,7 @@ services:
       privileged: true
       volumes:
        - ./configuation/redis/etc/redis.conf:/etc/redis.conf
+       - ./configuation/redis/usr/lib/systemd/system/redis.service:/usr/lib/systemd/system/redis.service
        - ./run/var/lib/redis:/var/lib/redis:z
       ports:
        - 16379:6379
