@@ -2,7 +2,7 @@
 name=CentOS-$releasever - Base
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
 baseurl=https://mirrors.ustc.edu.cn/centos/$releasever/os/$basearch/
-gpgcheck=1
+gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
 #released updates
@@ -10,7 +10,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 name=CentOS-$releasever - Updates
 # mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates
 baseurl=https://mirrors.ustc.edu.cn/centos/$releasever/updates/$basearch/
-gpgcheck=1
+gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
 #additional packages that may be useful
@@ -18,7 +18,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 name=CentOS-$releasever - Extras
 # mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
 baseurl=https://mirrors.ustc.edu.cn/centos/$releasever/extras/$basearch/
-gpgcheck=1
+gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
 #additional packages that extend functionality of existing packages
@@ -26,6 +26,6 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 name=CentOS-$releasever - Plus
 # mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
 baseurl=https://mirrors.ustc.edu.cn/centos/$releasever/centosplus/$basearch/
-gpgcheck=1
+gpgcheck=0
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
