@@ -17,9 +17,6 @@ RUN rpm --rebuilddb \
 && yum -y install redis \ 
 && yum clean all
 
-# 为/usr/local/bin下的文件添加执行权限
-RUN chmod u+x /usr/local/bin/*
-
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\

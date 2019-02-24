@@ -9,11 +9,6 @@ ENV LC_ALL=en_US.utf8 \
 # initial pass
 RUN echo 'root:root' | chpasswd
 
-RUN \
-rpm --rebuilddb  \
-&& yum -y update  \
-&& yum clean all
-
 RUN rpm --rebuilddb \
 && yum install -y epel-release  \
 && yum -y update  \
@@ -21,16 +16,6 @@ RUN rpm --rebuilddb \
 && yum -y install openssh-server \
 && yum -y install nginx \ 
 && yum clean all
-
-# 复写sshd的service文件
-COPY config/usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/sshd.service
-
-# 加入环境变量注入服务
-COPY config/etc/systemd/system/container-environment-inject.service /etc/systemd/system/container-environment-inject.service
-COPY config/usr/local/bin/* /usr/local/bin/
-
-# 为/usr/local/bin下的文件添加执行权限
-RUN chmod u+x /usr/local/bin/*
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
