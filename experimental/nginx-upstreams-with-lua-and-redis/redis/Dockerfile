@@ -9,14 +9,10 @@ ENV LC_ALL=en_US.utf8 \
 # initial pass
 RUN echo 'root:root' | chpasswd
 
-RUN \
-rpm --rebuilddb  \
+RUN rpm --rebuilddb \
+&& yum install -y epel-release  \
 && yum -y update  \
-&& yum clean all
-
-# 必要的定位用工具
-RUN yum -y install vim net-tools tcpdump telnet lsof wget curl \
-&& yum install -y epel-release \
+&& yum -y install vim net-tools tcpdump telnet lsof wget curl \
 && yum -y install openssh-server \
 && yum -y install redis \ 
 && yum clean all

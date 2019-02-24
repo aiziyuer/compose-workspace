@@ -14,9 +14,10 @@ rpm --rebuilddb  \
 && yum -y update  \
 && yum clean all
 
-# 必要的定位用工具
-RUN yum -y install vim net-tools tcpdump telnet lsof wget curl \
-&& yum install -y epel-release \
+RUN rpm --rebuilddb \
+&& yum install -y epel-release  \
+&& yum -y update  \
+&& yum -y install vim net-tools tcpdump telnet lsof wget curl \
 && yum -y install openssh-server \
 && yum -y install nginx \ 
 && yum clean all
