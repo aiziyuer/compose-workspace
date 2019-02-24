@@ -14,7 +14,7 @@ COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
 
 RUN rpm --rebuilddb \
 && yum install -y epel-release  \
-&& yum -y install vim net-tools tcpdump telnet lsof wget curl \
+&& yum -y install vim net-tools tcpdump telnet lsof wget curl lrzsz \
 && yum -y install openssh-server \
 && yum -y install redis \ 
 && yum clean all
