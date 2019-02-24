@@ -2,8 +2,8 @@ version: '2'
 
 services:
     
-    regids:
-      build: ./nginx
+    redis:
+      build: ./redis
       privileged: true
       environment:
        - DEBUG=aiziyuer  
