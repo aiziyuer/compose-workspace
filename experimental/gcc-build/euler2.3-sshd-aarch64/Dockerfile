@@ -1,7 +1,4 @@
-FROM centos/aarch64:7
-
-
-ADD 
+FROM aiziyuer/euler2sp3:base
 
 # 设置环境全英文避免出错
 ENV LC_ALL=en_US.utf8 \
@@ -19,13 +16,27 @@ rpm --rebuilddb  \
 && yum clean all
 
 # 必要的定位用工具
-RUN yum -y install vim net-tools tcpdump telnet lsof wget curl \
+RUN rpm --rebuilddb  \
+&& yum -y install vim net-tools tcpdump telnet lsof wget curl \
 && yum -y install openssh-server \
 && yum clean all
 
 # 自定义命令
-RUN yum -y install git zsh 
+RUN rpm --rebuilddb  \
+&& yum -y install git zsh \
+&& yum clean all
 
+# # 安装gcc专用的一些构件用到的套件
+RUN rpm --rebuilddb \
+&& yum -y install redhat-lsb rpm-build rpm-sign check dejagnu expect zlib-devel \
+&& yum clean all
+
+# 安装构件用的工具
+RUN rpm --rebuilddb \
+&& yum group install --skip-broken -y "Development Tools" --setopt=group_package_types=mandatory,default,optional \
+&& yum clean all
+
+# 调整开机自启动的服务
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\

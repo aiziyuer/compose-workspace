@@ -8,3 +8,10 @@ services:
       volumes:
         - ./data:/data
       privileged: true
+    euler2.3-sshd-aarch64:
+      build: ./euler2.3-sshd-aarch64
+      ports:
+        - "2122:22"
+      volumes:
+        - ./data:/data
+      privileged: true

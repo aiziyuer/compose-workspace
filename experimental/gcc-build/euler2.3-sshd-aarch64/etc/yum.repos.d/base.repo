@@ -1,0 +1,5 @@
+[base]
+name=EulerOS-2.0SP3 base
+baseurl=http://developer.huawei.com/ict/site-euleros/euleros/repo/yum/2.3/os/aarch64/
+enabled=1
+gpgcheck=0
