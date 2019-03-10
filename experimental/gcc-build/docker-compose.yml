@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+    centos7-sshd:
+      build: ./centos7-sshd
+      ports:
+        - 2022:22
+      volumes:
+        - ./data:/data
+      privileged: true
