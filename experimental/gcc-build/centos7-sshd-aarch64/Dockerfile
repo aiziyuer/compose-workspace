@@ -22,7 +22,7 @@ RUN yum -y install vim net-tools tcpdump telnet lsof wget curl \
 && yum clean all
 
 # 自定义命令
-RUN yum -y git zsh 
+RUN yum -y install git zsh 
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\

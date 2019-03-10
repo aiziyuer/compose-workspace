@@ -4,7 +4,7 @@ services:
     centos7-sshd-aarch64:
       build: ./centos7-sshd-aarch64
       ports:
-        - 2022:22
+        - "2022:22"
       volumes:
         - ./data:/data
       privileged: true
