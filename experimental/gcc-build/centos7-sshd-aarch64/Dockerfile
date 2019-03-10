@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos/aarch64:7
 
 
 # 设置环境全英文避免出错
@@ -19,11 +19,10 @@ rpm --rebuilddb  \
 # 必要的定位用工具
 RUN yum -y install vim net-tools tcpdump telnet lsof wget curl \
 && yum -y install openssh-server \
-&& yum install -y epel-release \
 && yum clean all
 
-# 为/usr/local/bin下的文件添加执行权限
-RUN chmod u+x /usr/local/bin/*
+# 自定义命令
+RUN yum -y git zsh 
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
