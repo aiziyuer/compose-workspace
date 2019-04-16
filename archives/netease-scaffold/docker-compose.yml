@@ -1,8 +1,0 @@
-version: '2'
-
-services:
-
-    centos7-systemd:
-      build: ./centos7-systemd
-      image: aiziyuer/centos7-systemd:netease-sacaffold
-      privileged: true
