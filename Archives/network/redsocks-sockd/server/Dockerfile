@@ -3,9 +3,16 @@ FROM centos:7
 # 覆盖源
 COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
 
+# 增加网络定位用的工具
 RUN  \
 rpm --rebuilddb  \
 && yum -y install net-tools tcpdump telnet lsof wget curl \
+&& yum clean all
+
+# 增加bash命令补全
+RUN  \
+rpm --rebuilddb  \
+&& yum -y mlocate bash-completion bash-completion-extras \
 && yum clean all
 
 # 开始安装sorkd
@@ -22,6 +29,8 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
+RUN \
+systemctl enable sockd
 
 # 避免出现僵尸进程: https://developers.redhat.com/blog/2016/09/13/running-systemd-in-a-non-privileged-container/
 STOPSIGNAL SIGRTMIN+3
