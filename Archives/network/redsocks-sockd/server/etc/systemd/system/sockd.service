@@ -1,0 +1,14 @@
+[Unit]
+Description=Dante Socks Proxy
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/sockd.pid
+ExecStart=/usr/sbin/sockd -D -f /etc/sockd/sockd.conf
+ExecReload=/bin/kill -HUP ${MAINPID}
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target graphical.target
