@@ -12,7 +12,7 @@ rpm --rebuilddb  \
 # 增加bash命令补全
 RUN  \
 rpm --rebuilddb  \
-&& yum -y mlocate bash-completion bash-completion-extras \
+&& yum -y install mlocate bash-completion bash-completion-extras \
 && yum clean all
 
 # 开始安装sorkd
