@@ -5,7 +5,7 @@ Documentation=https://github.com/lozy/danted
 
 [Service]
 EnvironmentFile=-/etc/default/sockd
-ExecStart=/usr/sbin/sockd -f /etc/sorkd/sockd.conf -N ${Start_Process} ${Sockd_Opts}
+ExecStart=/usr/sbin/sockd -f /etc/sockd/sockd.conf -N ${Start_Process} ${Sockd_Opts}
 ExecReload=/bin/kill -HUP $MAINPID
 PIDFile=/var/run/sockd.pid
 KillMode=process
