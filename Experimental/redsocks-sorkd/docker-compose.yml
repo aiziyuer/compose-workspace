@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+    client:
+      build: ./client
+      privileged: true
+    server:
+      build: ./server
+      privileged: true
