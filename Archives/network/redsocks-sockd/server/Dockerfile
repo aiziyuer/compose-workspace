@@ -18,6 +18,7 @@ rpm --rebuilddb  \
 # 开始安装sorkd
 COPY ./dists/tgz-prod.dante-1.4.2-rhel72-amd64-64bit-gcc.tar.gz /tmp/dante.tar.gz
 RUN tar xzvf /tmp/dante.tar.gz -C /
+COPY ./etc/sockd/sockd.conf /etc/sockd/sockd.conf
 COPY ./lib/systemd/system/sockd.service /lib/systemd/system/
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
