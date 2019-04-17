@@ -3,7 +3,7 @@ FROM centos:7 as builder
 # 覆盖源
 COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
 
-RUN yum install gcc make
+RUN yum install -y gcc make
 
 COPY ./dists/redsocks-release-0.5.tar.gz /tmp/redsocks-release.tar.gz
 
