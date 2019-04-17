@@ -1,6 +1,5 @@
 [Unit]
 Description=inject environment to /etc/environment for other systemd service
-Before=basic.target
 
 [Service]
 Type=oneshot
@@ -10,4 +9,4 @@ TimeoutSec=0
 RemainAfterExit=yes
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=basic.target

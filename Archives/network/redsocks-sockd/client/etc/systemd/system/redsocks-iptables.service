@@ -10,4 +10,4 @@ TimeoutSec=0
 RemainAfterExit=yes
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=basic.target
