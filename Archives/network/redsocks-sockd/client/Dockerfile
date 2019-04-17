@@ -40,6 +40,10 @@ COPY ./etc/systemd/system/*.service /etc/systemd/system/
 COPY ./usr/local/bin/* /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
 
+
+# 配置redsocks
+COPY ./etc/redsocks /etc/redsocks
+
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\
