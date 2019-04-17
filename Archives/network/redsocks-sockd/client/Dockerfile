@@ -29,6 +29,12 @@ rpm --rebuilddb  \
 && yum -y install mlocate bash-completion bash-completion-extras \
 && yum clean all
 
+RUN \
+rpm --rebuilddb \
+&& yum install -y openssh-server \
+&& yum clean all
+COPY ./usr/lib/systemd/system/* /usr/lib/systemd/system/
+
 # 安装redsocks
 RUN yum install -y iptables libevent
 COPY --from=builder /workspace/redsocks*/redsocks /usr/local/bin/redsocks
@@ -55,6 +61,7 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN \
     systemctl enable container-environment-inject \
+&&  systemctl enable sshd \
 &&  systemctl enable redsocks \
 &&  systemctl enable redsocks-iptables
 
