@@ -1,5 +1,6 @@
 [Unit]
 Description=redsocks-iptables
+After=container-environment-inject.service
 Requires=container-environment-inject.service
 
 [Service]
@@ -10,4 +11,4 @@ TimeoutSec=0
 RemainAfterExit=yes
 
 [Install]
-WantedBy=basic.target
+WantedBy=multi-user.target
