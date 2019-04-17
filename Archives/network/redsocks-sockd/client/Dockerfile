@@ -23,6 +23,12 @@ rpm --rebuilddb  \
 && yum -y install net-tools tcpdump telnet lsof wget curl \
 && yum clean all
 
+# 增加bash命令补全
+RUN  \
+rpm --rebuilddb  \
+&& yum -y install mlocate bash-completion bash-completion-extras \
+&& yum clean all
+
 # 安装redsocks
 RUN yum install -y iptables libevent
 COPY --from=builder /workspace/redsocks*/redsocks /root/redsocks
