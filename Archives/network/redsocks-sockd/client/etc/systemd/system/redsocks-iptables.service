@@ -1,6 +1,6 @@
 [Unit]
 Description=redsocks-iptables
-Requires=container-environment-inject.target
+Requires=container-environment-inject.service
 
 [Service]
 Type=oneshot
