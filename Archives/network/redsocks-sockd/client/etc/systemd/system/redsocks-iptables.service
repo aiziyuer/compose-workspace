@@ -1,6 +1,6 @@
 [Unit]
 Description=redsocks-iptables
-after=basic.service
+after=basic.target
 
 [Service]
 Type=oneshot
