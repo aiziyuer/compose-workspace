@@ -27,6 +27,11 @@ rpm --rebuilddb  \
 RUN yum install -y iptables libevent
 COPY --from=builder /workspace/redsocks*/redsocks /root/redsocks
 
+# 加入系统service
+COPY ./etc/systemd/system/*.service /etc/systemd/system/
+# 拷贝自定义脚本
+COPY ./usr/local/bin/* /usr/local/bin/
+RUN chmod +x /usr/local/bin/*
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
