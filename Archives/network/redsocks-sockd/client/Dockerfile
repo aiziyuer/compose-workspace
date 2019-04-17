@@ -1,3 +1,18 @@
+FROM centos:7 as builder
+
+# 覆盖源
+COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
+
+RUN yum install gcc make
+
+COPY ./dists/redsocks-release-0.5.tar.gz /tmp/redsocks-release.tar.gz
+
+RUN \
+mkdir -p /workspace \
+&& tar xzvf /tmp/redsocks-release.tar.gz -C /workspace \
+&& cd /workspace/redsocks* \
+&& make
+
 FROM centos:7
 
 # 覆盖源
@@ -8,7 +23,8 @@ rpm --rebuilddb  \
 && yum -y install net-tools tcpdump telnet lsof wget curl \
 && yum clean all
 
-# 
+# 安装redsocks
+COPY --from=builder /workspace/redsocks*/redsocks /root/redsocks
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
