@@ -9,6 +9,7 @@ EnvironmentFile=/etc/sysconfig/redsocks
 EnvironmentFile=/etc/environment
 User=root
 ExecStartPre=/usr/local/bin/redsocks -t -c $REDSOCKS_CONF
+ExecStart=/usr/bin/echo $WHITELIST_IP
 ExecStart=/usr/local/bin/redsocks -c $REDSOCKS_CONF \
   -p /run/redsocks.pid
 ExecStopPost=/bin/rm /run/redsocks/redsocks.pid
