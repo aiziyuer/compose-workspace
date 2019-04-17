@@ -31,7 +31,7 @@ rpm --rebuilddb  \
 
 # 安装redsocks
 RUN yum install -y iptables libevent
-COPY --from=builder /workspace/redsocks*/redsocks /root/redsocks
+COPY --from=builder /workspace/redsocks*/redsocks /usr/local/bin/redsocks
 
 # 加入系统service
 COPY ./etc/systemd/system/*.service /etc/systemd/system/
