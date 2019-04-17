@@ -4,6 +4,9 @@ services:
     client:
       build: ./client
       privileged: true
+    links:
+     - server
     server:
+      hostname: server
       build: ./server
       privileged: true
