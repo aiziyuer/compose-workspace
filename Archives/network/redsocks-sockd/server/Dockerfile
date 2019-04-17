@@ -37,3 +37,5 @@ systemctl enable sockd
 STOPSIGNAL SIGRTMIN+3
 
 CMD ["/usr/sbin/init"]
+
+EXPOSE 1080

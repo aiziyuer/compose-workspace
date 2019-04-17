@@ -4,6 +4,23 @@
 ss-redir的精简版本
 
 
+### 测试功能
+
+```
+# 服务器端添加一张别名网卡, 网段假设是31.31.31.31/32
+ifconfig eth0:0 31.31.31.31/32
+
+# 用nc模拟tcp服务器
+yum install -y nc pv 
+nc -4 -l -k -p 4444 </dev/null
+
+# 客户端用nc+pv来测试速度
+yum install -y nc pv
+nc 31.31.31.31 4444 | pv >/dev/null
+
+```
+
+
 ### FAQ
 
 - [Configuring Dante Socks 101](https://www.pahoehoe.net/tag/sockd-service/)

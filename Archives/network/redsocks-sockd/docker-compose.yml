@@ -5,7 +5,7 @@ services:
       build: ./client
       privileged: true
       environment:
-       - WHITELIST_IP=31.31.0.0/16
+       - WHITELIST_IP=31.31.31.0/24
       links:
        - server
       volumes:
@@ -16,3 +16,5 @@ services:
       hostname: server
       build: ./server
       privileged: true
+      expose:
+       - 1080
