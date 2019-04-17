@@ -34,6 +34,7 @@ RUN yum install -y iptables libevent
 COPY --from=builder /workspace/redsocks*/redsocks /usr/local/bin/redsocks
 
 # 加入系统service
+COPY ./etc/sysconfig/* /etc/sysconfig/
 COPY ./etc/systemd/system/*.service /etc/systemd/system/
 # 拷贝自定义脚本
 COPY ./usr/local/bin/* /usr/local/bin/
@@ -49,7 +50,8 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN \
-    systemctl enable container-environment-inject
+    systemctl enable container-environment-inject \
+&&  systemctl enable redsocks
 
 
 # 避免出现僵尸进程: https://developers.redhat.com/blog/2016/09/13/running-systemd-in-a-non-privileged-container/
