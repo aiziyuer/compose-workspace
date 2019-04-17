@@ -6,6 +6,7 @@ Requires=container-environment-inject.service
 [Service]
 Type=oneshot
 EnvironmentFile-=/etc/environment
+ExecStart=/usr/bin/echo $WHITELIST_IP
 ExecStart=/usr/local/bin/iptables-whitelist.bash
 TimeoutSec=0
 RemainAfterExit=yes
