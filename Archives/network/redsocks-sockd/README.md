@@ -17,7 +17,6 @@ ifconfig lo:0 31.31.31.31/32
 
 # 用nc模拟tcp服务器
 yum install -y nc pv 
-nc -4 -l -k -p 4444 </dev/zero
 
 # 客户端 
 docker-compose exec client bash
