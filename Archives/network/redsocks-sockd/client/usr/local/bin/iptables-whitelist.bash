@@ -55,7 +55,7 @@ execute "iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports 1080"
 
 # white list 
 # eg. export WHITELIST_IP=100.95.0.0/16,100.94.0.0/16
-WHITELIST_IP=${WHITELIST_IP:-'100.95.0.0/16'}
+WHITELIST_IP=${WHITELIST_IP:-'22.22.0.0/16'}
 IFS=',' read -ra IPS <<< "$WHITELIST_IP"
 for ip in "${IPS[@]}"; do
   execute "iptables -t nat -A OUTPUT -p tcp -d $ip -j REDSOCKS"

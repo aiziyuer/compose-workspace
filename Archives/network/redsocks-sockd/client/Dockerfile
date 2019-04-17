@@ -55,6 +55,7 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN \
     systemctl enable container-environment-inject \
+&&  systemctl enable redsocks-iptables \
 &&  systemctl enable redsocks
 
 
