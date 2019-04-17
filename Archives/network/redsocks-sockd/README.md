@@ -7,14 +7,21 @@ ss-redir的精简版本
 ### 测试功能
 
 ```
-# 服务器端添加一张别名网卡, 网段假设是31.31.31.31/32
+# 启动应用
+docker-compose build && docker-compose up -d 
+
+# 服务器端
+docker-compose exec server bash
+# 添加一张别名网卡, 网段假设是31.31.31.31/32
 ifconfig lo:0 31.31.31.31/32
 
 # 用nc模拟tcp服务器
 yum install -y nc pv 
 nc -4 -l -k -p 4444 </dev/zero
 
-# 客户端用nc+pv来测试速度
+# 客户端 
+docker-compose exec client bash
+# 用nc+pv来测试速度
 yum install -y nc pv
 nc 31.31.31.31 4444 | pv >/dev/null
 
