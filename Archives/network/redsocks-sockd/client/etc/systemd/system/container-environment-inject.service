@@ -1,6 +1,5 @@
 [Unit]
 Description=inject environment to /etc/environment for other systemd service
-Before=basic.target
 
 [Service]
 Type=oneshot

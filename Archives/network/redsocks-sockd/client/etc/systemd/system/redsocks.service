@@ -1,6 +1,6 @@
 [Unit]
 Description=Transparent redirector of any TCP connection to proxy using your firewall
-After=container-environment-inject.service
+After=network.target
 
 [Service]
 Type=forking
@@ -9,11 +9,10 @@ EnvironmentFile=/etc/sysconfig/redsocks
 EnvironmentFile=/etc/environment
 User=root
 ExecStartPre=/usr/local/bin/redsocks -t -c $REDSOCKS_CONF
-ExecStart=/usr/bin/echo $WHITELIST_IP
 ExecStart=/usr/local/bin/redsocks -c $REDSOCKS_CONF \
   -p /run/redsocks.pid
 ExecStopPost=/bin/rm /run/redsocks/redsocks.pid
 Restart=on-abort
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=basic.target

@@ -8,6 +8,10 @@ services:
        - WHITELIST_IP=31.31.0.0/16
       links:
        - server
+      volumes:
+       - ./client/etc/systemd/system/container-environment-inject.service:/etc/systemd/system/container-environment-inject.service
+       - ./client/etc/systemd/system/redsocks-iptables.service:/etc/systemd/system/redsocks-iptables.service
+       - ./client/etc/systemd/system/redsocks.service:/etc/systemd/system/redsocks.service
     server:
       hostname: server
       build: ./server

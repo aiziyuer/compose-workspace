@@ -60,7 +60,8 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN \
-    systemctl enable container-environment-inject \
+    systemctl mask systemd-update-utmp-runlevel \
+&&  systemctl enable container-environment-inject \
 &&  systemctl enable sshd \
 &&  systemctl enable redsocks \
 &&  systemctl enable redsocks-iptables
