@@ -3,7 +3,7 @@ FROM centos:7 as builder
 # 覆盖源
 COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
 
-RUN yum install -y gcc make
+RUN yum install -y gcc make libevent libevent-devel
 
 COPY ./dists/redsocks-release-0.5.tar.gz /tmp/redsocks-release.tar.gz
 
@@ -24,7 +24,10 @@ rpm --rebuilddb  \
 && yum clean all
 
 # 安装redsocks
+RUN yum install -y iptables libevent
 COPY --from=builder /workspace/redsocks*/redsocks /root/redsocks
+
+
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
