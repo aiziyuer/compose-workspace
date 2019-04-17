@@ -55,8 +55,8 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN \
     systemctl enable container-environment-inject \
-&&  systemctl enable redsocks-iptables \
-&&  systemctl enable redsocks
+&&  systemctl enable redsocks \
+&&  systemctl enable redsocks-iptables
 
 
 # 避免出现僵尸进程: https://developers.redhat.com/blog/2016/09/13/running-systemd-in-a-non-privileged-container/
