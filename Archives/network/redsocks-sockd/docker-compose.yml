@@ -4,6 +4,8 @@ services:
     client:
       build: ./client
       privileged: true
+      environment:
+       - WHITELIST_IP_01=100.95.0.0/16
       links:
        - server
     server:
