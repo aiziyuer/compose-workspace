@@ -5,13 +5,13 @@ after=container-environment-inject.service
 
 [Service]
 Type=forking
-PIDFile=/run/redsocks/redsocks.pid
+PIDFile=/run/redsocks.pid
 EnvironmentFile=/etc/sysconfig/redsocks
 EnvironmentFile=/etc/environment
 User=root
 ExecStartPre=/usr/local/bin/redsocks -t -c $REDSOCKS_CONF
 ExecStart=/usr/local/bin/redsocks -c $REDSOCKS_CONF \
-  -p /run/redsocks/redsocks.pid
+  -p /run/redsocks.pid
 ExecStopPost=/bin/rm /run/redsocks/redsocks.pid
 Restart=on-abort
 
