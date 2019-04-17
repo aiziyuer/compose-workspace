@@ -1,7 +1,6 @@
 [Unit]
 Description=Transparent redirector of any TCP connection to proxy using your firewall
-before=basic.service
-after=container-environment-inject.service
+after=basic.service
 
 [Service]
 Type=forking
