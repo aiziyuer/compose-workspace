@@ -12,7 +12,7 @@ COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
 RUN rpm --rebuilddb \
 && yum install -y epel-release  \
 && yum -y install vim net-tools tcpdump telnet lsof wget curl lrzsz \
-&& yum -y install python3-pip \
+&& yum -y install python3.6-pip \
 && yum clean all
 
 # 增加bash命令补全
