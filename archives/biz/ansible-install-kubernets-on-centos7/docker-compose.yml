@@ -7,12 +7,18 @@ services:
       privileged: true
       expose:
        - 22
+      networks:
+        controller:
+          ipv4_address: 192.168.1.3
       ports:
        - "20022:22"
  
     master:
       build: ./centos7-with-docker
       privileged: true
+      networks:
+        controller:
+          ipv4_address: 192.168.1.2
       volumes:
        - ./data/master:/var/lib/docker
       expose:
@@ -22,6 +28,9 @@ services:
     gateway:
       build: ./centos7-with-docker
       privileged: true
+      networks:
+        controller:
+          ipv4_address: 192.168.1.3
       volumes:
        - ./data/gateway:/var/lib/docker
       expose:
@@ -31,6 +40,9 @@ services:
 
     storage:
       build: ./centos7
+      networks:
+        controller:
+          ipv4_address: 192.168.1.3
       privileged: true
       expose:
        - 22
@@ -40,6 +52,8 @@ services:
       privileged: true
       volumes:
        - ./data/node:/var/lib/docker
+      networks:
+        - node
       expose:
        - 22
        
@@ -49,3 +63,14 @@ services:
        - ./config/ansible-playbook:/ansible-playbook
       working_dir: /ansible-playbook
        
+networks:
+  controller:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.1.0/24"
+  node:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.2.0/24"     
