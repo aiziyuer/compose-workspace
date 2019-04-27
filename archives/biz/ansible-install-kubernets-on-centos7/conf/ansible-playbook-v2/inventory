@@ -4,10 +4,10 @@
 [k8s-master]
 master ansible_host=192.168.1.2 kubernetes_role=master
 
-[storage]
+[k8-storage]
 storage ansible_host=192.168.1.3
 
-[snat]
+[k8-snat]
 snat ansible_host=192.168.1.5
 
 [k8s-nodes]
