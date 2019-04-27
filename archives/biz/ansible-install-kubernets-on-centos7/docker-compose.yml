@@ -54,6 +54,7 @@ services:
        - ./data/node:/var/lib/docker
       networks:
         - node
+            ipv4_address: 192.168.2.2
       expose:
        - 22
        
@@ -62,6 +63,9 @@ services:
       volumes:
        - ./conf/ansible-playbook-v2:/ansible-playbook
       working_dir: /ansible-playbook
+      networks:
+        - controller
+        - node
        
 networks:
   controller:
