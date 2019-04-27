@@ -1,2 +1,5 @@
 env/*
 env/.gitkeep
+data/*
+data/.gitkeep
+.idea/
