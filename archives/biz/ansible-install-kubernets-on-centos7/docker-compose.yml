@@ -11,15 +11,19 @@ services:
        - 20022:22
  
     master:
-      build: ./centos7
+      build: ./centos7-with-docker
       privileged: true
+      volumes:
+       - ./master:/var/lib/docker
       expose:
        - 22
        - 6443
            
     gateway:
-      build: ./centos7
+      build: ./centos7-with-docker
       privileged: true
+      volumes:
+       - ./master:/var/lib/docker
       expose:
        - 22
        - 80
@@ -32,8 +36,10 @@ services:
        - 22
        
     node:
-      build: ./centos7
+      build: ./centos7-with-docker
       privileged: true
+      volumes:
+       - ./master:/var/lib/docker
       expose:
        - 22
        
