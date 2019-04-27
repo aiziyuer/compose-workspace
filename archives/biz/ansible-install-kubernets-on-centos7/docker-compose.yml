@@ -53,8 +53,8 @@ services:
       volumes:
        - ./data/node:/var/lib/docker
       networks:
-        - node:
-            ipv4_address: 192.168.2.2
+        node:
+          ipv4_address: 192.168.2.2
       expose:
        - 22
        
