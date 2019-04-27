@@ -27,7 +27,7 @@ RUN \
 yum groupinstall -y 'Development Tools' 
 
 RUN \
-yum install -y python3-dev 
+yum install -y python36-devel
 
 RUN \
 pip3 install ansible
