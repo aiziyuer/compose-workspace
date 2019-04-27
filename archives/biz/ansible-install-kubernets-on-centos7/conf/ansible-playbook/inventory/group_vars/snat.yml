@@ -1,0 +1,3 @@
+---
+# file: group_vars/snat
+ansible_ssh_port: 20022
