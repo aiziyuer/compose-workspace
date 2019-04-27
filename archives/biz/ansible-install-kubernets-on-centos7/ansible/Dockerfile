@@ -24,6 +24,9 @@ rpm --rebuilddb  \
 
 # 安装ansible
 RUN \
+yum groupinstall -y 'Development Tools' 
+
+RUN \
 pip3 install ansible
 
 RUN \
