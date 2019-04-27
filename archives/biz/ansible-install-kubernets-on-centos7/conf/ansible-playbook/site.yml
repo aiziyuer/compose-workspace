@@ -1,4 +1,6 @@
-- hosts: snat
+---
+- hosts: all
+  gather_facts: no
   remote_user: root
   
   tasks:
