@@ -3,5 +3,5 @@
 - hosts: snat
   gather_facts: no
   roles:
-     - { role: hostname, hostname_prefix: "{% if {{ ONEBOX_REGION }} %}{{ ONEBOX_REGION }}-{% else %}{% endif %}" }
+     - { role: hostname, hostname_prefix: "{% if lookup('env','ONEBOX_REGION') %}{{ lookup('env','ONEBOX_REGION') }}-{% else %}{% endif %}" }
      
