@@ -1,1 +1,2 @@
 .project
+/archives/biz/ansible-install-kubernets-on-centos7/conf/ansible-playbook/*.retry
