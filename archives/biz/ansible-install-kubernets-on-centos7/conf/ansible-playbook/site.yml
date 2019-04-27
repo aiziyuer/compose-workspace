@@ -1,8 +1,6 @@
 ---
+
 - hosts: all
   gather_facts: no
-  remote_user: root
-  
-  tasks:
-  - name: install httpd
-    yum: name=httpd state=present
+  roles:
+     - hostname

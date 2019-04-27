@@ -1,12 +1,17 @@
 ---
 
+- name: Printing the environment​ variable in Ansible
+  debug:
+    msg: "ONEBOX_REGION => {{ ONEBOX_REGION }}."
+
 - name: Hostname | Update the hostname (pt. 1) - hostname cmd
   hostname:
     name: "{{inventory_hostname_short}}"
+#  ignore_errors: yes
 
 - name: Hostname | Update the hostname (pt. 2) - (/etc/hostname)
   copy:
-    content: "{{inventory_hostname_short}}{{'\n'}}"
+    content: "{{ ONEBOX_REGION }}-{{inventory_hostname_short}}{{'\n'}}"
     dest: /etc/hostname
     owner: root
     group: root
@@ -16,5 +21,6 @@
   lineinfile:
     dest: /etc/hosts
     regexp: "^127.0.0.1"
-    line: "127.0.0.1{{'\t'}}{{inventory_hostname}}{% if inventory_hostname != inventory_hostname_short %}{{'\t'}}{{inventory_hostname_short}}{% endif %}{{'\t'}}localhost"
+    line: "127.0.0.1{{'\t'}}{{ ONEBOX_REGION }}-{{inventory_hostname}}{% if inventory_hostname != inventory_hostname_short %}{{'\t'}}{{ ONEBOX_REGION }}-{{inventory_hostname_short}}{% endif %}{{'\t'}}localhost"
     state: present
+  ignore_errors: yes
