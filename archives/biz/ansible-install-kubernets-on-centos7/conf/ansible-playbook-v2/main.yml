@@ -5,7 +5,6 @@
   gather_facts: no
   roles:
      -  { role: basic }
-     
 
 # 跳板机
 - hosts: jumper
@@ -13,3 +12,8 @@
   roles:
      - { role: hostname, hostname_prefix: "{% if lookup('env','ONEBOX_REGION') %}{{ lookup('env','ONEBOX_REGION') }}-{% else %}{% endif %}" }
      
+# 修改主机名
+- hosts: k8s
+  gather_facts: no
+  roles:
+     -  { role: hostname, hostname_prefix: "{% if lookup('env','ONEBOX_REGION') %}{{ lookup('env','ONEBOX_REGION') }}-{% else %}{% endif %}" }
