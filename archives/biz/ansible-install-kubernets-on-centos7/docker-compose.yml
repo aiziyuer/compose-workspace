@@ -60,7 +60,7 @@ services:
     ansible:
       build: ./ansible
       volumes:
-       - ./config/ansible-playbook:/ansible-playbook
+       - ./conf/ansible-playbook:/ansible-playbook
       working_dir: /ansible-playbook
        
 networks:
