@@ -1,7 +1,7 @@
 ---
 
-- hosts: all
+- hosts: snat
   gather_facts: no
   roles:
-     - { role: hostname, region: {{ ONEBOX_REGION }} }
+     - { role: hostname, region: "{{ ONEBOX_REGION }}" }
      

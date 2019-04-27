@@ -7,7 +7,7 @@
 - name: Hostname | Update the hostname (pt. 1) - hostname cmd
   hostname:
     name: "{{inventory_hostname_short}}"
-#  ignore_errors: yes
+  ignore_errors: yes
 
 - name: Hostname | Update the hostname (pt. 2) - (/etc/hostname)
   copy:
@@ -16,6 +16,7 @@
     owner: root
     group: root
     mode: 0644
+  ignore_errors: yes
 
 - name: Hostname | Update the IPv4 hostname (pt. 3) - (/etc/hosts)
   lineinfile:
