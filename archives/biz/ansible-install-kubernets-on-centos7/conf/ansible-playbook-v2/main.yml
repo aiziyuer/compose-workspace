@@ -1,6 +1,14 @@
 ---
 
-- hosts: snat
+# 修改源
+- hosts: all
+  gather_facts: no
+  roles:
+     -  { role: basic }
+     
+
+# 跳板机
+- hosts: jumper
   gather_facts: no
   roles:
      - { role: hostname, hostname_prefix: "{% if lookup('env','ONEBOX_REGION') %}{{ lookup('env','ONEBOX_REGION') }}-{% else %}{% endif %}" }
