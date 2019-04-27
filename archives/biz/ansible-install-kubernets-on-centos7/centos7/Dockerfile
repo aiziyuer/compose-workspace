@@ -18,6 +18,12 @@ RUN rpm --rebuilddb \
 && yum -y install openssh-server \
 && yum clean all
 
+# 增加bash命令补全
+RUN  \
+rpm --rebuilddb  \
+&& yum -y install mlocate bash-completion bash-completion-extras \
+&& yum clean all
+
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\
@@ -34,7 +40,7 @@ RUN printf "\n" >>/etc/ssh/sshd_config \
 
 # 设置开机自启动的服务, 这里就以sshd来做测试
 RUN \
-	systemctl enable sshd \
+	systemctl enable sshd
 
 # 避免出现僵尸进程: https://developers.redhat.com/blog/2016/09/13/running-systemd-in-a-non-privileged-container/
 STOPSIGNAL SIGRTMIN+3
