@@ -36,3 +36,7 @@ services:
       privileged: true
       expose:
        - 22
+       
+    ansible:
+      image: ansible/ansible-runner
+       
