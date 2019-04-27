@@ -1,0 +1,38 @@
+version: '2'
+
+services:
+
+    snat:
+      build: ./centos7
+      privileged: true
+      expose:
+       - 22
+      ports:
+       - 20022:22
+ 
+    master:
+      build: ./centos7
+      privileged: true
+      expose:
+       - 22
+       - 6443
+           
+    gateway:
+      build: ./centos7
+      privileged: true
+      expose:
+       - 22
+       - 80
+       - 6379
+
+    storage:
+      build: ./centos7
+      privileged: true
+      expose:
+       - 22
+       
+    node:
+      build: ./centos7
+      privileged: true
+      expose:
+       - 22
