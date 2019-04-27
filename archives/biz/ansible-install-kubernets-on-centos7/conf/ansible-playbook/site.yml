@@ -1,0 +1,7 @@
+- hosts: all
+  remote_user: root
+  vars: httpd_port=80
+  
+  tasks:
+  - name: install httpd
+    yum: name=httpd state=present
