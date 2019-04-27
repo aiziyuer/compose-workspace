@@ -8,6 +8,7 @@ ENV LC_ALL=en_US.utf8 \
 
 # 覆盖源
 COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
+COPY root/.pip/pip.conf /root/.pip/
 
 RUN rpm --rebuilddb \
 && yum install -y epel-release  \
