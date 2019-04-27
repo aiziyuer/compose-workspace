@@ -3,4 +3,5 @@
 - hosts: all
   gather_facts: no
   roles:
-     - hostname
+     - { role: hostname, region: {{ ONEBOX_REGION }} }
+     
