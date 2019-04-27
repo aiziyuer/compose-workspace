@@ -1,12 +1,18 @@
 ---
 
-- name: Add Centos7 Repository
+- name: Add CentOS-Base repo
   copy:
-    src: /etc/yum.repos.d/*
-    dest: /etc/yum.repos.d/
+    src: /etc/yum.repos.d/CentOS-Base.repo
+    dest: /etc/yum.repos.d/CentOS-Base.repo
     owner: root
     group: root
     mode: 0644
 
-
+- name: Add EPEL repo
+  copy:
+    src: /etc/yum.repos.d/epel.repo
+    dest: /etc/yum.repos.d/epel.repo
+    owner: root
+    group: root
+    mode: 0644
 
