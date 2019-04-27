@@ -9,7 +9,7 @@ services:
        - 22
       networks:
         controller:
-          ipv4_address: 192.168.1.3
+          ipv4_address: 192.168.1.5
       ports:
        - "20022:22"
  
@@ -30,7 +30,7 @@ services:
       privileged: true
       networks:
         controller:
-          ipv4_address: 192.168.1.3
+          ipv4_address: 192.168.1.4
       volumes:
        - ./data/gateway:/var/lib/docker
       expose:
