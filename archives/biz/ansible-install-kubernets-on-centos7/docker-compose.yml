@@ -14,7 +14,7 @@ services:
       build: ./centos7-with-docker
       privileged: true
       volumes:
-       - ./master:/var/lib/docker
+       - ./data/master:/var/lib/docker
       expose:
        - 22
        - 6443
@@ -23,7 +23,7 @@ services:
       build: ./centos7-with-docker
       privileged: true
       volumes:
-       - ./master:/var/lib/docker
+       - ./data/gateway:/var/lib/docker
       expose:
        - 22
        - 80
@@ -39,7 +39,7 @@ services:
       build: ./centos7-with-docker
       privileged: true
       volumes:
-       - ./master:/var/lib/docker
+       - ./data/node:/var/lib/docker
       expose:
        - 22
        
