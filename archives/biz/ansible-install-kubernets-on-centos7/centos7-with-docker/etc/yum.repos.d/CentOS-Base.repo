@@ -1,7 +1,7 @@
 [base]
 name=CentOS-$releasever - Base
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
-baseurl=https://mirrors.ustc.edu.cn/centos/$releasever/os/$basearch/
+baseurl=https://mirrors.huaweicloud.com/centos/$releasever/os/$basearch/
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
@@ -9,7 +9,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 [updates]
 name=CentOS-$releasever - Updates
 # mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates
-baseurl=https://mirrors.ustc.edu.cn/centos/$releasever/updates/$basearch/
+baseurl=https://mirrors.huaweicloud.com/centos/$releasever/updates/$basearch/
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
@@ -17,7 +17,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 [extras]
 name=CentOS-$releasever - Extras
 # mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
-baseurl=https://mirrors.ustc.edu.cn/centos/$releasever/extras/$basearch/
+baseurl=https://mirrors.huaweicloud.com/centos/$releasever/extras/$basearch/
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
@@ -25,7 +25,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 [centosplus]
 name=CentOS-$releasever - Plus
 # mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
-baseurl=https://mirrors.ustc.edu.cn/centos/$releasever/centosplus/$basearch/
+baseurl=https://mirrors.huaweicloud.com/centos/$releasever/centosplus/$basearch/
 gpgcheck=0
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
