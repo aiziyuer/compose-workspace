@@ -26,14 +26,21 @@ while not q.empty():
 # 开始处理文件内容找出需要的个人信息
 personal_info_regex = re.compile(r"(?:name\s+=\s+u[\\]*')([^'\\]+)[\\]*'\s+(?:popo\s+=\s+u[\\]*')([^'\\]+)[\\]*'")
 pre_department = ''
+fb = open('name.txt', 'w')
 for f in py_files:
     department = os.path.dirname(f)
     if pre_department != department:
         pre_department = department
-        print os.path.basename(pre_department)
+        # print os.path.basename(pre_department)
+        fb.write(os.path.basename(pre_department))
+        fb.write('\n')
     with open(f, 'r') as content_file:
         content = content_file.read()
         m = personal_info_regex.search(content)
         if m:
-            print m.group(1)
-            print m.group(2)
+            # print m.group(1)
+            fb.write(m.group(1))
+            fb.write('\n')
+            # print m.group(2)
+            fb.write(m.group(2))
+            fb.write('\n')
