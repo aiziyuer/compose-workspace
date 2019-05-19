@@ -12,6 +12,9 @@ class EchoHandler(StreamRequestHandler):
             self.wfile.write(line)
 
 
+
+
+
 if __name__ == '__main__':
     serv = ThreadingTCPServer(('', 20000), EchoHandler)
     serv.serve_forever()
