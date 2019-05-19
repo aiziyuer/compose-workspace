@@ -2,6 +2,9 @@
 
 import xlwt
 
+_INPUT_DIR = 'input'
+_OUTPUT_DIR = 'output'
+
 
 # 人员信息
 
@@ -13,7 +16,7 @@ class Person:
         self.popo_email = popo_email
 
 
-file_path = 'data/name.txt'
+file_path = _INPUT_DIR + '/name.txt'
 one_list = []
 with open(file_path) as fp:
     line = fp.readline().rstrip('\n')
@@ -75,4 +78,4 @@ for team_name, team in depart_dict.items():
 
     pass
 
-wbk.save('data/name.xls')
+wbk.save(_OUTPUT_DIR + '/name.xls')

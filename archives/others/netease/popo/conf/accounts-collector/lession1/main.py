@@ -4,14 +4,15 @@ import Queue
 import os
 import re
 
-_CUR_DIR = 'input'
+_DATA_DIR = 'input'
+_OUTPUT_DIR = 'output'
 
 # 这里存储所有满足条件的文件
 py_files = []
 
 # 模拟递归查找文件
 q = Queue.Queue()
-q.put(_CUR_DIR)
+q.put(_DATA_DIR)
 while not q.empty():
     dir_name = q.get()
     fileList = os.listdir(dir_name)
@@ -26,7 +27,7 @@ while not q.empty():
 # 开始处理文件内容找出需要的个人信息
 personal_info_regex = re.compile(r"(?:name\s+=\s+u[\\]*')([^'\\]+)[\\]*'\s+(?:popo\s+=\s+u[\\]*')([^'\\]+)[\\]*'")
 pre_department = ''
-fb = open('output/name.txt', 'w')
+fb = open(_OUTPUT_DIR + '/name.txt', 'w')
 for f in py_files:
     department = os.path.dirname(f)
     if pre_department != department:
