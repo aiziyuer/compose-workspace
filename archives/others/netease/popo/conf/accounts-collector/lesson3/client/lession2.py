@@ -1,24 +1,25 @@
 # -*- coding:utf8 -*-
 
 import xlwt
-
-_INPUT_DIR = 'input'
-_OUTPUT_DIR = 'output'
+import StringIO
 
 
-# 人员信息
+def parse_member_info(data):
+    _OUTPUT_DIR = 'output'
 
-class Person:
+    # 人员信息
 
-    def __init__(self, user_depart, user_name, popo_email):
-        self.user_depart = user_depart
-        self.user_name = user_name
-        self.popo_email = popo_email
+    class Person:
 
+        def __init__(self, user_depart, user_name, popo_email):
+            self.user_depart = user_depart
+            self.user_name = user_name
+            self.popo_email = popo_email
 
-file_path = _INPUT_DIR + '/name.txt'
-one_list = []
-with open(file_path) as fp:
+    one_list = []
+
+    fp = StringIO.StringIO(data)
+
     line = fp.readline().rstrip('\n')
     cnt = -1
 
@@ -44,38 +45,66 @@ with open(file_path) as fp:
         line = fp.readline().rstrip('\n')
         cnt += 1
 
-# 3. 人员列表分部门存储
-depart_dict = {}
-for one in one_list:
-    team = depart_dict.get(one.user_depart)
-    team = team if team is not None else []
-    depart_dict[one.user_depart] = team
-    team.append(one)
+    # 3. 人员列表分部门存储
+    depart_dict = {}
+    for one in one_list:
+        team = depart_dict.get(one.user_depart)
+        team = team if team is not None else []
+        depart_dict[one.user_depart] = team
+        team.append(one)
 
-# 4. 输出为excel
-wbk = xlwt.Workbook(encoding='utf-8')
-sheet = wbk.add_sheet(u'Sheet1', cell_overwrite_ok=True)
-team_count = 0
-for team_name, team in depart_dict.items():
+    # 4. 输出为excel
+    wbk = xlwt.Workbook(encoding='utf-8')
+    sheet = wbk.add_sheet(u'Sheet1', cell_overwrite_ok=True)
+    team_count = 0
+    for team_name, team in depart_dict.items():
 
-    team_count += 1
+        team_count += 1
 
-    # 录入部门信息
-    line_no = 0
-    sheet.write(line_no, (team_count - 1) * 2, team_name,
-                style=xlwt.easyxf('font: color-index red, bold on,height 280, name SimSun'))
-    line_no += 1
-
-    for one in team:
-        sheet.write(line_no, (team_count - 1) * 2, one.user_name,
-                    style=xlwt.easyxf('pattern: pattern solid, fore_colour yellow;'
-                                      'font: italic 1, color-index red, bold on, height 220, name Microsoft YaHei'))
-        sheet.write(line_no, (team_count - 1) * 2 + 1, one.popo_email,
-                    style=xlwt.easyxf('font: italic 1, color-index green, bold off, height 220, name SimSun'))
+        # 录入部门信息
+        line_no = 0
+        sheet.write(line_no, (team_count - 1) * 2, team_name,
+                    style=xlwt.easyxf('font: color-index red, bold on,height 280, name SimSun'))
         line_no += 1
+
+        for one in team:
+            sheet.write(line_no, (team_count - 1) * 2, one.user_name,
+                        style=xlwt.easyxf('pattern: pattern solid, fore_colour yellow;'
+                                          'font: italic 1, color-index red, bold on, height 220, name Microsoft YaHei'))
+            sheet.write(line_no, (team_count - 1) * 2 + 1, one.popo_email,
+                        style=xlwt.easyxf('font: italic 1, color-index green, bold off, height 220, name SimSun'))
+            line_no += 1
+
+            pass
 
         pass
 
-    pass
+    wbk.save(_OUTPUT_DIR + '/name.xls')
 
-wbk.save(_OUTPUT_DIR + '/name.xls')
+
+if __name__ == '__main__':
+    example = '''\
+H16
+周福记
+wxzfjee@corp.netease.com
+李复翻译
+hzfy55@corp.netease.com
+H35
+李复
+hzlf1458@corp.netease.com
+王鑫
+wxn1458@corp.netease.com
+赵婷舒
+ztsdd8@corp.netease.com
+H43
+丝忆风格
+syfghj@corp.netease.com
+纷纷
+fenfen445@corp.netease.com
+郦
+wxl86@corp.netease.com
+高峰国服
+gfgfty8@corp.netease.com\
+'''
+
+    parse_member_info(example)
