@@ -11,7 +11,7 @@ py_files = []
 
 # 模拟递归查找文件
 q = Queue.Queue()
-q.put('data')
+q.put(_CUR_DIR)
 while not q.empty():
     dir_name = q.get()
     fileList = os.listdir(dir_name)
