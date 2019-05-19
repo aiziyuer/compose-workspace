@@ -9,7 +9,7 @@ from lession1 import parse_raw_data_by_date
 
 class MyHandler(StreamRequestHandler):
     def handle(self):
-        parameter_date = self.request.recv(102).strip()
+        parameter_date = self.request.recv(1024).strip()
         data = parse_raw_data_by_date(parameter_date)
         print data
         self.request.sendall(data)
