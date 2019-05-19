@@ -4,7 +4,7 @@ import Queue
 import os
 import re
 
-_CUR_DIR = 'data'
+_CUR_DIR = 'input'
 
 # 这里存储所有满足条件的文件
 py_files = []
@@ -26,7 +26,7 @@ while not q.empty():
 # 开始处理文件内容找出需要的个人信息
 personal_info_regex = re.compile(r"(?:name\s+=\s+u[\\]*')([^'\\]+)[\\]*'\s+(?:popo\s+=\s+u[\\]*')([^'\\]+)[\\]*'")
 pre_department = ''
-fb = open('name.txt', 'w')
+fb = open('output/name.txt', 'w')
 for f in py_files:
     department = os.path.dirname(f)
     if pre_department != department:
