@@ -16,5 +16,5 @@ class MyHandler(StreamRequestHandler):
 
 
 if __name__ == '__main__':
-    serv = ThreadingTCPServer(('', 20000), MyHandler)
+    serv = ThreadingTCPServer(('0.0.0.0', 20000), MyHandler)
     serv.serve_forever()
