@@ -1,20 +1,20 @@
 # -*- coding:utf8 -*-
 
 from SocketServer import StreamRequestHandler, ThreadingTCPServer
+from lession1 import parse_raw_data_by_date
 
 
-class EchoHandler(StreamRequestHandler):
+# 参考文档:
+# https://python3-cookbook.readthedocs.io/zh_CN/latest/c11/p02_creating_tcp_server.html
+
+class MyHandler(StreamRequestHandler):
     def handle(self):
-        print('Got connection from', self.client_address)
-        # self.rfile is a file-like object for reading
-        for line in self.rfile:
-            # self.wfile is a file-like object for writing
-            self.wfile.write(line)
-
-
-
+        parameter_date = self.request.recv(102).strip()
+        data = parse_raw_data_by_date(parameter_date)
+        print data
+        self.request.sendall(data)
 
 
 if __name__ == '__main__':
-    serv = ThreadingTCPServer(('', 20000), EchoHandler)
+    serv = ThreadingTCPServer(('', 20000), MyHandler)
     serv.serve_forever()
