@@ -25,6 +25,9 @@ FROM centos/aarch64:7
 COPY --from=builder /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
 COPY --from=builder /src/github.com/KurtStam/add-aarch64-qemu/cross-build* /usr/bin/
 
+# 覆盖源
+COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
+
 RUN [ "cross-build-start" ]
 
 RUN echo "verify is passed!"
