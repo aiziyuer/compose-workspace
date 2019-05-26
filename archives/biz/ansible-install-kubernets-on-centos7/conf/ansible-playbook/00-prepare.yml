@@ -1,0 +1,13 @@
+---
+
+# 修改通用源
+- hosts: all:k8s-cluster:etcd
+  gather_facts: no
+  roles:
+     -  { role: basic }
+     
+# 安装docker等必要的软件
+- hosts: k8s-cluster
+  gather_facts: no
+  roles:
+     -  { role: docker }
