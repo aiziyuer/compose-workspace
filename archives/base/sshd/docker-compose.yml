@@ -3,4 +3,5 @@ version: '2'
 services:
     slave:
       build: ./slave
+      image: aiziyuer/centos:7-sshd
       privileged: true
