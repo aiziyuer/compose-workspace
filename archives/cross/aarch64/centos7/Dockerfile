@@ -11,8 +11,9 @@ FROM golang:1.11 as builder
 
 # 下载异构用的解释器
 RUN \
-curl -L -ko /usr/bin/qemu-aarch64-static \
-https://github.com/multiarch/qemu-user-static/releases/download/v4.0.0/qemu-aarch64-static
+curl -L -k \
+https://github.com/multiarch/qemu-user-static/releases/download/v4.0.0/qemu-aarch64-static.tar.gz \
+| tar -xvz -C /usr/bin/
 
 ENV GOPATH=/
 
