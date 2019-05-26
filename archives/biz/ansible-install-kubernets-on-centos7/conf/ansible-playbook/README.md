@@ -18,7 +18,8 @@ pip freeze > requirements.txt
 # 恢复类库
 pip install -r requirements.txt 
 
-
+# 测试ansible
+ansible-playbook -i development 00-prepare.yml
 
 ```
 
