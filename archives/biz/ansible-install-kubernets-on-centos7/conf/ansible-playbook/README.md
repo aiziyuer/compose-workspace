@@ -9,11 +9,16 @@
 # 创建虚拟环境
 virtualenv env
 
+# 加载虚拟环境
+source env/bin/activate
+
 # 保存当前环境的类库
 pip freeze > requirements.txt 
 
 # 恢复类库
 pip install -r requirements.txt 
+
+
 
 ```
 
