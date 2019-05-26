@@ -33,4 +33,8 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 # 避免出现僵尸进程: https://developers.redhat.com/blog/2016/09/13/running-systemd-in-a-non-privileged-container/
 STOPSIGNAL SIGRTMIN+3
 
+# 设置开机自启动的服务, 这里就以nginx来做测试
+RUN \
+	systemctl enable nginx
+
 CMD ["/usr/sbin/init"]
