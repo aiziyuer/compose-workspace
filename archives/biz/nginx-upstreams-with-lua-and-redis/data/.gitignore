@@ -1,4 +1,4 @@
-openrestry/*
+openrestry/**/*
 !openrestry/logs/.gitkeep
-redis/*
+redis/**/*
 !redis/log/.gitkeep
