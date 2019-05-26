@@ -18,6 +18,7 @@ services:
        - ./conf/redis/redis.conf:/etc/redis.conf
        - ./conf/redis/redis.service:/usr/lib/systemd/system/redis.service
        - ./data/redis:/var/lib/redis:z
+       - ./data/redis/log:/var/log/redis/:z
       ports:
        - 16379:6379
     
