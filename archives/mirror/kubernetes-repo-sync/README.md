@@ -14,8 +14,8 @@ docker-compose build && docker-compose up -d
 docker-compose exec slave bash
 
 # 设置代理(如果有需要的话)
-export http_proxy=http://192.168.224.1:3128
-export https_proxy=http://192.168.224.1:3128
+export http_proxy=http://192.168.124.1:3128
+export https_proxy=http://192.168.124.1:3128
 
 # 从互联网上同步数据
 reposync --plugins --repoid=kubernetes \
