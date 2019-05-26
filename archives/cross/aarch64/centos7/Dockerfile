@@ -18,10 +18,12 @@ COPY . .
 RUN go get -d -v ./...
 RUN go install -v ./...
 
+# 下载异构用的解释器
+RUN \
+curl -L -ko /usr/bin/qemu-aarch64-static \
+https://github.com/multiarch/qemu-user-static/releases/download/v4.0.0/qemu-aarch64-static
+
 FROM centos/aarch64:7
 
-# 下载异构用的解释器
-ADD \
-https://github.com/multiarch/qemu-user-static/releases/download/v4.0.0/qemu-aarch64-static \
-/usr/bin/qemu-aarch64-static
-
+COPY --from=builder /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
+COPY --from=builder /usr/bin/cross-build /usr/bin/cross-build
