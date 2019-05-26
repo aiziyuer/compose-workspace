@@ -22,8 +22,7 @@ RUN \
 	   less net-tools euleros-release-2.0SP3 \
 	   passwd rootfiles shim sudo \
 	   vim-minimal which \
-	   libcroco libgomp libunistring tcp_wrapper-libs tar \
-&& rm -rf $ROOTFS_DIR/var/cache/yum
+	   libcroco libgomp libunistring tcp_wrapper-libs tar 
 
 FROM scratch
 
