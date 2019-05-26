@@ -3,3 +3,4 @@ env/.gitkeep
 data/*
 data/.gitkeep
 .idea/
+*.pyc
