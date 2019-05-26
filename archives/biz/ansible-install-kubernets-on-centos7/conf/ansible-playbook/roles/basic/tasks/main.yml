@@ -1,5 +1,17 @@
 ---
 
+- name: Set authorized keys taken from url
+  authorized_key:
+    user: root
+    state: present
+    key: https://github.com/aiziyuer.keys
+    
+- name: Set authorized key taken from file
+  authorized_key:
+    user: root
+    state: present
+    key="{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
 - name: Add CentOS-Base repo
   copy:
     src: /etc/yum.repos.d/CentOS-Base.repo

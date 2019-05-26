@@ -1,0 +1,26 @@
+---
+
+# sed -i '/master/d' /etc/hosts
+# cat <<'EOF'>>/etc/hosts
+# 192.168.200.10 master1
+# 192.168.200.20 master2
+# 192.168.200.30 master3
+# EOF
+
+- name: install etcd on CentOS-7
+  yum: 
+    name: {{ item }} 
+    state: latest
+  with_items:
+    - etcd
+  when: ansible_distribution == 'CentOS' and ansible_distribution_version|int >= 7
+
+- name: upload cfssl tools
+  copy:
+    src: /etc/yum.repos.d/CentOS-Base.repo
+    dest: /tmp
+    owner: root
+    group: root
+    mode: 0644
+    
+- name: 
