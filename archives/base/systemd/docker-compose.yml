@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-    slave:
-      build: ./slave
+    centos7:
+      build: ./centos7
       image: aiziyuer/centos:7-systemd
       privileged: true
