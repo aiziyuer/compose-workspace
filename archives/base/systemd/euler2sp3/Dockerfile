@@ -27,3 +27,7 @@ RUN \
 FROM scratch
 
 COPY --from=builder /rootfs/ /
+
+# 定制源
+RUN rm -rf /etc/yum.repos.d || true && mkdir -p /etc/yum.repos.d
+COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
