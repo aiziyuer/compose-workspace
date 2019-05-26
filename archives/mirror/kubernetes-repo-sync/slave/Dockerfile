@@ -19,7 +19,7 @@ RUN yum -y install vim net-tools tcpdump telnet lsof wget curl \
 && yum clean all
 
 # 安装业务软件
-RUN yum install -y craterepo rsync nginx
+RUN yum install -y createrepo rsync nginx
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
