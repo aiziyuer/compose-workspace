@@ -9,13 +9,14 @@
 
 FROM golang:1.11 as builder
 
-ENV GOPATH=/tmp
+ENV GOPATH=/tmp \
+    GOOS=linux \
+    GOARCH=amd64
 
 WORKDIR $GOPATH/src/github.com/KurtStam/add-aarch64-qemu
-
 COPY . .
-
-RUN go install -v ./ .
+RUN go get -d -v ./...
+RUN go install -v ./...
 
 FROM centos/aarch64:7
 
