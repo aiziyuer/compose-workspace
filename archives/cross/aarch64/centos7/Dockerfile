@@ -1,12 +1,4 @@
-#FROM centos:7 as builder
-
-# 设置源
-#COPY ./x86_64/etc/yum.repos.d/* /etc/yum.repos.d/
-
-# 安装golang来编译crossbuild
-#RUN yum install -y \
-#               golang
-
+# 打包用镜像
 FROM golang:1.11 as builder
 
 # 下载异构用的解释器
@@ -26,6 +18,8 @@ RUN \
    ln -s cross-build-start cross-build \
 && ln -s cross-build-end cross-build
 
+
+# 运行用镜像
 FROM centos/aarch64:7
 
 COPY --from=builder /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
