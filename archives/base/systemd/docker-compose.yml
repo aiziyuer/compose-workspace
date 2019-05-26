@@ -8,5 +8,5 @@ services:
       
     euler2sp3:
       build: ./euler2sp3
-      image: aiziyuer/euler2sp3:systemd
+      image: aiziyuer/euler:2sp3-systemd
       privileged: true
