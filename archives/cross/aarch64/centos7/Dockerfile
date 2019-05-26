@@ -14,9 +14,7 @@ RUN \
 curl -L -ko /usr/bin/qemu-aarch64-static \
 https://github.com/multiarch/qemu-user-static/releases/download/v4.0.0/qemu-aarch64-static
 
-ENV GOPATH=/tmp \
-    GOOS=linux \
-    GOARCH=amd64
+ENV GOPATH=/
 
 WORKDIR $GOPATH/src/github.com/KurtStam/add-aarch64-qemu
 
