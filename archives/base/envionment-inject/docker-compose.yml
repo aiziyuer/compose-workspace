@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-    centos7-systemd:
-      build: ./centos7-systemd
+    slave:
+      build: ./slave
       privileged: true
       environment:
        - DEBUG=aiziyuer
