@@ -15,8 +15,8 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-extldflags "-static"' cross-build.go
 RUN \ 
-   ln -s cross-build-start cross-build \
-&& ln -s cross-build-end cross-build
+   ln -s cross-build cross-build-start \
+&& ln -s cross-build cross-build-end
 
 
 # 运行用镜像
