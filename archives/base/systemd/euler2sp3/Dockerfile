@@ -1,6 +1,9 @@
 # 制作指导: https://developer.huawei.com/ict/cn/site-euleros/article/yum
 FROM centos:7 as builder
 
+# 覆盖源
+COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
+
 ENV ROOTFS_DIR=/rootfs
 
 # 初始化rpmdb
