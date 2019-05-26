@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+    http:
+      build: ./http
+      privileged: true
+    socket:
+      build: ./socket
+      privileged: true
