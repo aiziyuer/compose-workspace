@@ -2,7 +2,7 @@
 FROM centos:7 as builder
 
 # 覆盖源
-RUN rm -rf /etc/yum.repos.d/*.rpm
+RUN rm -rf /etc/yum.repos.d/*.repo
 COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
 
 ENV ROOTFS_DIR=/rootfs
