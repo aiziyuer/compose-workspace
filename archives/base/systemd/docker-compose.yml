@@ -5,3 +5,8 @@ services:
       build: ./centos7
       image: aiziyuer/centos:7-systemd
       privileged: true
+      
+    euler2sp3:
+      build: ./euler2sp3
+      image: aiziyuer/euler2sp3:systemd
+      privileged: true
