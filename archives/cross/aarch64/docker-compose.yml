@@ -3,5 +3,5 @@ version: '2'
 services:
     centos7:
       build: ./centos7
-      image: aiziyuer/aarch64-centos7:7
+      image: aiziyuer/aarch64-centos:7
       privileged: true
