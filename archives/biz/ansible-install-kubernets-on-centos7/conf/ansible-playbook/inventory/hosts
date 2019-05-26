@@ -1,5 +1,0 @@
-
-
-[all]
-# snat  ansible_ssh_user=root ansible_ssh_pass='root' ansible_ssh_host=192.168.224.88 ansible_ssh_port=20022
-snat  ansible_ssh_host=192.168.224.88 ansible_ssh_port=20022

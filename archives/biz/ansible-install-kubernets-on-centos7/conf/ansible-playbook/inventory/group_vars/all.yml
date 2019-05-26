@@ -1,8 +1,0 @@
----
-# file: group_vars/all
-ansible_connection: ssh 
-ansible_ssh_user: root 
-ansible_ssh_pass: 'root'
-
-
-ONEBOX_REGION: "{{ lookup('env','ONEBOX_REGION') }}"

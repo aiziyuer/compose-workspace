@@ -1,5 +1,0 @@
-.vscode
-env/*
-log/*
-!log/.gitkeep
-*.retry
