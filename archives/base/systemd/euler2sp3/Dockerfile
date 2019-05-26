@@ -23,7 +23,7 @@ RUN \
 	   passwd rootfiles shim sudo \
 	   vim-minimal which \
 	   libcroco libgomp libunistring tcp_wrapper-libs tar \
-&& rm -rm $ROOTFS_DIR/var/cache/yum
+&& rm -rf $ROOTFS_DIR/var/cache/yum
 
 FROM scratch
 
