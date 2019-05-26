@@ -16,3 +16,8 @@ services:
       privileged: true
       volumes:
        - ./conf/socket/nginx.conf:/etc/nginx/nginx.conf
+    file:
+      build: ./centos7
+      privileged: true
+      volumes:
+       - ./conf/file/nginx.conf:/etc/nginx/nginx.conf
