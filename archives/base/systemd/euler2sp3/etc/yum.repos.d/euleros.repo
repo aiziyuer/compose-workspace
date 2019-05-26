@@ -2,5 +2,5 @@
 name=EulerOS-2.0SP3 base
 baseurl=http://developer.huawei.com/ict/site-euleros/euleros/repo/yum/2.3/os/x86_64/
 enabled=1
-gpgcheck=1
+gpgcheck=0
 gpgkey=http://developer.huawei.com/ict/site-euleros/euleros/repo/yum/2.3/os/RPM-GPG-KEY-EulerOS
