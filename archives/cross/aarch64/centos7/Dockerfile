@@ -22,8 +22,17 @@ WORKDIR $GOPATH/src/github.com/KurtStam/add-aarch64-qemu
 COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-extldflags "-static"' cross-build.go
+RUN \ 
+   ln -s cross-build-start cross-build \
+&& ln -s cross-build-end cross-build
 
 FROM centos/aarch64:7
 
 COPY --from=builder /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
-COPY --from=builder /src/github.com/KurtStam/add-aarch64-qemu/cross-build /usr/bin/cross-build
+COPY --from=builder /src/github.com/KurtStam/add-aarch64-qemu/cross-build* /usr/bin/
+
+RUN [ "cross-build-start" ]
+
+RUN echo "verify is passed!"
+
+RUN [ "cross-build-end" ]
