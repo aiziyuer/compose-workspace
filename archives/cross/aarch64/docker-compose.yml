@@ -1,0 +1,6 @@
+version: '2'
+
+services:
+    centos7:
+      build: ./centos7
+      privileged: true
