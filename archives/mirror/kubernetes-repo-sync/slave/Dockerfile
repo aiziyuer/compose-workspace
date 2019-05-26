@@ -7,7 +7,8 @@ ENV LC_ALL=en_US.utf8 \
     LC_CTYPE=en_US.UTF-8
 
 # 覆盖源
-COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
+COPY etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/
+COPY etc/yum.repos.d/epel.repo /etc/yum.repos.d/
 
 RUN \
 rpm --rebuilddb  \
@@ -38,3 +39,5 @@ RUN \
 	systemctl enable nginx
 
 CMD ["/usr/sbin/init"]
+
+COPY etc/yum.repos.d/kubernetes.repo /etc/yum.repos.d/
