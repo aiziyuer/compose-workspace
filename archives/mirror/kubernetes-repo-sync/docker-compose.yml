@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+    slave:
+      build: ./slave
+      privileged: true
+      volumes:
+      - ./slave/data/mirrors/kubernetes:/mirrors/kubernetes:z
