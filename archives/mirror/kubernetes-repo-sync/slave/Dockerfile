@@ -4,7 +4,7 @@ FROM centos:7
 # 设置环境全英文避免出错
 ENV LC_ALL=en_US.utf8 \
     LANG=en_US.UTF-8 \
-    LC_CTYPE=en_US.UTF-8\
+    LC_CTYPE=en_US.UTF-8
 
 # 覆盖源
 COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
@@ -19,7 +19,7 @@ RUN yum -y install vim net-tools tcpdump telnet lsof wget curl \
 && yum clean all
 
 # 安装业务软件
-RUN yum install -y craterepo rsync
+RUN yum install -y craterepo rsync nginx
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
