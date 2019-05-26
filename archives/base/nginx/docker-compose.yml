@@ -1,9 +1,9 @@
 version: '2'
 
 services:
-    centos7-http-server:
-      build: ./centos7-http-server
+    centos7-http:
+      build: ./centos7-http
       privileged: true
-    centos7-socket-server:
-      build: ./centos7-socket-server
+    centos7-socket:
+      build: ./centos7-socket
       privileged: true
