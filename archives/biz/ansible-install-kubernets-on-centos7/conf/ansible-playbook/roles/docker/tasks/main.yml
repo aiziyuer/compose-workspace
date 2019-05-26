@@ -1,0 +1,16 @@
+---
+- name: install docker on CentOS-7
+  yum: 
+    name: {{ item }} 
+    state: latest
+  with_items:
+    - docker
+  when: ansible_distribution == 'CentOS' and ansible_distribution_version|int >= 7
+
+- name: install docker on EulerOS
+  yum: 
+    name: {{ item }} 
+    state: latest
+  with_items:
+    - docker-engine
+  when: ansible_distribution == 'EulerOS'

@@ -16,3 +16,8 @@ pip freeze > requirements.txt
 pip install -r requirements.txt 
 
 ```
+
+### FAQ
+
+- [kubernetes-sigs/kubespray](https://github.com/kubernetes-sigs/kubespray)
+- [yum包安装](https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html)

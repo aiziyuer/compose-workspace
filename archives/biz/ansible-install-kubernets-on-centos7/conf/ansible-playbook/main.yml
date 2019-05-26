@@ -1,19 +1,14 @@
 ---
 
-# 修改源
-- hosts: all
+# 修改通用源
+- hosts: all:k8s-cluster:etcd
   gather_facts: no
   roles:
      -  { role: basic }
 
-# 跳板机
-- hosts: jumper
+# 安装docker等必要的软件
+- hosts: k8s-cluster
   gather_facts: no
   roles:
-     - { role: hostname, hostname_prefix: "{% if lookup('env','ONEBOX_REGION') %}{{ lookup('env','ONEBOX_REGION') }}-{% else %}{% endif %}" }
-     
-# 修改主机名
-- hosts: k8s
-  gather_facts: no
-  roles:
-     -  { role: hostname, hostname_prefix: "{% if lookup('env','ONEBOX_REGION') %}{{ lookup('env','ONEBOX_REGION') }}-{% else %}{% endif %}" }
+     -  { role: docker }
+
