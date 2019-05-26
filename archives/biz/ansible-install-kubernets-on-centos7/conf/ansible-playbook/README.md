@@ -19,7 +19,7 @@ pip freeze > requirements.txt
 pip install -r requirements.txt 
 
 # 测试ansible
-ansible-playbook -i development 00-prepare.yml
+ansible-playbook -i inventory/development/hosts.ini 00-prepare.yml
 
 ```
 
