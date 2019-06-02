@@ -1,5 +1,8 @@
 ---
 
+# 测试ansible
+# ansible-playbook -i inventory/development/hosts.ini 00-prepare.yml
+
 # 修改通用源
 - hosts: all:k8s-cluster:etcd
   gather_facts: true

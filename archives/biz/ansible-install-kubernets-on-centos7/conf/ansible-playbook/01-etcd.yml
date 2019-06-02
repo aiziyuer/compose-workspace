@@ -1,8 +1,7 @@
 ---
 
-- include: 00-prepare.yml
-
-- include: 01-etcd.yml
+# 测试ansible
+# ansible-playbook -i inventory/development/hosts.ini 01-etcd.yml
 
 # 安装etcd
 - hosts: etcd

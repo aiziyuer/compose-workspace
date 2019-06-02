@@ -7,6 +7,14 @@
 # 192.168.200.30 master3
 # EOF
 
+- name: collection system release info
+  shell: cat /etc/*release
+  register: info
+
+- name: show release info
+  # 对info.stdout结果使用pprint filter进行格式化
+  debug: msg=""{{ info.stdout | pprint }}""
+
 - name: install etcd on CentOS-7
   yum: 
     name: {{ item }} 
@@ -17,10 +25,22 @@
 
 - name: upload cfssl tools
   copy:
-    src: /etc/yum.repos.d/CentOS-Base.repo
+    src: /cfssl-R1.2.tar.xz
     dest: /tmp
     owner: root
     group: root
     mode: 0644
-    
-- name: 
+
+# 参考: https://stackoverflow.com/questions/40230184/how-to-do-multiline-shell-script-in-ansible
+- name: decomporess the options tools
+  shell: |
+    mkdir -p /usr/local/bin
+    tar xvf /tmp/{{ item.package_name }} -C /usr/local/bin/
+  with_items:
+  - { package_name: "cfssl-R1.2.tar.xz" }
+  
+# - name: modify hosts
+#   cmd: |
+#     cat <<'EOF'
+#       192.168.200.10 master1
+#     EOF
