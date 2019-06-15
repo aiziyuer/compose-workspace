@@ -13,7 +13,7 @@ RUN \
 RUN yum install -y \
             java
 
-# 安装必要的软件
-RUN \
-    yum install -y logstash
+# # 安装必要的软件
+# RUN \
+#     yum install -y logstash
 
