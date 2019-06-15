@@ -5,3 +5,7 @@ services:
       build: ./centos7
       image: aiziyuer/aarch64-centos:7
       privileged: true
+    centos7-logstash:
+      build: ./centos7
+      image: aiziyuer/aarch64-centos:logstash
+      privileged: true
