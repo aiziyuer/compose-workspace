@@ -6,8 +6,12 @@ COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
 
 RUN echo "verify is passed!"
 
+# 安装java并设置JAVA_HOME
+RUN yum install -y \
+            java
+
 # 安装必要的软件
-RUN \
-    rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch \
- && yum install -y logstash
+#RUN \
+#    rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch \
+# && yum install -y logstash
 
