@@ -74,6 +74,7 @@
 					<repositoryName>lib</repositoryName>
 					<!-- lib目录中jar的存放规则，默认是${groupId}/${artifactId}的目录格式，flat表示直接把jar放到lib目录 -->
 					<repositoryLayout>flat</repositoryLayout>
+					<showConsoleWindow>true</showConsoleWindow>
 					<encoding>UTF-8</encoding>
 					<logsDirectory>logs</logsDirectory>
 					<tempDirectory>tmp</tempDirectory>
@@ -83,7 +84,7 @@
 							<name>${project.name}</name>
 							<jvmSettings>
 								<extraArguments>
-								    <extraArgument>-DlogPath=../logs</extraArgument>
+									<extraArgument>-DlogPath=../logs</extraArgument>
 									<extraArgument>-server</extraArgument>
 									<extraArgument>-Xms128M</extraArgument>
 								</extraArguments>
