@@ -42,16 +42,16 @@ spec:
         image: centos:7
         command: ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]
         env:
-        - name: SPECIAL_LEVEL_KEY_1
+        - name: SPECIAL_LEVEL_KEY
           valueFrom:
             configMapKeyRef:
               name: demo-config
-              key: SPECIAL_LEVEL
-        - name: SPECIAL_TYPE_KEY_1
+              key: SPECIAL_LEVEL_1
+        - name: SPECIAL_TYPE_KEY
           valueFrom:
             configMapKeyRef:
               name: demo-config
-              key: SPECIAL_TYPE
+              key: SPECIAL_TYPE_1
         envFrom:
         - configMapRef:
             name: demo-config
@@ -63,16 +63,16 @@ spec:
         image: centos:7
         command: ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]
         env:
-        - name: SPECIAL_LEVEL_KEY_2
+        - name: SPECIAL_LEVEL_KEY
           valueFrom:
             configMapKeyRef:
               name: demo-config
-              key: SPECIAL_LEVEL
-        - name: SPECIAL_TYPE_KEY_2
+              key: SPECIAL_LEVEL_2
+        - name: SPECIAL_TYPE_KEY
           valueFrom:
             configMapKeyRef:
               name: demo-config
-              key: SPECIAL_TYPE
+              key: SPECIAL_TYPE_2
         volumeMounts:
         - name: config-volume
           mountPath: /app/config.yaml
