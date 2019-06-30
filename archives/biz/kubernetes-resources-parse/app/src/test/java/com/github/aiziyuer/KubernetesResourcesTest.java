@@ -34,6 +34,7 @@ import io.kubernetes.client.models.V1Secret;
 import io.kubernetes.client.models.V1Volume;
 import io.kubernetes.client.models.V1beta2Deployment;
 import lombok.Data;
+import lombok.ToString.Exclude;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -93,7 +94,18 @@ public class KubernetesResourcesTest {
 
 		private Map<String, String> unreadableConfig = new HashMap<>();
 
+		@Exclude
 		private Object resource = null;
+	}
+
+	private String toJson(Object o) {
+
+		try {
+			return WRITER.writeValueAsString(o);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	// @Ignore
@@ -115,18 +127,20 @@ public class KubernetesResourcesTest {
 		Map<String, Map<String, Object>> resourceMap = new HashMap<>();
 		resourceTypeMap.keySet().forEach(s -> resourceMap.put(s, new HashMap<>()));
 
+		// 根据'---'作为分隔符来分割yaml的文档
 		for (String resourceContent : yamlContent.split("---")) {
 
 			if (StringUtils.isBlank(resourceContent))
 				continue;
 
 			// yaml text -> java map object -> jsonpath object
-			Object contentJson = Configuration.defaultConfiguration().jsonProvider()
-					.parse(WRITER.writeValueAsString(YAML.load(resourceContent)));
+			String contentJson = toJson(YAML.load(resourceContent));
+			log.info(String.format("resource: %s", contentJson));
+			Object contentJsonObj = Configuration.defaultConfiguration().jsonProvider().parse(contentJson);
 			// resource type
-			String kind = JsonPath.read(contentJson, "$.kind");
+			String kind = JsonPath.read(contentJsonObj, "$.kind");
 			// resource name
-			String name = JsonPath.read(contentJson, "$.metadata.name");
+			String name = JsonPath.read(contentJsonObj, "$.metadata.name");
 
 			Map<String, Object> resourceNameMap = resourceMap.get(kind);
 			// 没有注册的类型不解析
@@ -143,7 +157,7 @@ public class KubernetesResourcesTest {
 
 		}
 
-		log.info(String.format("resourceMap: %s", resourceMap));
+		log.trace(String.format("resourceMap: %s", resourceMap));
 
 		// TODO 组件配置: 环境变量, ConfigMap, Secret
 		List<AppInfo> appInfos = resourceMap.get("Deployment").entrySet().stream().map(entry -> {
@@ -152,88 +166,74 @@ public class KubernetesResourcesTest {
 			info.name = entry.getKey();
 			info.resource = entry.getValue();
 
-			try {
+			Configuration conf = Configuration.builder() //
+					.mappingProvider(new JacksonMappingProvider(JSON_OBJECT_MAPPER)) //
+					.jsonProvider(new JacksonJsonProvider(JSON_OBJECT_MAPPER)) //
+					.build();
 
-				Configuration conf = Configuration.builder() //
-						.mappingProvider(new JacksonMappingProvider(JSON_OBJECT_MAPPER)) //
-						.jsonProvider(new JacksonJsonProvider(JSON_OBJECT_MAPPER)) //
-						.build();
+			// 处理Volumes
+			Map<String, String> voluemeMap = new HashMap<>();
+			List<V1Volume> volumes = JsonPath//
+					.using(conf) //
+					.parse(toJson((V1beta2Deployment) info.resource)) //
+					.read("$.spec.template.spec.volumes[0:]", new TypeRef<List<V1Volume>>() {
+					});
+			volumes.stream()//
+					.parallel() // 并行计算
+					.peek(v -> {
+						// ConfigMap
+						V1ConfigMapVolumeSource configMap = v.getConfigMap();
+						if (configMap == null)
+							return;
 
-				// 处理Volumes
-				Map<String, String> voluemeMap = new HashMap<>();
-				List<V1Volume> volumes = JsonPath//
-						.using(conf) //
-						.parse(WRITER.writeValueAsString((V1beta2Deployment) info.resource)) //
-						.read("$.spec.template.spec.volumes[0:]", new TypeRef<List<V1Volume>>() {
-						});
-				volumes.stream()//
-						.parallel() // 并行计算
-						.peek(v -> {
-							// ConfigMap
-							V1ConfigMapVolumeSource configMap = v.getConfigMap();
-							if (configMap == null)
-								return;
+						// volume的名称
+						v.getName();
+						// configmap的名称
+						configMap.getName();
 
-							// volume的名称
-							v.getName();
-							// configmap的名称
-							configMap.getName();
+						voluemeMap.put(v.getName(), configMap.getName());
 
-							voluemeMap.put(v.getName(), configMap.getName());
+					}) //
+					.peek(v -> {
+						// TODO Secrets
+						v.getSecret();
+					}) //
+			;
 
-						}) //
-						.peek(v -> {
-							// TODO Secrets
-							v.getSecret();
-						}) //
-				;
+			// 处理容器
+			List<V1Container> containers = JsonPath//
+					.using(conf) //
+					.parse(toJson((V1beta2Deployment) info.resource)) //
+					.read( //
+							"$.spec.template.spec.containers[0:]", // [0:]可以让取出来的数据是map而不是数组
+							new TypeRef<List<V1Container>>() {
+							});
+			// 暂时只处理一个容器
+			containers.stream().limit(1).peek(container -> {
 
-				// 处理容器
-				List<V1Container> containers = JsonPath//
-						.using(conf) //
-						.parse(WRITER.writeValueAsString((V1beta2Deployment) info.resource)) //
-						.read( //
-								"$.spec.template.spec.containers[0:]", // [0:]可以让取出来的数据是map而不是数组
-								new TypeRef<List<V1Container>>() {
-								});
-				// 暂时只处理一个容器
-				containers.stream().limit(1).peek(container -> {
+				log.trace(String.format("containers.stream().limit(1).peek(container->: %s", toJson(container)));
 
-					try {
+				// TODO 环境变量
+				container.getEnv().forEach(env -> {
 
-						log.trace(String.format("containers.stream().limit(1).peek(container->: %s",
-								WRITER.writeValueAsString(container)));
-
-						// TODO 环境变量
-						container.getEnv().forEach(env -> {
-
-						});
-						container.getEnvFrom().forEach(envFrom -> {
-
-						});
-
-						// TODO 挂载点信息
-						container.getVolumeMounts().forEach(volumeMount -> {
-							
-
-						});
-						container.getVolumeDevices();
-
-					} catch (JsonProcessingException e) {
-						log.error("WRITER.writeValueAsString(container) error: ", e);
-					}
+				});
+				container.getEnvFrom().forEach(envFrom -> {
 
 				});
 
-			} catch (JsonProcessingException e1) {
-				log.error("JsonPath.parse(WRITER.writeValueAsString(deployment)) error: ", e1);
-			}
+				// TODO 挂载点信息
+				container.getVolumeMounts().forEach(volumeMount -> {
+
+				});
+				container.getVolumeDevices();
+
+			});
 
 			return info;
 
 		}).collect(Collectors.toList());
 
-		log.info(appInfos);
+		log.info(String.format("appInfos: %s", toJson(appInfos)));
 
 		// TODO 持久化目录(非必须)
 

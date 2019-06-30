@@ -29,9 +29,9 @@
 		<!-- additivity="true"> -->
 		<!-- <appender-ref ref="fileLogger" level="debug" /> -->
 		<!-- </Logger> -->
-		<Root level="debug" additivity="false">
+		<Root level="trace" additivity="false">
 			<appender-ref ref="console" level="warn" />
-			<appender-ref ref="fileLogger" level="info" />
+			<appender-ref ref="fileLogger" level="${env:LOG_LEVEL:-info}" />
 		</Root>
 	</Loggers>
 </Configuration>
