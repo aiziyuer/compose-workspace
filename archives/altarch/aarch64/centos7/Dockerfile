@@ -13,7 +13,7 @@ FROM centos/aarch64:7
 # 注册解析执行器, 主要用户异构场景
 COPY --from=builder /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
 
-# 覆盖源
+# 添加源源
 COPY etc/yum.repos.d/*.repo /etc/yum.repos.d/
 
 # 如果是x86_64宿主机下需要采用 docker run --rm --privileged multiarch/qemu-user-static:register 来预先注册
