@@ -22,8 +22,10 @@ data:
     color.bad=yellow
     allow.textmode=true
     how.nice.to.look=fairlyNice
-  SPECIAL_LEVEL: very
-  SPECIAL_TYPE: charm
+  SPECIAL_LEVEL_1: very
+  SPECIAL_TYPE_1: charm
+  SPECIAL_LEVEL_2: very
+  SPECIAL_TYPE_2: charm
 ---
 apiVersion: apps/v1beta1 
 kind: Deployment
@@ -36,16 +38,37 @@ spec:
         app: demo
     spec:
       containers:
-      - name: demo
+      - name: demo1
         image: centos:7
         command: ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]
         env:
-        - name: SPECIAL_LEVEL_KEY
+        - name: SPECIAL_LEVEL_KEY_1
           valueFrom:
             configMapKeyRef:
               name: demo-config
               key: SPECIAL_LEVEL
-        - name: SPECIAL_TYPE_KEY
+        - name: SPECIAL_TYPE_KEY_1
+          valueFrom:
+            configMapKeyRef:
+              name: demo-config
+              key: SPECIAL_TYPE
+        envFrom:
+        - configMapRef:
+            name: demo-config
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config.yaml
+          subPath: config.yaml
+      - name: demo2
+        image: centos:7
+        command: ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]
+        env:
+        - name: SPECIAL_LEVEL_KEY_2
+          valueFrom:
+            configMapKeyRef:
+              name: demo-config
+              key: SPECIAL_LEVEL
+        - name: SPECIAL_TYPE_KEY_2
           valueFrom:
             configMapKeyRef:
               name: demo-config
