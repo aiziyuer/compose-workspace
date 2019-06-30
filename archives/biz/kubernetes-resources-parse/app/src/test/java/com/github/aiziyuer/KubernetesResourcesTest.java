@@ -173,7 +173,7 @@ public class KubernetesResourcesTest {
 
 			// 处理Volumes
 			Map<String, String> voluemeMap = new HashMap<>();
-			List<V1Volume> volumes = JsonPath//
+			List<V1Volume> volumes = JsonPath// 实现参考: http://www.ibloger.net/article/2329.html
 					.using(conf) //
 					.parse(toJson((V1beta2Deployment) info.resource)) //
 					.read("$.spec.template.spec.volumes[0:]", new TypeRef<List<V1Volume>>() {
