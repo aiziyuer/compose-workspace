@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3'
 
 # 参考1: https://github.com/Kong/docker-kong/blob/master/compose/docker-compose.yml
 # 参考2: https://gist.github.com/pantsel/73d949774bd8e917bfd3d9745d71febf
@@ -18,7 +18,6 @@ x-common:
 	restart: on-failure
 
 services:
-
 
   kong-migrations:
     << : *x-common
