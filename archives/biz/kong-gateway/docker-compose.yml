@@ -14,6 +14,8 @@ services:
     user: "root"
     networks:
       - kong-net
+    links:
+      - postgres:postgres
     depends_on:
       postgres:
         condition: service_healthy
