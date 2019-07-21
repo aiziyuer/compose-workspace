@@ -93,4 +93,4 @@ services:
     networks:
       - kong-net
     volumes:
-      - ./data/postgres/data:/var/lib/postgresql/data
+      - ./data/postgres/data:/var/lib/postgresql/data:z
