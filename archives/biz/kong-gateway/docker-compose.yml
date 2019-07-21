@@ -6,20 +6,22 @@ version: '2.1'
 networks:
   kong-net:
 
+x-common:
+    &x-common
+	image: "${KONG_DOCKER_TAG:-kong:latest}"
+	user: "root"
+	networks:
+	  - kong-net
+	volumes:
+	  - ./conf/kong/kong.conf:/etc/kong/kong.conf:z
+	  - ./data/kong/logs:/usr/local/kong/logs:z
+	restart: on-failure
+
 services:
 
-  kong-common:
-    image: "${KONG_DOCKER_TAG:-kong:latest}"
-    user: "root"
-    networks:
-      - kong-net
-    volumes:
-      - ./conf/kong/kong.conf:/etc/kong/kong.conf:z
-      - ./data/kong/logs:/usr/local/kong/logs:z
-    restart: on-failure
 
   kong-migrations:
-    extends: kong-common
+    << : *x-common
     command: kong migrations bootstrap -c /etc/kong/kong.conf
     depends_on:
       postgres:
@@ -28,7 +30,7 @@ services:
       - postgres:postgres
        
   kong-migrations-up:
-    extends: kong-common
+    << : *x-common
     command: kong migrations up -c /etc/kong/kong.conf
     depends_on:
       postgres:
