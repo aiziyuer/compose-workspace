@@ -9,7 +9,7 @@ networks:
 services:
   kong-migrations:
     image: "${KONG_DOCKER_TAG:-kong:latest}"
-    command: kong -c /etc/kong/kong.conf migrations bootstrap
+    command: kong migrations bootstrap -c /etc/kong/kong.conf
     depends_on:
       postgres:
         condition: service_healthy
@@ -21,7 +21,7 @@ services:
     
   kong-migrations-up:
     image: "${KONG_DOCKER_TAG:-kong:latest}"
-    command: kong -c /etc/kong/kong.conf migrations up
+    command: kong migrations up -c /etc/kong/kong.conf
     depends_on:
       postgres:
         condition: service_healthy
@@ -33,7 +33,7 @@ services:
     
   kong:
     image: "${KONG_DOCKER_TAG:-kong:latest}"
-    command: kong -c /etc/kong/kong.conf start 
+    command: kong start -c /etc/kong/kong.conf
     user: "root"
     depends_on:
       postgres:
