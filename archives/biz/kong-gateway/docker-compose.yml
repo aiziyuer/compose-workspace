@@ -38,7 +38,7 @@ services:
       - postgres:postgres
 
   kong:
-    extends: kong-common
+    << : *x-common
     command: kong start -c /etc/kong/kong.conf
     depends_on:
       postgres:
