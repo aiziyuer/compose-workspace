@@ -58,6 +58,8 @@ services:
   kong-dashboard:
     image: pgbi/kong-dashboard
     command: "start --kong-url http://kong:8001"
+    networks:
+      - kong-net
     links:
       - kong:kong
     ports:
