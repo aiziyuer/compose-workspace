@@ -8,29 +8,38 @@ networks:
 
 services:
 
-  kong-migrations:
+  kong-common:
     image: "${KONG_DOCKER_TAG:-kong:latest}"
-    command: kong migrations bootstrap -c /etc/kong/kong.conf
     user: "root"
     networks:
       - kong-net
     links:
       - postgres:postgres
-    depends_on:
-      postgres:
-        condition: service_healthy
     volumes:
       - ./conf/kong/kong.conf:/etc/kong/kong.conf:z
       - ./data/kong/logs:/usr/local/kong/logs:z
     restart: on-failure
-    
+
+  kong-migrations:
+    extends: kong-common
+    command: kong migrations bootstrap -c /etc/kong/kong.conf
+    depends_on:
+      postgres:
+        condition: service_healthy
+        
   kong-migrations-up:
     extends: kong-migrations
     command: kong migrations up -c /etc/kong/kong.conf
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   kong:
-    extends: kong-migrations
+    extends: kong-common
     command: kong start -c /etc/kong/kong.conf
+    depends_on:
+      postgres:
+        condition: service_healthy
     ports:
       - "8000:8000/tcp"
       - "8001:8001/tcp"
