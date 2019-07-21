@@ -13,8 +13,6 @@ services:
     user: "root"
     networks:
       - kong-net
-    links:
-      - postgres:postgres
     volumes:
       - ./conf/kong/kong.conf:/etc/kong/kong.conf:z
       - ./data/kong/logs:/usr/local/kong/logs:z
@@ -26,14 +24,18 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-        
+    links:
+      - postgres:postgres
+       
   kong-migrations-up:
     extends: kong-migrations
     command: kong migrations up -c /etc/kong/kong.conf
     depends_on:
       postgres:
         condition: service_healthy
-
+    links:
+      - postgres:postgres
+      
   kong:
     extends: kong-common
     command: kong start -c /etc/kong/kong.conf
