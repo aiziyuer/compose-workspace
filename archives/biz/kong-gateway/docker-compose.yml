@@ -55,7 +55,13 @@ services:
       timeout: 10s
       retries: 10
 
-
+  kong-dashboard:
+    image: pgbi/kong-dashboard
+    command: "start --kong-url http://kong:8001"
+    links:
+      - kong:kong
+    ports:
+      - 8080:8080
 
   postgres:
     image: postgres:9.5
