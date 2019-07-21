@@ -1,4 +1,4 @@
-version: '3'
+version: '2.1'
 
 # 参考1: https://github.com/Kong/docker-kong/blob/master/compose/docker-compose.yml
 # 参考2: https://gist.github.com/pantsel/73d949774bd8e917bfd3d9745d71febf
@@ -7,15 +7,15 @@ networks:
   kong-net:
 
 x-common:
-    &x-common
-	image: "${KONG_DOCKER_TAG:-kong:latest}"
-	user: "root"
-	networks:
-	  - kong-net
-	volumes:
-	  - ./conf/kong/kong.conf:/etc/kong/kong.conf:z
-	  - ./data/kong/logs:/usr/local/kong/logs:z
-	restart: on-failure
+  &x-common
+  image: "${KONG_DOCKER_TAG:-kong:latest}"
+  user: "root"
+  networks:
+    - kong-net
+  volumes:
+    - ./conf/kong/kong.conf:/etc/kong/kong.conf:z
+    - ./data/kong/logs:/usr/local/kong/logs:z
+  restart: on-failure
 
 services:
 
@@ -27,7 +27,7 @@ services:
         condition: service_healthy
     links:
       - postgres:postgres
-       
+
   kong-migrations-up:
     << : *x-common
     command: kong migrations up -c /etc/kong/kong.conf
@@ -36,7 +36,7 @@ services:
         condition: service_healthy
     links:
       - postgres:postgres
-      
+
   kong:
     extends: kong-common
     command: kong start -c /etc/kong/kong.conf
