@@ -28,7 +28,7 @@ services:
       - postgres:postgres
        
   kong-migrations-up:
-    extends: kong-migrations
+    extends: kong-common
     command: kong migrations up -c /etc/kong/kong.conf
     depends_on:
       postgres:
