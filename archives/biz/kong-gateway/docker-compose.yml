@@ -44,10 +44,9 @@ services:
       postgres:
         condition: service_healthy
     ports:
-      - "8000:8000/tcp"
+      - "80:8000/tcp"
       - "8001:8001/tcp"
-      - "8443:8443/tcp"
-      - "8444:8444/tcp"
+      - "443:8443/tcp"
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 10s
