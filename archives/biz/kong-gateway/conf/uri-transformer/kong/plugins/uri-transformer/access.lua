@@ -6,6 +6,9 @@ mkdir -p /usr/local/share/lua/5.1/kong/plugins/uri-transformer
 
 "]]
 
+local ngx = ngx
+local kong = kong
+
 local _M = {}
 
 function _M.execute(conf)
@@ -34,10 +37,16 @@ function _M.execute(conf)
             upstream_uri = string.gsub(upstream_uri, string.format("$%s", i), uri_captures[i])
         end
 
+        ngx.var.upstream_uri = upstream_uri
     end
 
     -- 每次都关闭调试开关
-    require('mobdebug').done()
+    if conf.remotedebug_enable then
+        require('mobdebug').done()
+    end
+    
+    local scheme = kong.service.request.get_scheme()
+    -- ngx.var.upstream_scheme = scheme
 
 end
 
