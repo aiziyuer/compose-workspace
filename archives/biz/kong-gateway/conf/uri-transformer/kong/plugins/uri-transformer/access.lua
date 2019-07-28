@@ -11,7 +11,7 @@ local _M = {}
 function _M.execute(conf)
 
     -- 插件开关
-    if conf.debug_model then
+    if conf.remotedebug_enable then
         require('mobdebug').start(conf.remotedebug_host)
     end
 
