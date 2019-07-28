@@ -58,6 +58,9 @@ services:
 
   kong-dashboard:
     build: ./kong-dashboard
+    depends_on:
+      kong:
+        condition: service_healthy
     networks:
       - kong-net
     links:
