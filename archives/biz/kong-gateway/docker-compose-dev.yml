@@ -15,7 +15,7 @@ x-common:
   volumes:
     - ./conf/kong/kong.conf:/etc/kong/kong.conf:z
     - ./data/kong/logs:/usr/local/kong/logs:z
-    - ./conf/kong/uri-transformer/kong/plugins/uri-transformer:/usr/local/share/lua/5.1/kong/plugins/uri-transformer:z
+    - ./conf/uri-transformer/kong/plugins/uri-transformer:/usr/local/share/lua/5.1/kong/plugins/uri-transformer:z
   restart: on-failure
 
 services:
@@ -88,3 +88,8 @@ services:
       - kong-net
     volumes:
       - ./data/postgres/data:/var/lib/postgresql/data:z
+
+  nginx:
+     image: nginx:1.17.2-perl
+     volumes:
+      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf:ro 
