@@ -8,7 +8,7 @@ networks:
 
 x-common:
   &x-common
-  image: "${KONG_DOCKER_TAG:-kong:latest}"
+  image: "${KONG_DOCKER_TAG:-kong:1.0.2-centos}"
   user: "root"
   networks:
     - kong-net
@@ -56,8 +56,7 @@ services:
       retries: 10
 
   kong-dashboard:
-    image: pgbi/kong-dashboard
-    command: "start --kong-url http://kong:8001"
+    build: ./kong-dashboard
     networks:
       - kong-net
     links:
