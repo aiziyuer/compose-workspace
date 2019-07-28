@@ -8,14 +8,14 @@ networks:
 
 x-common:
   &x-common
-  image: "${KONG_DOCKER_TAG:-kong:1.0.2-centos}"
+  build: ./kong
   user: "root"
   networks:
     - kong-net
   volumes:
     - ./conf/kong/kong.conf:/etc/kong/kong.conf:z
     - ./data/kong/logs:/usr/local/kong/logs:z
-    - ./uri-transformer/kong/plugins/uri-transformer:/usr/local/share/lua/5.1/kong/plugins/uri-transformer:z
+    - ./conf/uri-transformer/kong/plugins/uri-transformer:/usr/local/share/lua/5.1/kong/plugins/uri-transformer:z
   restart: on-failure
 
 services:

@@ -1,14 +1,23 @@
-package.path = package.path .. ";./?.lua;/opt/zbstudio/lualibs/?/?.lua;/opt/zbstudio/lualibs/?.lua"
-package.cpath = package.cpath .. ";/opt/zbstudio/bin/linux/x64/?.so;/opt/zbstudio/bin/linux/x64/clibs/?.so"
+-- package.path = package.path .. ";./?.lua;/opt/zbstudio/lualibs/?/?.lua;/opt/zbstudio/lualibs/?.lua"
+-- package.cpath = package.cpath .. ";/opt/zbstudio/bin/linux/x64/?.so;/opt/zbstudio/bin/linux/x64/clibs/?.so"
 
 --[["
 
 
 
 
+
+
+
 # 快速挂载开发机调试
 
+
 mkdir -p /usr/local/share/lua/5.1/kong/plugins/uri-transformer
+
+
+
+
+
 
 
 
