@@ -15,6 +15,7 @@ x-common:
   volumes:
     - ./conf/kong/kong.conf:/etc/kong/kong.conf:z
     - ./data/kong/logs:/usr/local/kong/logs:z
+    - ./uri-transformer/kong/plugins/uri-transformer:/usr/local/share/lua/5.1/kong/plugins/uri-transformer:z
   restart: on-failure
 
 services:
@@ -54,8 +55,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
-    volumes:
-      - ./uri-transformer/kong/plugins/uri-transformer:/usr/local/share/lua/5.1/kong/plugins/uri-transformer:z
 
   kong-dashboard:
     build: ./kong-dashboard
