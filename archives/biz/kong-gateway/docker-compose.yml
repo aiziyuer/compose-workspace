@@ -88,3 +88,11 @@ services:
       - kong-net
     volumes:
       - ./data/postgres/data:/var/lib/postgresql/data:z
+  nginx:
+     image: nginx:1.17.2-perl
+     ports:
+      - 6080:6080
+      - 6443:6443
+     volumes:
+      - ./conf/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./conf/nginx/certs:/etc/nginx/certs:ro
