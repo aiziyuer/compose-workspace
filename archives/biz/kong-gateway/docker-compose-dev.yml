@@ -95,3 +95,4 @@ services:
       - 6443:6443
      volumes:
       - ./conf/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./conf/nginx/certs:/etc/nginx/certs:ro
