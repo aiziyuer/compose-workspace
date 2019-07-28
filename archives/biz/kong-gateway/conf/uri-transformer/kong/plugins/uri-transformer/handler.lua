@@ -13,32 +13,33 @@ function UriTransformerHandler:init_worker()
   -- 在这里实现自定义的逻辑
 end
 
-function UriTransformerHandler:certificate(config)
+function UriTransformerHandler:certificate(conf)
   UriTransformerHandler.super.certificate(self)
   -- 在这里实现自定义的逻辑
 end
 
-function UriTransformerHandler:rewrite(config)
+function UriTransformerHandler:rewrite(conf)
   UriTransformerHandler.super.rewrite(self)
   -- 在这里实现自定义的逻辑
 end
 
-function UriTransformerHandler:access(config)
+function UriTransformerHandler:access(conf)
   UriTransformerHandler.super.access(self)
   -- 在这里实现自定义的逻辑
+  access.execute(conf)
 end
 
-function UriTransformerHandler:header_filter(config)
+function UriTransformerHandler:header_filter(conf)
   UriTransformerHandler.super.header_filter(self)
   -- 在这里实现自定义的逻辑
 end
 
-function UriTransformerHandler:body_filter(config)
+function UriTransformerHandler:body_filter(conf)
   UriTransformerHandler.super.body_filter(self)
   -- 在这里实现自定义的逻辑
 end
 
-function UriTransformerHandler:log(config)
+function UriTransformerHandler:log(conf)
   UriTransformerHandler.super.log(self)
   -- 在这里实现自定义的逻辑
 end
