@@ -39,14 +39,16 @@ function _M.execute(conf)
 
         ngx.var.upstream_uri = upstream_uri
     end
+    
+    -- 强制反代协议和后端协议一致
+    if conf.preserve_schema then
+        ngx.var.upstream_scheme = ngx.var.scheme
+    end
 
     -- 每次都关闭调试开关
     if conf.remotedebug_enable then
         require('mobdebug').done()
     end
-    
-    local scheme = kong.service.request.get_scheme()
-    -- ngx.var.upstream_scheme = scheme
 
 end
 
