@@ -6,6 +6,7 @@ services:
     nginx:
       container_name: nginx
       build: ./nginx
+      image: aiziyuer/simple-reserve-proxy:nginx
       privileged: true
       ports:
        - 20080:80
@@ -13,6 +14,7 @@ services:
     redis:
       container_name: redis
       build: ./redis
+      image: aiziyuer/simple-reserve-proxy:redis
       privileged: true
       volumes:
        - ./conf/redis/redis.conf:/etc/redis.conf
@@ -25,6 +27,7 @@ services:
     openresty:
       container_name: openresty
       build: ./openresty
+      image: aiziyuer/simple-reserve-proxy:openresty
       privileged: true
       volumes:
        - ./conf/openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
