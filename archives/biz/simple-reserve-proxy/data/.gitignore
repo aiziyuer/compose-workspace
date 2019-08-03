@@ -1,0 +1,4 @@
+openresty/**/*
+!openresty/**/.gitkeep
+redis/**/*
+!redis/**/.gitkeep
