@@ -11,6 +11,11 @@ services:
       privileged: true
       volumes:
        - ./conf/http/nginx.conf:/etc/nginx/nginx.conf
+    openresty:
+      build: ./openresty
+      privileged: true
+      volumes:
+       - ./conf/openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
     socket:
       build: ./centos7
       privileged: true
