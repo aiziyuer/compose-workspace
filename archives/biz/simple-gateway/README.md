@@ -10,7 +10,7 @@ yum install -y redis unix2dos
 
 # 初始化redis的
 cat <<EOL | unix2dos | redis-cli --pipe
-#FLUSHALL
+FLUSHALL
 SET backend:example.com:80 11.11.11.101:80
 EOL
 
