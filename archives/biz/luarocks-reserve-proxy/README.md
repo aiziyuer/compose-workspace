@@ -14,18 +14,16 @@ yum install -y redis unix2dos
 # 初始化redis的
 cat <<EOL | unix2dos | redis-cli --pipe
 FLUSHALL
-SET backend:example.com:80 "185.199.111.153:80 aiziyuer.github.io"
+SET backend:example.com:80 "202.38.95.110:80 mirrors.ustc.edu.cn"
 EOL
 
 # 样例nginx服务从gateway访问
 curl -X GET \
---url http://localhost/2019/07/28/kong-study-plugin.html \
--H "Host:example.com" \
-| base64 | head -n 5
+--url http://localhost/alpine/v3.10/releases/x86_64/alpine-extended-3.10.0-x86_64.iso.sha256 \
+-H "Host:example.com" 
 
 # 原始的样例nginx服务直接访问
-curl http://aiziyuer.github.io/2019/07/28/kong-study-plugin.html \
-| base64 | head -n 5
+curl http://mirrors.ustc.edu.cn/alpine/v3.10/releases/x86_64/alpine-extended-3.10.0-x86_64.iso.sha256
 
 ```
 
@@ -37,3 +35,4 @@ curl http://aiziyuer.github.io/2019/07/28/kong-study-plugin.html \
 -   [Nginx内置绑定变量](https://wiki.jikexueyuan.com/project/openresty/openresty/inline_var.html)
 -   [Redis操作指南](https://redis.io/topics/mass-insert)
 -   [lua与redis结合应用于nginx的动态upstream](http://www.rendoumi.com/luayu-redisjie-he-ying-yong-yu-nginxde-dong-tai-upstream/)
+-   [Environment Variables in Nginx Config](https://blog.doismellburning.co.uk/environment-variables-in-nginx-config/)
