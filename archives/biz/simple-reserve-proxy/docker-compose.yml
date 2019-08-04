@@ -1,40 +1,48 @@
 version: '2'
 
+networks:
+  gateway-net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "11.11.11.0/24"
+
 services:
  
     # 测试用的服务
-    nginx:
-      container_name: nginx
-      build: ./nginx
-      image: aiziyuer/simple-reserve-proxy:nginx
-      privileged: true
-      ports:
-       - 20080:80
+    example:
+      image: nginx:1.17.2-alpine-perl
+      networks:
+        gateway-net:
+          ipv4_address: 11.11.11.101
+      expose:
+       - "80"
     
     redis:
-      container_name: redis
-      build: ./redis
-      image: aiziyuer/simple-reserve-proxy:redis
-      privileged: true
+      image: redis:alpine3.10
+      user: root
+      entrypoint: 
+        - redis-server
+        - /usr/local/etc/redis/redis.conf
+      networks:
+        gateway-net:
+          ipv4_address: 11.11.11.3
       volumes:
-       - ./conf/redis/redis.conf:/etc/redis.conf
-       - ./conf/redis/redis.service:/usr/lib/systemd/system/redis.service
+       - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
        - ./data/redis:/var/lib/redis:z
        - ./data/redis/log:/var/log/redis/:z
       ports:
-       - 16379:6379
+       - "6379:6379/tcp"
     
     openresty:
-      container_name: openresty
-      build: ./openresty
-      image: aiziyuer/simple-reserve-proxy:openresty
-      privileged: true
+      image: openresty/openresty:1.15.8.1-3-alpine
       volumes:
-       - ./conf/openresty/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+       - ./conf/openresty/conf.d:/etc/nginx/conf.d
        - ./data/openresty/logs:/usr/local/openresty/nginx/logs
+      networks:
+        gateway-net:
       ports:
-       - 10080:80
+       - "80:80/tcp"
+       - "443:443/tcp"
       links:
        - "redis"
-       - "nginx"
-
