@@ -52,8 +52,8 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # 下载编译工具链, 下面是加速mirrors, 原始链接: https://github.com/RMerl/am-toolchains.git
 RUN git clone --depth=1 \
-       https://codehub.devcloud.huaweicloud.com/aiziyuer00001/am-toolchains.git /opt/am-toolchains \
- && chown -R asuswrt:root /opt/am-toolchains
+       https://codehub.devcloud.huaweicloud.com/aiziyuer00001/am-toolchains.git /opt/toolchains \
+ && chown -R asuswrt:root /opt/toolchains
 
 # 编译后发现需要补充的包
 RUN apt-get update -y \
