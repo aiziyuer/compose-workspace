@@ -33,13 +33,15 @@ ln -s ~/asuswrt-merlin.ng /media/ASUSWRT/asuswrt-merlin.ng
 
 # 开始编译
 cd ~/asuswrt-merlin.ng/release/src-rt-5.02hnd
-#export CC=/opt/toolchains/crosstools-aarch64-gcc-5.5-linux-4.1-glibc-2.26-binutils-2.28.1/bin/aarch64-linux-gcc
+# 这一步非常久
 make rt-ac86u
 
 
+#export CC=/opt/toolchains/crosstools-aarch64-gcc-5.5-linux-4.1-glibc-2.26-binutils-2.28.1/bin/aarch64-linux-gcc
 ```
 
 
 ## FAQ
 
 - [mritd/asuswrt-merlin-build](https://hub.docker.com/r/mritd/asuswrt-merlin-build/dockerfile)
+- [Compile Firmware from source using Ubuntu](https://github.com/RMerl/asuswrt-merlin/wiki/Compile-Firmware-from-source-using-Ubuntu)

@@ -37,6 +37,14 @@ RUN apt-get update -y \
     && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/*
 
+# 编译后发现需要补充的包
+RUN apt-get update -y \
+    && apt-get install -y \
+        docbook-xsl libtool-bin \
+    && apt-get autoremove -y \
+    && apt-get autoclean -y \
+    && rm -rf /var/lib/apt/lists/*
+
 # 系统定制, 强制系统使用bash来解释sh脚本
 RUN \
     ln -sf bash /bin/sh
