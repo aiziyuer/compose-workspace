@@ -42,6 +42,19 @@ RUN dpkg --add-architecture i386 \
  && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
  && echo "Asia/Shanghai" > /etc/timezone
 
+# 系统定制, 强制系统使用bash来解释sh脚本
+RUN \
+    ln -sf bash /bin/sh
+
+# ng的编译中有要求不允许root用户
+RUN adduser --gecos '' --ingroup root --disabled-password asuswrt && adduser asuswrt sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# 下载编译工具链, 下面是加速mirrors, 原始链接: https://github.com/RMerl/am-toolchains.git
+RUN git clone --depth=1 \
+       https://codehub.devcloud.huaweicloud.com/aiziyuer00001/am-toolchains.git /opt/am-toolchains \
+ && chown -R asuswrt:root /opt/am-toolchains
+
 # 编译后发现需要补充的包
 RUN apt-get update -y \
  && apt-get install -y \
@@ -62,28 +75,15 @@ RUN apt-get update -y \
  && apt-get autoclean -y \
  && rm -rf /var/lib/apt/lists/*
 
-# 下载编译工具链
-RUN git clone \
-       https://github.com/RMerl/am-toolchains.git /opt/am-toolchains
-
 RUN \
     echo "export LD_LIBRARY_PATH=$LD_LIBRARY:/opt/toolchains/crosstools-arm-gcc-5.3-linux-4.1-glibc-2.22-binutils-2.25/usr/lib" >> ~/.profile \
  && echo "export TOOLCHAIN_BASE=/opt/toolchains" >> ~/.profile \
  && echo "PATH=\$PATH:/opt/toolchains/crosstools-arm-gcc-5.3-linux-4.1-glibc-2.22-binutils-2.25/usr/bin" >> ~/.profile \
  && echo "PATH=\$PATH:/opt/toolchains/crosstools-aarch64-gcc-5.3-linux-4.1-glibc-2.22-binutils-2.25/usr/bin" >> ~/.profile
 
-# 系统定制, 强制系统使用bash来解释sh脚本
-RUN \
-    ln -sf bash /bin/sh
-
-# ng的编译中有要求不允许root用户
-RUN adduser --gecos '' --ingroup root --disabled-password asuswrt && adduser asuswrt sudo
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN \
        mkdir -p /{media,opt} \
  && mkdir -p /home/asuswrt/am-toolchains \
- && mkdir -p /home/asuswrt/asuswrt-merlin.ng \
- && chown -R asuswrt:root /media /opt \
- && chown -R asuswrt:root /home/asuswrt
+ && mkdir -p /home/asuswrt/asuswrt-merlin.ng
 
 USER asuswrt

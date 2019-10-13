@@ -6,4 +6,4 @@ services:
       image: aiziyuer/asuswrt-merlin:384.13
       command: tail -f /dev/null
       volumes:
-        - /opt/asuswrt-merlin.ng:/home/asuswrt/asuswrt-merlin.ng
+        - /media/asuswrt-merlin.ng:/home/asuswrt/asuswrt-merlin.ng

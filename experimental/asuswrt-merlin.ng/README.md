@@ -10,9 +10,8 @@
 
 ``` bash
 # 下载源码
-git clone https://github.com/RMerl/am-toolchains.git /opt/am-toolchains
-git clone https://github.com/RMerl/asuswrt-merlin.ng /opt/asuswrt-merlin.ng
-cd /opt/asuswrt-merlin.ng && git checkout 384.13_1 -b 384.13_1
+git clone --depth=1 -b 384.13_1 \
+    https://github.com/aiziyuer/asuswrt-merlin.ng.git /media/asuswrt-merlin.ng
 
 # 宿主机注册aarch64的cpu异构钩子
 docker run --rm --privileged multiarch/qemu-user-static:register
