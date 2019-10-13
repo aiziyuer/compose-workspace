@@ -21,6 +21,11 @@ LABEL org.label-schema.name="Asuswrt Merlin Build" \
 # 注册解析执行器, 主要用户异构场景
 COPY --from=builder /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
 
+# 替换成速度快一些的华为云mirrors
+RUN \
+    sed -i "s@http://.*archive.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list \
+ && sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list 
+
 RUN dpkg --add-architecture i386 \
  && apt-get update -y \
  && apt-get install -y \
