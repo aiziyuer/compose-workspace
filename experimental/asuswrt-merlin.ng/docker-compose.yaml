@@ -3,7 +3,7 @@ version: '2'
 services:
     workspace:
       build: ./workspace
+      image: aiziyuer/asuswrt-merlin:384.13
       command: tail -f /dev/null
       volumes:
-        - /opt/am-toolchains:/home/asuswrt/am-toolchains
         - /opt/asuswrt-merlin.ng:/home/asuswrt/asuswrt-merlin.ng

@@ -14,18 +14,16 @@ git clone https://github.com/RMerl/am-toolchains.git /opt/am-toolchains
 git clone https://github.com/RMerl/asuswrt-merlin.ng /opt/asuswrt-merlin.ng
 cd /opt/asuswrt-merlin.ng && git checkout 384.13_1 -b 384.13_1
 
+# 宿主机注册aarch64的cpu异构钩子
+docker run --rm --privileged multiarch/qemu-user-static:register
+# 取消注册钩子
+# docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
 # 用容器启动编译环境干干净净
 docker-compose run workspace bash
 
 # 修改文件数组
 sudo chown asuswrt:root -R /home/asuswrt/asuswrt-merlin.ng
-
-# 设置工具链接
-ln -s ~/am-toolchains/brcm-arm-hnd /opt/toolchains
-echo "export LD_LIBRARY_PATH=$LD_LIBRARY:/opt/toolchains/crosstools-arm-gcc-5.3-linux-4.1-glibc-2.22-binutils-2.25/usr/lib" >> ~/.profile
-echo "export TOOLCHAIN_BASE=/opt/toolchains" >> ~/.profile
-echo "PATH=\$PATH:/opt/toolchains/crosstools-arm-gcc-5.3-linux-4.1-glibc-2.22-binutils-2.25/usr/bin" >> ~/.profile
-echo "PATH=\$PATH:/opt/toolchains/crosstools-aarch64-gcc-5.3-linux-4.1-glibc-2.22-binutils-2.25/usr/bin" >> ~/.profile
 
 # 设置输出目录
 mkdir -p /media/ASUSWRT/
@@ -36,10 +34,30 @@ cd ~/asuswrt-merlin.ng/release/src-rt-5.02hnd
 # 这一步非常久
 make rt-ac86u
 
-
 #export CC=/opt/toolchains/crosstools-aarch64-gcc-5.5-linux-4.1-glibc-2.26-binutils-2.28.1/bin/aarch64-linux-gcc
 ```
 
+## 系统定制
+
+### IPV6的NAT开关打开
+
+``` bash
+# 默认官方的梅林固件的ipv6是没有打开NAT功能的, 重新编译来支持
+# CONFIG_NF_NAT_MASQUERADE_IPV6
+# CONFIG_IP6_NF_NAT
+# CONFIG_IP6_NF_TARGET_MASQUERADE
+
+# 成功后可以在内核模块中看到nf_nat_ipv6.ko文件
+
+```
+
+
+## 蛋疼网络卡住了镜像构建
+
+``` bash
+# 切换到需要编译的Dockerfile所在目录, 配置一下代理让构建过程飞起来
+docker build --build-arg http_proxy=http://192.168.50.136:3128 --build-arg https_proxy=http://192.168.50.136:3128 .
+```
 
 ## FAQ
 
