@@ -81,9 +81,4 @@ RUN \
  && echo "PATH=\$PATH:/opt/toolchains/crosstools-arm-gcc-5.3-linux-4.1-glibc-2.22-binutils-2.25/usr/bin" >> ~/.profile \
  && echo "PATH=\$PATH:/opt/toolchains/crosstools-aarch64-gcc-5.3-linux-4.1-glibc-2.22-binutils-2.25/usr/bin" >> ~/.profile
 
-RUN \
-       mkdir -p /{media,opt} \
- && mkdir -p /home/asuswrt/am-toolchains \
- && mkdir -p /home/asuswrt/asuswrt-merlin.ng
-
 USER asuswrt
