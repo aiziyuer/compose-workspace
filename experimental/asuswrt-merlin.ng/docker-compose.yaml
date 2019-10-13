@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+    workspace:
+      build: ./workspace
+      command: tail -f /dev/null
+      volumes:
+        - /opt/am-toolchains:/home/asuswrt/am-toolchains
+        - /opt/asuswrt-merlin.ng:/home/asuswrt/asuswrt-merlin.ng
