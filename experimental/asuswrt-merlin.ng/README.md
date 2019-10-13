@@ -22,18 +22,14 @@ docker run --rm --privileged multiarch/qemu-user-static:register
 docker-compose run workspace bash
 
 # 修改文件数组
-sudo chown asuswrt:root -R /home/asuswrt/asuswrt-merlin.ng
-
-# 设置输出目录
-mkdir -p /media/ASUSWRT/
-ln -s ~/asuswrt-merlin.ng /media/ASUSWRT/asuswrt-merlin.ng
+sudo chown asuswrt:root -R /media/ASUSWRT/asuswrt-merlin.ng
 
 # 开始编译
-cd ~/asuswrt-merlin.ng/release/src-rt-5.02hnd
-# 这一步非常久
-make rt-ac86u
+cd /media/ASUSWRT/asuswrt-merlin.ng/release/src-rt-5.02hnd
+make rt-ac86u | tee output.log
 
-#export CC=/opt/toolchains/crosstools-aarch64-gcc-5.5-linux-4.1-glibc-2.26-binutils-2.28.1/bin/aarch64-linux-gcc
+# 这一步非常久, 我这里大概是3个小时
+
 ```
 
 ## 系统定制
@@ -42,9 +38,11 @@ make rt-ac86u
 
 ``` bash
 # 默认官方的梅林固件的ipv6是没有打开NAT功能的, 重新编译来支持
+# 文件路径: release/src-rt-5.02hnd/hostTools/scripts/defconfig-bcm.template
 # CONFIG_NF_NAT_MASQUERADE_IPV6
 # CONFIG_IP6_NF_NAT
 # CONFIG_IP6_NF_TARGET_MASQUERADE
+# 以上几个开关设置为y
 
 # 成功后可以在内核模块中看到nf_nat_ipv6.ko文件
 
