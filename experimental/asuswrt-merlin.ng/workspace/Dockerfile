@@ -30,6 +30,7 @@ RUN apt-get update -y \
     && apt-get install -y \
         liblzo2-dev uuid-dev uuid-dev build-essential lzma-dev liblzma-dev lzma binutils-dev \
         texinfo dos2unix u-boot-tools device-tree-compiler qemu \
+        bc xsltproc \
         patch cmake autogen intltool libglib2.0-dev \
         libc6-i386 lib32stdc++6 lib32z1 libelf1:i386 libncurses5:i386 libc6-dev-i386 \
     && apt-get autoremove -y \
