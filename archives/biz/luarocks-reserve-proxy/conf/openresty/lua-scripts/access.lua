@@ -3,7 +3,7 @@ local _M  = {}
 
 function _M.go()
 
-    -- require("mobdebug").start("192.168.50.135")
+    require("mobdebug").start("192.168.50.135")
 
     -- 根据访问的host:port来查询对应的后端服务
     local key = "backend:"..ngx.var.http_host..":"..ngx.var.server_port
