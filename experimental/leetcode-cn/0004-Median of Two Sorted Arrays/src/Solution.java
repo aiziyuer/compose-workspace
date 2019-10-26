@@ -40,9 +40,40 @@
  */
 
 class Solution {
-    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-    	
-        
-    	return -1;
-    }
+	public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+		// 设置边界
+		int[] fakeNums1 = new int[nums1.length + 1];
+		int[] fakeNums2 = new int[nums2.length + 1];
+		for (int i = 0; i < nums1.length; i++)
+			fakeNums1[i] = nums1[i];
+		for (int i = 0; i < nums2.length; i++)
+			fakeNums2[i] = nums2[i];
+		fakeNums1[nums1.length] = fakeNums2[nums2.length] = Integer.MAX_VALUE;
+
+		// 分别记录中位数的位置
+		int i1, i2;
+		i1 = i2 = 0;
+
+		// 定义中位数
+		int mid = -1;
+
+		// 取第n小的数字
+		for (int c = 0; c <= (nums1.length + nums2.length - 1) / 2; c++) {
+
+			if (fakeNums1[i1] <= fakeNums2[i2]) {
+				mid = fakeNums1[i1];
+				if (i1 < fakeNums1.length)
+					i1++;
+			} else {
+				mid = fakeNums2[i2];
+				if (i2 < fakeNums2.length)
+					i2++;
+			}
+
+		}
+
+		return ((nums1.length + nums2.length) % 2 != 0) ? mid : (mid + Math.min(fakeNums1[i1], fakeNums2[i2])) / 2.0;
+
+	}
 }
