@@ -73,6 +73,7 @@ class Solution {
 
 		}
 
+		// 奇数中位数就一个, 偶数需要再往后看一位数字然后算下均值
 		return ((nums1.length + nums2.length) % 2 != 0) ? mid : (mid + Math.min(fakeNums1[i1], fakeNums2[i2])) / 2.0;
 
 	}
