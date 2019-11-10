@@ -1,0 +1,22 @@
+
+# software version
+docker_version: 18.03.1
+kube_version: v1.10.5
+kubernetes_cni_version: v0.6.0
+gluster_version: 4.1.9
+flannel_version: v0.11.0
+
+# kubernete configuration
+# eg. token: b0f7b8.8d1767879297d85c
+token: ffffff.ffffffffffffffff
+service_cidr: "220.0.0.0/12"
+pod_network_cidr: "219.0.0.0/8"
+cluster_domain: "cluster.me"
+support_ipvs: "false"
+network_interface: "eth0"
+
+
+ansible_ssh_user: root
+ansible_ssh_pass: Changeme_123
+ansible_connection: ssh
+
