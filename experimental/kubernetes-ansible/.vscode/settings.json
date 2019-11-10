@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "**/defaults/**/*": "ansible",
+        "**/tasks/**/*.yml": "ansible",
+        "**/handler/**/*": "ansible",
+        "**/*_var/**/*.yml": "ansible",
+        "**/roles/**/*": "ansible",
+        "**/playbooks/**/*.yml": "ansible",
+        "**/*anbile*/**/*": "ansible",
+        "**/vars/**/*.yml": "ansible",
+        // "**/inventory/**/*": "ansible",
+    },
+    "python.pythonPath": ".env/bin/python",
+    "python.terminal.activateEnvironment": true
+}
