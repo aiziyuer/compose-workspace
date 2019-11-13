@@ -1,10 +1,15 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+
 # 下载镜像
 # vagrant box add centos/7 http://aiziyuer.synology.me:10080/cloud.centos.org/centos/7/vagrant/x86_64/CentOS-7-x86_64-Vagrant-1905_01.HyperV.box
+# 安装必须的插件
+# vagrant plugin install vagrant-reload
 # 启动镜像
 # vagrant up
+
+# vagrant destroy
 
 boxes = [
   {
@@ -13,40 +18,57 @@ boxes = [
       :mem => "512",
       :cpu => "1"
   },
-  # {
-  #     :name => "slave1",
-  #     :eth1 => "192.168.205.11",
-  #     :mem => "1024",
-  #     :cpu => "1"
-  # },
-  # {
-  #     :name => "slave2",
-  #     :eth1 => "192.168.205.12",
-  #     :mem => "1024",
-  #     :cpu => "1"
-  # }
+  {
+      :name => "node1",
+      :eth0 => "192.168.200.21",
+      :mem => "512",
+      :cpu => "1"
+  },
+  {
+      :name => "node2",
+      :eth0 => "192.168.200.22",
+      :mem => "512",
+      :cpu => "1"
+  }
 ]
 
 Vagrant.configure("2") do |config|
   
-    config.vm.box = "centos/7"
+  config.vm.box = "centos/7"
 
-    # 循环设置每台虚拟机
-    boxes.each do |opts|
-      config.vm.define opts[:name] do |config|
-        config.vm.hostname = opts[:name]
+  # 循环设置每台虚拟机
+  boxes.each do |box|
+    config.vm.define box[:name] do |config|
+      config.vm.hostname = box[:name]
 
-        # 配置内存和CPU
-        config.vm.provider "hyperv" do |h|
-          h.cpus=opts[:cpu]
-          h.memory=opts[:mem]
-        end
-
-        # 配置 IP
-        config.vm.network :private_network, ip: opts[:eth0]
-
-
+      # 配置内存和CPU
+      config.vm.provider "hyperv" do |h|
+        h.cpus=box[:cpu]
+        h.memory=box[:mem]
       end
-    end
 
+      # 配置 IP
+      config.vm.network "private_network", bridge: "NAT-Switch"
+      config.vm.provision "shell", inline: <<-SHELL
+
+cat<<-'EOF' >/etc/sysconfig/network-scripts/ifcfg-eth0
+TYPE=Ethernet
+BOOTPROTO=static
+DEFROUTE=yes
+NAME=eth0
+DEVICE=eth0
+ONBOOT=yes
+IPADDR=#{ box[:eth0] }
+NETMASK=255.255.255.0
+GATEWAY=192.168.200.1
+EOF
+
+sudo ifdown eth0
+sudo ifup eth0
+
+      SHELL
+
+    end
   end
+
+end
