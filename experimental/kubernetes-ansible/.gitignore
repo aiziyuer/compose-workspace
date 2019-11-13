@@ -2,3 +2,4 @@
 !.env/pip.conf
 .log
 !.log/.gitkeep
+.vagrant
