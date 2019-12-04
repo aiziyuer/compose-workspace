@@ -1,5 +1,5 @@
 .env/*
 !.env/pip.conf
-.log
-!.log/.gitkeep
+log/*
+!log/.gitkeep
 .vagrant

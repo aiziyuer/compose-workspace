@@ -16,6 +16,10 @@ support_ipvs: "false"
 network_interface: "eth0"
 
 
+# 通用配置
+public_dns:
+  - 8.8.8.8
+
 ansible_ssh_user: root
 ansible_ssh_pass: Changeme_123
 ansible_connection: ssh

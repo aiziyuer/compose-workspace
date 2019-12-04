@@ -1,0 +1,9 @@
+---
+
+- name: config revolve
+  template: src={{ item.src }} dest={{ item.dest }} mode={{ item.mode | default(0644) }}
+  with_items:
+    - {src: resolv.conf.j2, dest: '/etc/resolv.conf' }
+
+
+  

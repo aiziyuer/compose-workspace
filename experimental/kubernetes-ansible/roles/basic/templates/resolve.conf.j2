@@ -1,0 +1,5 @@
+# genrage by ansible do not modify manually
+
+{% for ns in public_dns -%}
+nameserver {{ ns }}
+{% endfor -%}
