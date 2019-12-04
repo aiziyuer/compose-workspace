@@ -1,0 +1,35 @@
+---
+- name: Set instruction_set_architecture to adm64
+  set_fact:
+    instruction_set_architecture: adm64
+  when:
+    - ansible_architecture == 'x86_64'
+
+- name: Set instruction_set_architecture to arm64
+  set_fact:
+    instruction_set_architecture: arm64
+  when:
+    - ansible_architecture == 'aarch64'
+
+- name: Get distro name from /etc/os-release
+  shell: |
+    case `grep '^NAME=' /etc/*-release | sed s'/NAME=//' | awk '{print toupper($0) }' ` in
+    *"CENTOS"*)
+      echo "RedHat";;
+    *"RedHat"*)
+      echo "RedHat";;
+    *"EULER"*)
+      echo "RedHat";;
+    *"UBUNTU"*)
+      echo "Debian";;
+    *"Debian"*)
+      echo "Debian";;
+    *)
+      echo "RedHat";;
+      esac
+  register: distro
+  changed_when: False
+
+- name: Set fact ansible_os_family
+  set_fact:
+    ansible_os_family: "{{ distro.stdout }}"

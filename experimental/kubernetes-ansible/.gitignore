@@ -3,3 +3,5 @@
 log/*
 !log/.gitkeep
 .vagrant
+__pychache__
+*.pyc

@@ -7,14 +7,14 @@
     },
     "files.associations": {
         "**/defaults/**/*": "ansible",
-        "**/tasks/**/*.yml": "ansible",
-        "**/handler/**/*": "ansible",
-        "**/*_var/**/*.yml": "ansible",
-        "**/roles/**/*": "ansible",
-        "**/playbooks/**/*.yml": "ansible",
-        "**/*anbile*/**/*": "ansible",
+        "**/tasks/**/*.yml" : "ansible",
+        "**/handler/*.yml" : "ansible",
+        "**/*_vars/**/*.yml" : "ansible",
+        "**/roles/**/*.yml" : "ansible",
+        "**/playbooks/**/*.yml" : "ansible",
+        "**/*ansible*/**/*.yml" : "ansible",
         "**/vars/**/*.yml": "ansible",
-        // "**/inventory/**/*": "ansible",
+        "**/inventory/*/*": "ini"
     },
     "python.pythonPath": ".env/bin/python",
     "python.terminal.activateEnvironment": true

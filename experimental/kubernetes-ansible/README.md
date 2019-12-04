@@ -25,6 +25,13 @@ pip3 install -r requirementes.txt
 # 清除所有虚环境的包 !! 危险 !!
 pip3 freeze | xargs pip3 uninstall -y
 
+# ssh_config设置样例
+cat <<'EOF'>/root/.ssh/config
+Host *
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+EOF
+
 ```
 
 

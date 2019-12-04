@@ -1,9 +1,39 @@
 ---
+- name: ensure dirs
+  file: path={{ item }} state=directory mode=0755
+  with_items:
+    - "/root/.ssh"
 
 - name: config revolve
   template: src={{ item.src }} dest={{ item.dest }} mode={{ item.mode | default(0644) }}
   with_items:
-    - {src: resolv.conf.j2, dest: '/etc/resolv.conf' }
+    - { src: resolv.conf.j2, dest: "/etc/resolv.conf" }
+    - { src: hosts.j2, dest: "/etc/hosts" }
 
+- name: ssh-copy-id
+  copy: src={{ item.src }} dest={{ item.dest }} mode={{ item.mode | default(0644) }}
+  with_items:
+    - { src: .ssh/authorized_keys, dest: "/root/.ssh/authorized_keys" }
 
-  
+- name: collect yum repos
+  find:
+    paths: /etc/yum.repos.d
+    excludes:
+      - all.repo
+  register: repos_to_delete
+
+- name: delete yum repos
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ repos_to_delete.files }}"
+
+- name: add yum repos
+  template: src={{ item }} dest="/etc/yum.repos.d/{{ item | basename | regex_replace('\.j2', '') }}"
+  with_items:
+    - all.repo.j2
+
+# kuberntes不允许主机名出现下划线
+- name: change hostname
+  shell: |
+    hostnamectl set-hostname "{{ inventory_hostname | replace("_", "-") }}"
