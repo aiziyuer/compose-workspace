@@ -20,7 +20,7 @@ gpgcheck=0
 
 [storage]
 name=CentOS-$releasever - storage
-baseurl=http://mirror.centos.org/centos/$releasever/storage/$basearch/gluster-4.1/
+baseurl=http://mirror.centos.org/centos/$releasever/storage/$basearch/gluster-{{ gluster_version | default('4.1.9') | regex_replace('^(?P<major>\d+\.\d+).+$', '\g<major>') }}/
 gpgcheck=0
 
 [epel]

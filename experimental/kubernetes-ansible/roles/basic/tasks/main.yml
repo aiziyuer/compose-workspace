@@ -75,7 +75,7 @@
      - conntrack
      - sysstat
      - wget
-     - lrszs
+     - lrzsz
      - nc
      - pv
      - sshpass
