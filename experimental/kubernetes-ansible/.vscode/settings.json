@@ -6,14 +6,14 @@
         "**/node_modules/*/**": true
     },
     "files.associations": {
-        "**/defaults/**/*": "ansible",
-        "**/tasks/**/*.yml" : "ansible",
-        "**/handler/*.yml" : "ansible",
-        "**/*_vars/**/*.yml" : "ansible",
-        "**/roles/**/*.yml" : "ansible",
-        "**/playbooks/**/*.yml" : "ansible",
-        "**/*ansible*/**/*.yml" : "ansible",
-        "**/vars/**/*.yml": "ansible",
+        "**/defaults/**/*": "ansible-advanced",
+        "**/tasks/**/*.yml" : "ansible-advanced",
+        "**/handler/*.yml" : "ansible-advanced",
+        "**/*_vars/**/*.yml" : "ansible-advanced",
+        "**/roles/**/*.yml" : "ansible-advanced",
+        "**/playbooks/**/*.yml" : "ansible-advanced",
+        "**/*ansible*/**/*.yml" : "ansible-advanced",
+        "**/vars/**/*.yml": "ansible-advanced",
         "**/inventory/*/*": "ini"
     },
     "python.pythonPath": ".env/bin/python",

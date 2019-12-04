@@ -37,3 +37,48 @@
 - name: change hostname
   shell: |
     hostnamectl set-hostname "{{ inventory_hostname | replace("_", "-") }}"
+
+- name: turn off selinux
+  selinux:
+   state: disabled
+
+- name: stop and disable firewalld
+  service:
+   name: firewalld
+   state: stopped
+   enabled: False
+
+- name: install nessary dependencies
+  when:
+   - ansible_os_family == "RedHat"
+  yum:
+    state: present
+    update_cache: yes
+    name:
+     - curl
+     - net-tools
+     - unzip
+     - gzip
+     - tar
+     - git
+     - zsh
+     - jq
+     - telnet
+     - tcpdump
+     - fuse
+     - fuse-libs
+     - glusterfs-libs-{{ gluster_version }}
+     - glusterfs-client-xlators-{{ gluster_version }}
+     - glusterfs-{{ gluster_version }}
+     - glusterfs-fuse-{{ gluster_version }}
+     - iptables
+     - conntrack
+     - sysstat
+     - wget
+     - lrszs
+     - nc
+     - pv
+     - sshpass
+     - iptables-services
+     - ipvsadm
+     - ipset
