@@ -16,13 +16,14 @@ boxes = [
       :name => "master1",
       :eth0 => "192.168.200.11",
       :mem => "512",
-      :cpu => "1"
+      :cpu => "1",
   },
   {
       :name => "storage1",
       :eth0 => "192.168.200.21",
       :mem => "512",
-      :cpu => "1"
+      :cpu => "1",
+      :disks => "10,10"
   },
   {
       :name => "gateway1",
@@ -40,13 +41,15 @@ boxes = [
       :name => "node1",
       :eth0 => "192.168.200.51",
       :mem => "512",
-      :cpu => "1"
+      :cpu => "1",
+      :disks => "10"
   },
   {
       :name => "node2",
       :eth0 => "192.168.200.52",
       :mem => "512",
-      :cpu => "1"
+      :cpu => "1",
+      :disks => "10"
   }
 ]
 
@@ -63,6 +66,16 @@ Vagrant.configure("2") do |config|
       config.vm.provider "hyperv" do |h|
         h.cpus=box[:cpu]
         h.memory=box[:mem]
+        
+        if box.key?("disks")
+          box[:disks].split(',').each_with_index  do |size, index|
+            unless File.exist?('./secondDisk.vdi')
+              h.customize ['createhd', '--filename', "./#{box[:name]}_#{index}.vdi", '--variant', 'Fixed', '--size', size * 1024]
+            end
+            h.customize ['storageattach', :id,  '--storagectl', 'SATA', '--port', index, '--device', 0, '--type', 'hdd', '--medium', "./#{box[:name]}_#{index}.vdi"]
+          end
+        end
+
       end
 
       # 配置 IP
