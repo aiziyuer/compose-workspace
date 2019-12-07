@@ -1,4 +1,11 @@
 inputs:
+  ipType:
+    default: 5_bgp
+    description: >
+      5_bgp：VPC动态BGP；5_sbgp：VPC静态BGP；5_telcom：中国电信；5_union：中国联通约束：只可以有如下取值:
+      5_telcom | 5_union | 5_bgp |
+      5_sbgp，各region取值范围为：东北-大连：5_telcom、5_union；华南-广州：5_bgp；华东-上海二：5_sbgp；华北-北京一：5_bgp、5_sbgp；亚太-香港：5_bgp；华北-北京四：5_bgp。
+    type: HuaweiCloud.VPC.EIP.Spec.Name
   nodeAvailabilityZone:
     default: cn-east-2c
     description: 可用分区
@@ -11,13 +18,6 @@ inputs:
     default: 9526f9b7-423c-4fdc-92ad-f1630a524652
     description: 节点镜像(CentOS 7)
     type: HuaweiCloud.ECS.Image.Id
-  ipType:
-    default: 5_bgp
-    description: >
-      5_bgp：VPC动态BGP；5_sbgp：VPC静态BGP；5_telcom：中国电信；5_union：中国联通约束：只可以有如下取值:
-      5_telcom | 5_union | 5_bgp |
-      5_sbgp，各region取值范围为：东北-大连：5_telcom、5_union；华南-广州：5_bgp；华东-上海二：5_sbgp；华北-北京一：5_bgp、5_sbgp；亚太-香港：5_bgp；华北-北京四：5_bgp。
-    type: HuaweiCloud.VPC.EIP.Spec.Name
   sshKey:
     description: 创建节点登录使用的密钥对(需提前创建好)
     type: HuaweiCloud.ECS.KeyPair.Name
@@ -150,61 +150,61 @@ metadata:
       isassociatedwith:
         - 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
         - e6a98745-6699-4590-81f1-70d2e124e5a0
-    ad7c8901-d762-497f-a25f-c8fcd4bbcf71:
+    0d8c573f-e385-4056-96b6-6fcc39828c5a:
       source:
         id: 66bb7fed-c285-489f-bb02-088fbbff9cc2
       target:
         id: e6a98745-6699-4590-81f1-70d2e124e5a0
       z: 2
-    7eddb018-a335-424d-aad1-947adb0401b7:
+    adc8eab6-b6ce-462c-957d-02579139608c:
       source:
         id: 66bb7fed-c285-489f-bb02-088fbbff9cc2
       target:
         id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
       z: 2
-    90bf9b43-0291-4522-b609-71edbf6d216a:
+    11244d67-973c-4516-947c-b1d25b6d419b:
       source:
         id: c8272480-4c58-4e86-b66e-16e60511cc87
       target:
         id: e6a98745-6699-4590-81f1-70d2e124e5a0
       z: 2
-    51cbaad3-3631-4b99-95b6-c4c89ccc3975:
+    bbcbb8bf-fe6c-49a1-8317-e0dbf3454cc3:
       source:
         id: c8272480-4c58-4e86-b66e-16e60511cc87
       target:
         id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
       z: 2
-    657ca52b-82b8-4d04-9c05-13ad864a8a8f:
+    c060037d-8a2f-41b4-97f1-5b9dee48751b:
       source:
         id: 2b148edd-fad5-4cef-82a3-4f1f3c2db9d1
       target:
         id: e6a98745-6699-4590-81f1-70d2e124e5a0
       z: 2
-    4edead98-5786-4198-a27f-81df59ce2919:
+    9c22d4fd-7e4a-4513-8bee-4bab75658b40:
       source:
         id: 2b148edd-fad5-4cef-82a3-4f1f3c2db9d1
       target:
         id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
       z: 2
-    34208682-acbe-4fa4-b74d-007bf9377325:
+    0eca1087-93e4-430f-bf42-26c3f30d2336:
       source:
         id: 96c8c995-f44d-4018-88e2-f529bf70db51
       target:
         id: e6a98745-6699-4590-81f1-70d2e124e5a0
       z: 2
-    70af3cd3-c46b-46f8-b966-07bb2bb92759:
+    43ef812f-4617-451c-9e06-4bb3074fb239:
       source:
         id: 96c8c995-f44d-4018-88e2-f529bf70db51
       target:
         id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
       z: 2
-    30650236-8628-49c5-af2f-61d0b992b9a3:
+    13f2484f-0c25-4847-9e77-508456b381b7:
       source:
         id: fbd0f61a-666f-40bb-9c0f-e48f47ef23c6
       target:
         id: e6a98745-6699-4590-81f1-70d2e124e5a0
       z: 2
-    a96e3765-bfc8-41ad-8eb5-cffc1334225b:
+    6fc60884-97f8-47cc-bda0-ddc64c0975ee:
       source:
         id: fbd0f61a-666f-40bb-9c0f-e48f47ef23c6
       target:
@@ -214,65 +214,65 @@ metadata:
     2b148edd-fad5-4cef-82a3-4f1f3c2db9d1:
       references:
         nics.subnetId:
-          - get_reference: vpcszfxz
+          - get_reference: vpc-subnet
         securityGroups.id:
-          - get_reference: vpcsg4a7
+          - get_reference: vpc-sg
         vpcId:
-          get_reference: vpcvpbpo
+          get_reference: vpc-vpc
     66bb7fed-c285-489f-bb02-088fbbff9cc2:
       references:
         nics.subnetId:
-          - get_reference: vpcszfxz
+          - get_reference: vpc-subnet
         securityGroups.id:
-          - get_reference: vpcsg4a7
+          - get_reference: vpc-sg
         vpcId:
-          get_reference: vpcvpbpo
+          get_reference: vpc-vpc
     835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0:
       references:
         vpcId:
-          get_reference: vpcvpbpo
+          get_reference: vpc-vpc
     899baeda-d630-48b6-935b-bdb0692ce659:
       references:
         securityGroupId:
-          get_reference: vpcsg4a7
+          get_reference: vpc-sg
     96c8c995-f44d-4018-88e2-f529bf70db51:
       references:
         nics.subnetId:
-          - get_reference: vpcszfxz
+          - get_reference: vpc-subnet
         securityGroups.id:
-          - get_reference: vpcsg4a7
+          - get_reference: vpc-sg
         vpcId:
-          get_reference: vpcvpbpo
+          get_reference: vpc-vpc
     c1d63aac-3db7-42f7-916b-ad9a8fe09273:
       references:
         securityGroupId:
-          get_reference: vpcsg4a7
+          get_reference: vpc-sg
     c8272480-4c58-4e86-b66e-16e60511cc87:
       references:
         nics.subnetId:
-          - get_reference: vpcszfxz
+          - get_reference: vpc-subnet
         securityGroups.id:
-          - get_reference: vpcsg4a7
+          - get_reference: vpc-sg
         vpcId:
-          get_reference: vpcvpbpo
+          get_reference: vpc-vpc
     e6a98745-6699-4590-81f1-70d2e124e5a0:
       references:
         vpcId:
-          get_reference: vpcvpbpo
+          get_reference: vpc-vpc
     f0f88c9f-e6c9-4e2d-9fe8-a35193d6cfd3:
       references:
         securityGroupId:
-          get_reference: vpcsg4a7
+          get_reference: vpc-sg
     fbd0f61a-666f-40bb-9c0f-e48f47ef23c6:
       references:
         nics.subnetId:
-          - get_reference: vpcszfxz
+          - get_reference: vpc-subnet
         securityGroups.id:
-          - get_reference: vpcsg4a7
+          - get_reference: vpc-sg
         vpcId:
-          get_reference: vpcvpbpo
+          get_reference: vpc-vpc
 node_templates:
-  gateway1:
+  ecs-gateway:
     metadata:
       Designer:
         id: fbd0f61a-666f-40bb-9c0f-e48f47ef23c6
@@ -284,7 +284,11 @@ node_templates:
       imageId:
         get_input: nodeImage
       instances: 1
-      name: gateway1
+      name:
+        concat:
+          - {get_input: HuaweiCloud.StackName}
+          - '-'
+          - gateway
       nics:
         - allowedAddressPairs:
             - ipAddress: ''
@@ -292,7 +296,7 @@ node_templates:
           ipCheck: false
           portSecurityEnabled: true
           subnetId:
-            get_reference: vpcszfxz
+            get_reference: vpc-subnet
       publicIP:
         eip:
           bandwidth:
@@ -306,20 +310,20 @@ node_templates:
         volumeType: SATA
       securityGroups:
         - id:
-            get_reference: vpcsg4a7
+            get_reference: vpc-sg
       sshKeyName:
         get_input: sshKey
       vpcId:
-        get_reference: vpcvpbpo
+        get_reference: vpc-vpc
     requirements:
       - vpcId:
-          node: vpcvpbpo
+          node: vpc-vpc
       - nics.subnetId:
-          node: vpcszfxz
+          node: vpc-subnet
       - securityGroups.id:
-          node: vpcsg4a7
+          node: vpc-sg
     type: HuaweiCloud.ECS.CloudServer
-  master1:
+  ecs-master:
     metadata:
       Designer:
         id: 96c8c995-f44d-4018-88e2-f529bf70db51
@@ -334,7 +338,11 @@ node_templates:
       imageId:
         get_input: nodeImage
       instances: 1
-      name: master1
+      name:
+        concat:
+          - {get_input: HuaweiCloud.StackName}
+          - '-'
+          - master
       nics:
         - allowedAddressPairs:
             - ipAddress: ''
@@ -342,7 +350,7 @@ node_templates:
           ipCheck: false
           portSecurityEnabled: true
           subnetId:
-            get_reference: vpcszfxz
+            get_reference: vpc-subnet
       publicIP:
         eip:
           bandwidth:
@@ -356,20 +364,20 @@ node_templates:
         volumeType: SATA
       securityGroups:
         - id:
-            get_reference: vpcsg4a7
+            get_reference: vpc-sg
       sshKeyName:
         get_input: sshKey
       vpcId:
-        get_reference: vpcvpbpo
+        get_reference: vpc-vpc
     requirements:
       - vpcId:
-          node: vpcvpbpo
+          node: vpc-vpc
       - nics.subnetId:
-          node: vpcszfxz
+          node: vpc-subnet
       - securityGroups.id:
-          node: vpcsg4a7
+          node: vpc-sg
     type: HuaweiCloud.ECS.CloudServer
-  node1:
+  ecs-node:
     metadata:
       Designer:
         id: 2b148edd-fad5-4cef-82a3-4f1f3c2db9d1
@@ -384,7 +392,11 @@ node_templates:
       imageId:
         get_input: nodeImage
       instances: 1
-      name: node1
+      name:
+        concat:
+          - {get_input: HuaweiCloud.StackName}
+          - '-'
+          - node
       nics:
         - allowedAddressPairs:
             - ipAddress: ''
@@ -392,7 +404,7 @@ node_templates:
           ipCheck: true
           portSecurityEnabled: true
           subnetId:
-            get_reference: vpcszfxz
+            get_reference: vpc-subnet
       publicIP:
         eip:
           bandwidth:
@@ -406,20 +418,20 @@ node_templates:
         volumeType: SATA
       securityGroups:
         - id:
-            get_reference: vpcsg4a7
+            get_reference: vpc-sg
       sshKeyName:
         get_input: sshKey
       vpcId:
-        get_reference: vpcvpbpo
+        get_reference: vpc-vpc
     requirements:
       - vpcId:
-          node: vpcvpbpo
+          node: vpc-vpc
       - nics.subnetId:
-          node: vpcszfxz
+          node: vpc-subnet
       - securityGroups.id:
-          node: vpcsg4a7
+          node: vpc-sg
     type: HuaweiCloud.ECS.CloudServer
-  snat1:
+  ecs-snat:
     metadata:
       Designer:
         id: c8272480-4c58-4e86-b66e-16e60511cc87
@@ -431,7 +443,11 @@ node_templates:
       imageId:
         get_input: nodeImage
       instances: 1
-      name: snat1
+      name:
+        concat:
+          - {get_input: HuaweiCloud.StackName}
+          - '-'
+          - snat
       nics:
         - allowedAddressPairs:
             - ipAddress: ''
@@ -439,7 +455,7 @@ node_templates:
           ipCheck: false
           portSecurityEnabled: true
           subnetId:
-            get_reference: vpcszfxz
+            get_reference: vpc-subnet
       publicIP:
         eip:
           bandwidth:
@@ -453,20 +469,20 @@ node_templates:
         volumeType: SATA
       securityGroups:
         - id:
-            get_reference: vpcsg4a7
+            get_reference: vpc-sg
       sshKeyName:
         get_input: sshKey
       vpcId:
-        get_reference: vpcvpbpo
+        get_reference: vpc-vpc
     requirements:
       - vpcId:
-          node: vpcvpbpo
+          node: vpc-vpc
       - nics.subnetId:
-          node: vpcszfxz
+          node: vpc-subnet
       - securityGroups.id:
-          node: vpcsg4a7
+          node: vpc-sg
     type: HuaweiCloud.ECS.CloudServer
-  storage1:
+  ecs-storage:
     metadata:
       Designer:
         id: 66bb7fed-c285-489f-bb02-088fbbff9cc2
@@ -481,7 +497,11 @@ node_templates:
       imageId:
         get_input: nodeImage
       instances: 1
-      name: storage1
+      name:
+        concat:
+          - {get_input: HuaweiCloud.StackName}
+          - '-'
+          - storage
       nics:
         - allowedAddressPairs:
             - ipAddress: ''
@@ -489,7 +509,7 @@ node_templates:
           ipCheck: false
           portSecurityEnabled: true
           subnetId:
-            get_reference: vpcszfxz
+            get_reference: vpc-subnet
       publicIP:
         eip:
           bandwidth:
@@ -503,20 +523,29 @@ node_templates:
         volumeType: SATA
       securityGroups:
         - id:
-            get_reference: vpcsg4a7
+            get_reference: vpc-sg
       sshKeyName:
         get_input: sshKey
       vpcId:
-        get_reference: vpcvpbpo
+        get_reference: vpc-vpc
     requirements:
       - vpcId:
-          node: vpcvpbpo
+          node: vpc-vpc
       - nics.subnetId:
-          node: vpcszfxz
+          node: vpc-subnet
       - securityGroups.id:
-          node: vpcsg4a7
+          node: vpc-sg
     type: HuaweiCloud.ECS.CloudServer
-  vpcsg2cb:
+  vpc-sg:
+    metadata:
+      Designer:
+        id: e6a98745-6699-4590-81f1-70d2e124e5a0
+    properties: {}
+    requirements:
+      - vpcId:
+          node: vpc-vpc
+    type: HuaweiCloud.VPC.SecurityGroup
+  vpc-sg-rule-ingress-icmp:
     metadata:
       Designer:
         id: f0f88c9f-e6c9-4e2d-9fe8-a35193d6cfd3
@@ -525,12 +554,12 @@ node_templates:
       ethertype: IPv4
       protocol: ICMP
       securityGroupId:
-        get_reference: vpcsg4a7
+        get_reference: vpc-sg
     requirements:
       - securityGroupId:
-          node: vpcsg4a7
+          node: vpc-sg
     type: HuaweiCloud.VPC.SecurityGroupRule
-  vpcsg2fj:
+  vpc-sg-rule-ingress-udp:
     metadata:
       Designer:
         id: 899baeda-d630-48b6-935b-bdb0692ce659
@@ -541,21 +570,12 @@ node_templates:
       minPort: 1
       protocol: UDP
       securityGroupId:
-        get_reference: vpcsg4a7
+        get_reference: vpc-sg
     requirements:
       - securityGroupId:
-          node: vpcsg4a7
+          node: vpc-sg
     type: HuaweiCloud.VPC.SecurityGroupRule
-  vpcsg4a7:
-    metadata:
-      Designer:
-        id: e6a98745-6699-4590-81f1-70d2e124e5a0
-    properties: {}
-    requirements:
-      - vpcId:
-          node: vpcvpbpo
-    type: HuaweiCloud.VPC.SecurityGroup
-  vpcsg4bl:
+  vpc-sg-rule-ingress-tcp:
     metadata:
       Designer:
         id: c1d63aac-3db7-42f7-916b-ad9a8fe09273
@@ -566,12 +586,12 @@ node_templates:
       minPort: 1
       protocol: TCP
       securityGroupId:
-        get_reference: vpcsg4a7
+        get_reference: vpc-sg
     requirements:
       - securityGroupId:
-          node: vpcsg4a7
+          node: vpc-sg
     type: HuaweiCloud.VPC.SecurityGroupRule
-  vpcszfxz:
+  vpc-subnet:
     metadata:
       Designer:
         id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
@@ -579,21 +599,58 @@ node_templates:
       cidr: '192.168.1.0/24'
       dhcpEnable: true
       gateway: 192.168.1.1
-      name: onebox
+      name:
+        concat:
+          - 'subnet-'
+          - {get_input: HuaweiCloud.StackName}
       primaryDns: 8.8.8.8
       secondaryDns: 114.114.114.114
       vpcId:
-        get_reference: vpcvpbpo
+        get_reference: vpc-vpc
     requirements:
       - vpcId:
-          node: vpcvpbpo
+          node: vpc-vpc
     type: HuaweiCloud.VPC.Subnet
-  vpcvpbpo:
+  vpc-vpc:
     metadata:
       Designer:
         id: 2617c555-7896-4b35-9427-bb10a72d7973
     properties:
       cidr: '192.168.0.0/16'
-      name: ''
+      name:
+        concat:
+          - 'vpc-'
+          - {get_input: HuaweiCloud.StackName}
     type: HuaweiCloud.VPC.VPC
 tosca_definitions_version: huaweicloud_tosca_version_1_0
+outputs:
+  master:
+    description: master ips
+    value:
+      get_attribute:
+        - ecs-master
+        - publicIps
+  gateway:
+    description: gateway ips
+    value:
+      get_attribute:
+        - ecs-gateway
+        - publicIps
+  storage:
+    description: storage ips
+    value:
+      get_attribute:
+        - ecs-storage
+        - publicIps
+  snat:
+    description: snat ips
+    value:
+      get_attribute:
+        - ecs-snat
+        - publicIps
+  node:
+    description: node ips
+    value:
+      get_attribute:
+        - ecs-node
+        - publicIps
