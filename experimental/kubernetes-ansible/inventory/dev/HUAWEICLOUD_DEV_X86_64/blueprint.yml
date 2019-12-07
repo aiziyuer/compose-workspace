@@ -1,0 +1,599 @@
+inputs:
+  nodeAvailabilityZone:
+    default: cn-east-2c
+    description: 可用分区
+    type: HuaweiCloud.ECS.AvailabilityZone.Name
+  nodeFlavor:
+    default: s3.small.1
+    description: 节点规格
+    type: HuaweiCloud.ECS.Flavor.Name
+  nodeImage:
+    default: 9526f9b7-423c-4fdc-92ad-f1630a524652
+    description: 节点镜像(CentOS 7)
+    type: HuaweiCloud.ECS.Image.Id
+  ipType:
+    default: 5_bgp
+    description: >
+      5_bgp：VPC动态BGP；5_sbgp：VPC静态BGP；5_telcom：中国电信；5_union：中国联通约束：只可以有如下取值:
+      5_telcom | 5_union | 5_bgp |
+      5_sbgp，各region取值范围为：东北-大连：5_telcom、5_union；华南-广州：5_bgp；华东-上海二：5_sbgp；华北-北京一：5_bgp、5_sbgp；亚太-香港：5_bgp；华北-北京四：5_bgp。
+    type: HuaweiCloud.VPC.EIP.Spec.Name
+  sshKey:
+    description: 创建节点登录使用的密钥对(需提前创建好)
+    type: HuaweiCloud.ECS.KeyPair.Name
+metadata:
+  Designer:
+    2617c555-7896-4b35-9427-bb10a72d7973:
+      size:
+        width: 780
+        height: 330
+      position:
+        x: -110
+        y: 210
+      z: 1
+      embeds:
+        - 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+        - e6a98745-6699-4590-81f1-70d2e124e5a0
+        - 66bb7fed-c285-489f-bb02-088fbbff9cc2
+        - c8272480-4c58-4e86-b66e-16e60511cc87
+        - 2b148edd-fad5-4cef-82a3-4f1f3c2db9d1
+        - 96c8c995-f44d-4018-88e2-f529bf70db51
+        - fbd0f61a-666f-40bb-9c0f-e48f47ef23c6
+    2b148edd-fad5-4cef-82a3-4f1f3c2db9d1:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 20
+        y: 410
+      z: 2
+      parent: 2617c555-7896-4b35-9427-bb10a72d7973
+      isassociatedwith:
+        - 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+        - e6a98745-6699-4590-81f1-70d2e124e5a0
+    66bb7fed-c285-489f-bb02-088fbbff9cc2:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 140
+        y: 250
+      z: 2
+      parent: 2617c555-7896-4b35-9427-bb10a72d7973
+      isassociatedwith:
+        - 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+        - e6a98745-6699-4590-81f1-70d2e124e5a0
+    835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: -90
+        y: 240
+      z: 2
+      parent: 2617c555-7896-4b35-9427-bb10a72d7973
+    899baeda-d630-48b6-935b-bdb0692ce659:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 470
+        y: 410
+      z: 3
+      parent: e6a98745-6699-4590-81f1-70d2e124e5a0
+      embeds: ''
+    96c8c995-f44d-4018-88e2-f529bf70db51:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 20
+        y: 250
+      z: 2
+      parent: 2617c555-7896-4b35-9427-bb10a72d7973
+      isassociatedwith:
+        - 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+        - e6a98745-6699-4590-81f1-70d2e124e5a0
+    c1d63aac-3db7-42f7-916b-ad9a8fe09273:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 370
+        y: 410
+      z: 3
+      parent: e6a98745-6699-4590-81f1-70d2e124e5a0
+    c8272480-4c58-4e86-b66e-16e60511cc87:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 380
+        y: 250
+      z: 2
+      parent: 2617c555-7896-4b35-9427-bb10a72d7973
+      isassociatedwith:
+        - 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+        - e6a98745-6699-4590-81f1-70d2e124e5a0
+    e6a98745-6699-4590-81f1-70d2e124e5a0:
+      size:
+        width: 300
+        height: 120
+      position:
+        x: 350
+        y: 390
+      z: 2
+      parent: 2617c555-7896-4b35-9427-bb10a72d7973
+      embeds:
+        - c1d63aac-3db7-42f7-916b-ad9a8fe09273
+        - 899baeda-d630-48b6-935b-bdb0692ce659
+        - f0f88c9f-e6c9-4e2d-9fe8-a35193d6cfd3
+    f0f88c9f-e6c9-4e2d-9fe8-a35193d6cfd3:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 560
+        y: 410
+      z: 3
+      parent: e6a98745-6699-4590-81f1-70d2e124e5a0
+      embeds: ''
+    fbd0f61a-666f-40bb-9c0f-e48f47ef23c6:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 260
+        y: 250
+      z: 2
+      parent: 2617c555-7896-4b35-9427-bb10a72d7973
+      isassociatedwith:
+        - 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+        - e6a98745-6699-4590-81f1-70d2e124e5a0
+    ad7c8901-d762-497f-a25f-c8fcd4bbcf71:
+      source:
+        id: 66bb7fed-c285-489f-bb02-088fbbff9cc2
+      target:
+        id: e6a98745-6699-4590-81f1-70d2e124e5a0
+      z: 2
+    7eddb018-a335-424d-aad1-947adb0401b7:
+      source:
+        id: 66bb7fed-c285-489f-bb02-088fbbff9cc2
+      target:
+        id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+      z: 2
+    90bf9b43-0291-4522-b609-71edbf6d216a:
+      source:
+        id: c8272480-4c58-4e86-b66e-16e60511cc87
+      target:
+        id: e6a98745-6699-4590-81f1-70d2e124e5a0
+      z: 2
+    51cbaad3-3631-4b99-95b6-c4c89ccc3975:
+      source:
+        id: c8272480-4c58-4e86-b66e-16e60511cc87
+      target:
+        id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+      z: 2
+    657ca52b-82b8-4d04-9c05-13ad864a8a8f:
+      source:
+        id: 2b148edd-fad5-4cef-82a3-4f1f3c2db9d1
+      target:
+        id: e6a98745-6699-4590-81f1-70d2e124e5a0
+      z: 2
+    4edead98-5786-4198-a27f-81df59ce2919:
+      source:
+        id: 2b148edd-fad5-4cef-82a3-4f1f3c2db9d1
+      target:
+        id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+      z: 2
+    34208682-acbe-4fa4-b74d-007bf9377325:
+      source:
+        id: 96c8c995-f44d-4018-88e2-f529bf70db51
+      target:
+        id: e6a98745-6699-4590-81f1-70d2e124e5a0
+      z: 2
+    70af3cd3-c46b-46f8-b966-07bb2bb92759:
+      source:
+        id: 96c8c995-f44d-4018-88e2-f529bf70db51
+      target:
+        id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+      z: 2
+    30650236-8628-49c5-af2f-61d0b992b9a3:
+      source:
+        id: fbd0f61a-666f-40bb-9c0f-e48f47ef23c6
+      target:
+        id: e6a98745-6699-4590-81f1-70d2e124e5a0
+      z: 2
+    a96e3765-bfc8-41ad-8eb5-cffc1334225b:
+      source:
+        id: fbd0f61a-666f-40bb-9c0f-e48f47ef23c6
+      target:
+        id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+      z: 2
+  relationships:
+    2b148edd-fad5-4cef-82a3-4f1f3c2db9d1:
+      references:
+        nics.subnetId:
+          - get_reference: vpcszfxz
+        securityGroups.id:
+          - get_reference: vpcsg4a7
+        vpcId:
+          get_reference: vpcvpbpo
+    66bb7fed-c285-489f-bb02-088fbbff9cc2:
+      references:
+        nics.subnetId:
+          - get_reference: vpcszfxz
+        securityGroups.id:
+          - get_reference: vpcsg4a7
+        vpcId:
+          get_reference: vpcvpbpo
+    835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0:
+      references:
+        vpcId:
+          get_reference: vpcvpbpo
+    899baeda-d630-48b6-935b-bdb0692ce659:
+      references:
+        securityGroupId:
+          get_reference: vpcsg4a7
+    96c8c995-f44d-4018-88e2-f529bf70db51:
+      references:
+        nics.subnetId:
+          - get_reference: vpcszfxz
+        securityGroups.id:
+          - get_reference: vpcsg4a7
+        vpcId:
+          get_reference: vpcvpbpo
+    c1d63aac-3db7-42f7-916b-ad9a8fe09273:
+      references:
+        securityGroupId:
+          get_reference: vpcsg4a7
+    c8272480-4c58-4e86-b66e-16e60511cc87:
+      references:
+        nics.subnetId:
+          - get_reference: vpcszfxz
+        securityGroups.id:
+          - get_reference: vpcsg4a7
+        vpcId:
+          get_reference: vpcvpbpo
+    e6a98745-6699-4590-81f1-70d2e124e5a0:
+      references:
+        vpcId:
+          get_reference: vpcvpbpo
+    f0f88c9f-e6c9-4e2d-9fe8-a35193d6cfd3:
+      references:
+        securityGroupId:
+          get_reference: vpcsg4a7
+    fbd0f61a-666f-40bb-9c0f-e48f47ef23c6:
+      references:
+        nics.subnetId:
+          - get_reference: vpcszfxz
+        securityGroups.id:
+          - get_reference: vpcsg4a7
+        vpcId:
+          get_reference: vpcvpbpo
+node_templates:
+  gateway1:
+    metadata:
+      Designer:
+        id: fbd0f61a-666f-40bb-9c0f-e48f47ef23c6
+    properties:
+      availabilityZone:
+        get_input: nodeAvailabilityZone
+      flavor:
+        get_input: nodeFlavor
+      imageId:
+        get_input: nodeImage
+      instances: 1
+      name: gateway1
+      nics:
+        - allowedAddressPairs:
+            - ipAddress: ''
+          ipAddress: 192.168.1.4
+          ipCheck: false
+          portSecurityEnabled: true
+          subnetId:
+            get_reference: vpcszfxz
+      publicIP:
+        eip:
+          bandwidth:
+            chargeMode: traffic
+            shareType: PER
+            size: 1
+          ipType:
+            get_input: ipType
+      rootVolume:
+        size: 50
+        volumeType: SATA
+      securityGroups:
+        - id:
+            get_reference: vpcsg4a7
+      sshKeyName:
+        get_input: sshKey
+      vpcId:
+        get_reference: vpcvpbpo
+    requirements:
+      - vpcId:
+          node: vpcvpbpo
+      - nics.subnetId:
+          node: vpcszfxz
+      - securityGroups.id:
+          node: vpcsg4a7
+    type: HuaweiCloud.ECS.CloudServer
+  master1:
+    metadata:
+      Designer:
+        id: 96c8c995-f44d-4018-88e2-f529bf70db51
+    properties:
+      availabilityZone:
+        get_input: nodeAvailabilityZone
+      dataVolumes:
+        - size: 40
+          volumeType: SATA
+      flavor:
+        get_input: nodeFlavor
+      imageId:
+        get_input: nodeImage
+      instances: 1
+      name: master1
+      nics:
+        - allowedAddressPairs:
+            - ipAddress: ''
+          ipAddress: 192.168.1.2
+          ipCheck: false
+          portSecurityEnabled: true
+          subnetId:
+            get_reference: vpcszfxz
+      publicIP:
+        eip:
+          bandwidth:
+            chargeMode: traffic
+            shareType: PER
+            size: 1
+          ipType:
+            get_input: ipType
+      rootVolume:
+        size: 50
+        volumeType: SATA
+      securityGroups:
+        - id:
+            get_reference: vpcsg4a7
+      sshKeyName:
+        get_input: sshKey
+      vpcId:
+        get_reference: vpcvpbpo
+    requirements:
+      - vpcId:
+          node: vpcvpbpo
+      - nics.subnetId:
+          node: vpcszfxz
+      - securityGroups.id:
+          node: vpcsg4a7
+    type: HuaweiCloud.ECS.CloudServer
+  node1:
+    metadata:
+      Designer:
+        id: 2b148edd-fad5-4cef-82a3-4f1f3c2db9d1
+    properties:
+      availabilityZone:
+        get_input: nodeAvailabilityZone
+      dataVolumes:
+        - size: 100
+          volumeType: SATA
+      flavor:
+        get_input: nodeFlavor
+      imageId:
+        get_input: nodeImage
+      instances: 1
+      name: node1
+      nics:
+        - allowedAddressPairs:
+            - ipAddress: ''
+          ipAddress: 192.168.1.6
+          ipCheck: true
+          portSecurityEnabled: true
+          subnetId:
+            get_reference: vpcszfxz
+      publicIP:
+        eip:
+          bandwidth:
+            chargeMode: traffic
+            shareType: PER
+            size: 1
+          ipType:
+            get_input: ipType
+      rootVolume:
+        size: 50
+        volumeType: SATA
+      securityGroups:
+        - id:
+            get_reference: vpcsg4a7
+      sshKeyName:
+        get_input: sshKey
+      vpcId:
+        get_reference: vpcvpbpo
+    requirements:
+      - vpcId:
+          node: vpcvpbpo
+      - nics.subnetId:
+          node: vpcszfxz
+      - securityGroups.id:
+          node: vpcsg4a7
+    type: HuaweiCloud.ECS.CloudServer
+  snat1:
+    metadata:
+      Designer:
+        id: c8272480-4c58-4e86-b66e-16e60511cc87
+    properties:
+      availabilityZone:
+        get_input: nodeAvailabilityZone
+      flavor:
+        get_input: nodeFlavor
+      imageId:
+        get_input: nodeImage
+      instances: 1
+      name: snat1
+      nics:
+        - allowedAddressPairs:
+            - ipAddress: ''
+          ipAddress: 192.168.1.5
+          ipCheck: false
+          portSecurityEnabled: true
+          subnetId:
+            get_reference: vpcszfxz
+      publicIP:
+        eip:
+          bandwidth:
+            chargeMode: traffic
+            shareType: PER
+            size: 1
+          ipType:
+            get_input: ipType
+      rootVolume:
+        size: 50
+        volumeType: SATA
+      securityGroups:
+        - id:
+            get_reference: vpcsg4a7
+      sshKeyName:
+        get_input: sshKey
+      vpcId:
+        get_reference: vpcvpbpo
+    requirements:
+      - vpcId:
+          node: vpcvpbpo
+      - nics.subnetId:
+          node: vpcszfxz
+      - securityGroups.id:
+          node: vpcsg4a7
+    type: HuaweiCloud.ECS.CloudServer
+  storage1:
+    metadata:
+      Designer:
+        id: 66bb7fed-c285-489f-bb02-088fbbff9cc2
+    properties:
+      availabilityZone:
+        get_input: nodeAvailabilityZone
+      dataVolumes:
+        - size: 30
+          volumeType: SATA
+      flavor:
+        get_input: nodeFlavor
+      imageId:
+        get_input: nodeImage
+      instances: 1
+      name: storage1
+      nics:
+        - allowedAddressPairs:
+            - ipAddress: ''
+          ipAddress: 192.168.1.3
+          ipCheck: false
+          portSecurityEnabled: true
+          subnetId:
+            get_reference: vpcszfxz
+      publicIP:
+        eip:
+          bandwidth:
+            chargeMode: traffic
+            shareType: PER
+            size: 1
+          ipType:
+            get_input: ipType
+      rootVolume:
+        size: 50
+        volumeType: SATA
+      securityGroups:
+        - id:
+            get_reference: vpcsg4a7
+      sshKeyName:
+        get_input: sshKey
+      vpcId:
+        get_reference: vpcvpbpo
+    requirements:
+      - vpcId:
+          node: vpcvpbpo
+      - nics.subnetId:
+          node: vpcszfxz
+      - securityGroups.id:
+          node: vpcsg4a7
+    type: HuaweiCloud.ECS.CloudServer
+  vpcsg2cb:
+    metadata:
+      Designer:
+        id: f0f88c9f-e6c9-4e2d-9fe8-a35193d6cfd3
+    properties:
+      direction: ingress
+      ethertype: IPv4
+      protocol: ICMP
+      securityGroupId:
+        get_reference: vpcsg4a7
+    requirements:
+      - securityGroupId:
+          node: vpcsg4a7
+    type: HuaweiCloud.VPC.SecurityGroupRule
+  vpcsg2fj:
+    metadata:
+      Designer:
+        id: 899baeda-d630-48b6-935b-bdb0692ce659
+    properties:
+      direction: ingress
+      ethertype: IPv4
+      maxPort: 65535
+      minPort: 1
+      protocol: UDP
+      securityGroupId:
+        get_reference: vpcsg4a7
+    requirements:
+      - securityGroupId:
+          node: vpcsg4a7
+    type: HuaweiCloud.VPC.SecurityGroupRule
+  vpcsg4a7:
+    metadata:
+      Designer:
+        id: e6a98745-6699-4590-81f1-70d2e124e5a0
+    properties: {}
+    requirements:
+      - vpcId:
+          node: vpcvpbpo
+    type: HuaweiCloud.VPC.SecurityGroup
+  vpcsg4bl:
+    metadata:
+      Designer:
+        id: c1d63aac-3db7-42f7-916b-ad9a8fe09273
+    properties:
+      direction: ingress
+      ethertype: IPv4
+      maxPort: 65535
+      minPort: 1
+      protocol: TCP
+      securityGroupId:
+        get_reference: vpcsg4a7
+    requirements:
+      - securityGroupId:
+          node: vpcsg4a7
+    type: HuaweiCloud.VPC.SecurityGroupRule
+  vpcszfxz:
+    metadata:
+      Designer:
+        id: 835f9bd4-ff5c-4aa7-bf86-d63fcf4430a0
+    properties:
+      cidr: '192.168.1.0/24'
+      dhcpEnable: true
+      gateway: 192.168.1.1
+      name: onebox
+      primaryDns: 8.8.8.8
+      secondaryDns: 114.114.114.114
+      vpcId:
+        get_reference: vpcvpbpo
+    requirements:
+      - vpcId:
+          node: vpcvpbpo
+    type: HuaweiCloud.VPC.Subnet
+  vpcvpbpo:
+    metadata:
+      Designer:
+        id: 2617c555-7896-4b35-9427-bb10a72d7973
+    properties:
+      cidr: '192.168.0.0/16'
+      name: ''
+    type: HuaweiCloud.VPC.VPC
+tosca_definitions_version: huaweicloud_tosca_version_1_0
