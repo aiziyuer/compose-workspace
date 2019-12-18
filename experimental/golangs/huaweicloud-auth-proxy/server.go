@@ -2,8 +2,8 @@
 package main
 
 import (
-	iam "iam"
 	"fmt"
+	iam "iam/iam"
 )
 
 func main() {
