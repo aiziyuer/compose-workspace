@@ -1,8 +1,9 @@
 {
-  "go.inferGopath": true,
+  "go.inferGopath": false,
   "go.toolsGopath": "${workspaceFolder}/.tools",
+  "go.gopath": "${workspaceFolder}",
   "go.alternateTools": {
-    "go-langserver": "bingo"
+    // "go-langserver": "bingo"
   },
   "go.languageServerExperimentalFeatures": {
     "format": true,
