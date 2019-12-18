@@ -1,7 +1,12 @@
 ---
-
 - hosts: all
   gather_facts: yes
   become: yes
   roles:
-    - {role: basic, tags: basic}
+    - { role: basic, tags: basic }
+
+- hosts: master
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: etcd, tags: etcd }

@@ -1,0 +1,18 @@
+{
+    "CN":"{{ inventory_hostname }}",
+    "hosts": [
+        "{{ inventory_hostname }}",
+        "{{ hostvars[inventory_hostname]['ansible_' + network_interface]['ipv4']['address'] }}"
+    ],
+    "key": {
+        "algo": "ecdsa",
+        "size": 256
+    },
+    "names": [
+        {
+            "C": "CH",
+            "L": "ZJ",
+            "ST": "Hang Zhou"
+        }
+    ]
+}

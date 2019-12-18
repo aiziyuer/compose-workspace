@@ -1,0 +1,12 @@
+---
+
+- name: check etcd installed or not
+  stat:
+    path: "/etc/etcd/etcd.conf"
+  register: etcd_config
+
+- name: start install etcd
+  when:
+   - (groups['master'] | length > 0 )
+   - not etcd_config.stat.exists
+  include_tasks: etcd.yml

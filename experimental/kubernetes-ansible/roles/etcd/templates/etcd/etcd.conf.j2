@@ -1,0 +1,48 @@
+{% if groups['master'] | length == 1 -%}
+
+#[Member]
+ETCD_DATA_DIR="/var/lib/etcd/default.etcd"
+ETCD_NAME="{{ inventory_hostname }}"
+ETCD_LISTEN_CLIENT_URLS="https://0.0.0.0:2379,http://0.0.0.0:4001"
+
+#[Clustering]
+ETCD_ADVERTISE_CLIENT_URLS="https://{{ inventory_hostname }}:2379,http://{{ inventory_hostname }}:4001"
+ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
+ETCD_INITIAL_CLUSTER_STATE="new"
+ETCD_STRICT_RECONFIG_CHECK="true"
+ETCD_ENABLE_V2="true"
+
+#[Security]
+ETCD_CERT_FILE="/etc/etcd/certs/server.pem"
+ETCD_KEY_FILE="/etc/etcd/certs/server-key.pem"
+ETCD_CLIENT_CERT_AUTH="true"
+ETCD_TRUSTED_CA_FILE="/etc/etcd/certs/ca.pem"
+
+{% else %}
+
+#[Member]
+ETCD_DATA_DIR="/var/lib/etcd/default.etcd"
+ETCD_NAME="{{ inventory_hostname }}"
+ETCD_LISTEN_PEER_URLS="https://0.0.0.0:2380"
+ETCD_LISTEN_CLIENT_URLS="http://0.0.0.0:2379,http://0.0.0.0:4001"
+
+#[Clustering]
+ETCD_INITIAL_ADVERTISE_PEER_URLS="https://{{ inventory_hostname }}:2380"
+ETCD_ADVERTISE_CLIENT_URLS="https://{{ inventory_hostname }}:2379,http://{{ inventory_hostname }}:4001"
+ETCD_INITIAL_CLUSTER="{{ groups['master'] | map('regex_replace', '^(?P<hostname>.+)$', '\g<hostname=https://\g<hostname>:2380') | join(',') }}"
+ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
+ETCD_INITIAL_CLUSTER_STATE="new"
+ETCD_STRICT_RECONFIG_CHECK="true"
+ETCD_ENABLE_V2="true"
+
+#[Security]
+ETCD_CERT_FILE="/etc/etcd/certs/server.pem"
+ETCD_KEY_FILE="/etc/etcd/certs/server-key.pem"
+ETCD_CLIENT_CERT_AUTH="true"
+ETCD_TRUSTED_CA_FILE="/etc/etcd/certs/ca.pem"
+ETCD_PEER_CERT_FILE="/etc/etcd/certs/peer.pem"
+ETCD_PEER_KEY_FILE="/etc/etcd/certs/peer-key.pem"
+ETCD_PEER_CLIENT_CERT_AUTH="true"
+ETCD_PEER_TRUSTED_CA_FILE="/etc/etcd/certs/ca.pem"
+
+{% endif %}

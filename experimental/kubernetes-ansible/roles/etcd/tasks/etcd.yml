@@ -1,0 +1,96 @@
+---
+
+- name: 1.1 ensures etcd dirs
+  file: path={{ item }} state=directory
+  with_items:
+   - /etc/systemd/system
+   - /etc/etcd/certs
+   - /var/lib/etcd
+
+- name: 1.1 create etcd pv
+  when:
+   - etcd_disk_names | default('') | length > 0
+  lvg:
+    vg: etcd
+    pvs: "{{ etcd_disk_names }}"
+
+- name: 1.2 prepare etcd data disk
+  when:
+   - etcd_disk_names | default('') | length > 0
+  lvol:
+    vg: etcd
+    lv: data
+    size: 100%vg
+    state: present
+  register: create_lv_etcd_data
+
+- name: 1.2 format etcd data disk
+  when:
+   - etcd_disk_names | default('') | length > 0
+   - create_lv_etcd_data is defined
+   - create_lv_etcd_data.changed
+  mount:
+    src: /dev/mapper/etcd-data
+    path: /var/lib/etcd
+    fstype: "{{ FS_TYPE | default('xfs') }}"
+    state: mounted
+
+- name: 1.3 install cfssl binaries
+  when: "'master' in group_names"
+  get_url: url={{item.url}} dest={{item.dest}} mode=0755
+  with_items:
+   - {url: 'http://aiziyuer.synology.me:10080/pkg.cfssl.org/R1.2/cfssl_linux-amd64', dest: '/usr/local/bin/cfssl'}
+   - {url: 'http://aiziyuer.synology.me:10080/pkg.cfssl.org/R1.2/cfssljson_linux-amd64', dest: '/usr/local/bin/cfssljson'}
+
+- name: 1.4 install etcd binaries
+  when: "'master' in group_names"
+  unarchive:
+    src: "http://aiziyuer.synology.me:10080/github.com/etcd-io/etcd/releases/download/v3.2.22/etcd-v3.2.22-linux-amd64.tar.gz"
+    dest: /usr/local/bin
+    remote_src: yes
+    extra_opts:
+     - --strip-components=1
+    exclude:
+     - Documentation
+     - README.md
+     - README-etcdctl.md
+     - READMEv2-etcdctl.md
+
+- name: 1.5 copy etcd root-ca certs
+  copy: src={{ item }} dest=/etc/etcd/certs/
+  with_fileglob:
+    - '../files/etcd/certs/*'
+
+- name: 1.6 copy etcd server csr
+  template: src={{ item.src }} dest={{ item.dest }} mode=0755
+  with_items:
+   - {src: etcd/certs/config.json.j2, dest: '/etc/etcd/certs/config.json' }
+  register: etcd_certs_config
+
+- name: 1.7 generate etcd server/peer certs
+#   when:
+#    - etcd_certs_config.changed
+  shell: |
+    cd /etc/etcd/certs
+    cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
+    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
+     -profile=client client.json | cfssljson -bare client
+    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
+    -profile=server config.json | cfssljson -bare server
+    cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
+    -profile=peer config.json | cfssljson -bare peer
+
+- name: 1.8 config etcd's config and service
+  template: src={{ item.src }} dest={{ item.dest }} mode=0500
+  with_items:
+   - {src: etcd/etcd.conf.j2, dest: '/etc/etcd/etcd.conf' }
+   - {src: etcd.service.j2, dest: '/etc/systemd/system/etcd.service'}
+
+- name: 1.9 try restart etcd daemon
+  systemd:
+    name: etcd
+    daemon_reload: yes
+    state: started
+    enabled: yes
+
+- command: systemctl is-active etcd
