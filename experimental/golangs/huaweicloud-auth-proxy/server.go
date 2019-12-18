@@ -2,7 +2,7 @@
 package main
 
 import (
-	"github.com/huaweicse/iam"
+	iam "iam"
 	"fmt"
 )
 
