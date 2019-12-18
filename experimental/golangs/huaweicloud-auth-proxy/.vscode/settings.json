@@ -1,4 +1,12 @@
 {
-    "go.useLanguageServer": true,
-    "go.inferGopath": true
+  "go.inferGopath": true,
+  "go.toolsGopath": "${workspaceFolder}/.tools",
+  "go.alternateTools": {
+    "go-langserver": "bingo"
+  },
+  "go.languageServerExperimentalFeatures": {
+    "format": true,
+    "autoComplete": true
+  },
+  "go.useLanguageServer": true
 }
