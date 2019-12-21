@@ -1,25 +1,19 @@
 [Unit]
 Description=Docker Application Container Engine
 After=network.target
-Wants=docker-storage-setup.service
-Requires=docker-cleanup.timer
 
 [Service]
 Type=notify
 NotifyAccess=main
-EnvironmentFile=-/run/containers/registries.conf
 EnvironmentFile=-/etc/sysconfig/docker
-EnvironmentFile=-/etc/sysconfig/docker-storage
-EnvironmentFile=-/etc/sysconfig/docker-network
 Environment=GOTRACEBACK=crash
 Environment=DOCKER_HTTP_HOST_COMPAT=1
-Environment=PATH=/usr/libexec/docker:/usr/bin:/usr/sbin
-ExecStart=/usr/bin/dockerd-current \
-          --add-runtime docker-runc=/usr/libexec/docker/docker-runc-current \
+Environment=PATH=/usr/local/bin:/usr/bin:/usr/sbin
+ExecStart=/usr/local/bin/dockerd \
+          --add-runtime docker-runc=/usr/local/bin/docker-runc \
           --default-runtime=docker-runc \
-          --exec-opt native.cgroupdriver=systemd \
-          --userland-proxy-path=/usr/libexec/docker/docker-proxy-current \
-          --init-path=/usr/libexec/docker/docker-init-current \
+          --userland-proxy-path=/usr/local/bin/docker-proxy \
+          --init-path=/usr/local/bin/docker-init \
           --seccomp-profile=/etc/docker/seccomp.json \
           $OPTIONS \
           $DOCKER_STORAGE_OPTIONS \
