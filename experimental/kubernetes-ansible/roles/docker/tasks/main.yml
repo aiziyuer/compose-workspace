@@ -48,6 +48,7 @@
   with_items:
     - {src: docker.service.j2, dest: '/etc/systemd/system/docker.service'}
     - {src: seccomp.json, dest: '/etc/docker/seccomp.json'}
+    - {src: daemon.json.j2, dest: '/etc/docker/daemon.json'}
 
 - name: 1.7 try restart docker daemon
   systemd:
