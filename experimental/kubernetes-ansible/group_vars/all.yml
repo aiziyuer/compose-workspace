@@ -24,3 +24,9 @@ ansible_ssh_user: root
 ansible_ssh_pass: Changeme_123
 ansible_connection: ssh
 
+# ansible all -m debug -a "var=hostvars[inventory_hostname]" -i inventory/dev/MY_DEV_REGION_X86_64/main.ini
+binary_cdn:
+  cfssl: "http://aiziyuer.synology.me:10080/pkg.cfssl.org/R1.2/cfssl_linux-amd64"
+  cfssljson : "http://aiziyuer.synology.me:10080/pkg.cfssl.org/R1.2/cfssljson_linux-amd64"
+  etcd: "http://aiziyuer.synology.me:10080/github.com/etcd-io/etcd/releases/download/v3.2.22/etcd-v3.2.22-linux-amd64.tar.gz"
+  docker: "http://aiziyuer.synology.me:10080/download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz"

@@ -39,13 +39,13 @@
   when: "'master' in group_names"
   get_url: url={{item.url}} dest={{item.dest}} mode=0755
   with_items:
-   - {url: 'http://aiziyuer.synology.me:10080/pkg.cfssl.org/R1.2/cfssl_linux-amd64', dest: '/usr/local/bin/cfssl'}
-   - {url: 'http://aiziyuer.synology.me:10080/pkg.cfssl.org/R1.2/cfssljson_linux-amd64', dest: '/usr/local/bin/cfssljson'}
+   - {url: "{{ binary_cdn.cfssl }}", dest: '/usr/local/bin/cfssl'}
+   - {url: '{{ binary_cdn.cfssljson }}', dest: '/usr/local/bin/cfssljson'}
 
 - name: 1.4 install etcd binaries
   when: "'master' in group_names"
   unarchive:
-    src: "http://aiziyuer.synology.me:10080/github.com/etcd-io/etcd/releases/download/v3.2.22/etcd-v3.2.22-linux-amd64.tar.gz"
+    src: "{{ binary_cdn.etcd }}"
     dest: /usr/local/bin
     remote_src: yes
     extra_opts:
