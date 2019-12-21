@@ -1,5 +1,7 @@
 # genrage by ansible do not modify manually
 
-{% for ns in public_dns -%}
+{% if public_dns | default('') | length > 0 %}}
+{% for ns in public_dns | split(',') -%}
 nameserver {{ ns }}
 {% endfor -%}
+{% endif %}}
