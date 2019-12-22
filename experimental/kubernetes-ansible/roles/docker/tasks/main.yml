@@ -4,6 +4,8 @@
   file: path={{ item }} state=directory
   with_items:
    - /etc/systemd/system
+   - /etc/docker
+   - /var/lib/docker
 
 - name: 1.2 create docker pv
   when:
