@@ -22,12 +22,12 @@ func TestClient(t *testing.T) {
 			},
 		},
 		Patterns: map[string]handler.Handler{
-			".+": handler.Handler{
+			".+": {
 				Requests: map[string]func(req *http.Request) error{
-					"auth": handler.AuthRequestHandler{
+					"auth": (&handler.AuthRequestHandler{
 						UserName: "aiziyuer",
 						Password: "aiziyuer",
-					}.Do(),
+					}).Do(),
 				},
 				Responses: map[string]func(req *http.Response) error{},
 			},
