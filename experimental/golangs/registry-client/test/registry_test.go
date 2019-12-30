@@ -10,7 +10,7 @@ import (
 
 func TestClient(t *testing.T) {
 
-	factory := handler.Factory{
+	router := handler.Router{
 		Client: &http.Client{
 			Transport: &http.Transport{
 				Proxy:       http.ProxyFromEnvironment,
@@ -21,10 +21,13 @@ func TestClient(t *testing.T) {
 				},
 			},
 		},
-		PatternMap: map[string]handler.Handler{
-			"/v2/": handler.Handler{
+		Patterns: map[string]handler.Handler{
+			".+": handler.Handler{
 				Requests: map[string]func(req *http.Request) error{
-					//"auth": nil,
+					"auth": handler.AuthRequestHandler{
+						UserName: "aiziyuer",
+						Password: "aiziyuer",
+					}.Do(),
 				},
 				Responses: map[string]func(req *http.Response) error{},
 			},
@@ -32,7 +35,7 @@ func TestClient(t *testing.T) {
 	}
 
 	req, _ := http.NewRequest("GET", "registry-1.docker.io", nil)
-	resp, err := factory.Do(req)
+	resp, err := router.Do(req)
 
 	fmt.Println(resp, err)
 }
