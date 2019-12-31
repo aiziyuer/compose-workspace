@@ -5,28 +5,31 @@ import (
 	"fmt"
 	"github.com/aiziyuer/registry/client/handler"
 	"net/http"
+	"os"
 	"testing"
 )
 
 func TestClient(t *testing.T) {
 
-	router := handler.Router{
-		Client: &http.Client{
-			Transport: &http.Transport{
-				Proxy:       http.ProxyFromEnvironment,
-				DialContext: nil,
-				DialTLS:     nil,
-				TLSClientConfig: &tls.Config{
-					InsecureSkipVerify: true,
-				},
+	c := &http.Client{
+		Transport: &http.Transport{
+			Proxy:       http.ProxyFromEnvironment,
+			DialContext: nil,
+			DialTLS:     nil,
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
 			},
 		},
+	}
+	router := handler.Router{
+		Client: c,
 		Patterns: map[string]handler.Handler{
 			".+": {
 				Requests: map[string]func(req *http.Request) error{
 					"auth": (&handler.AuthRequestHandler{
+						Client:   c,
 						UserName: "aiziyuer",
-						Password: "aiziyuer",
+						Password: os.Getenv("REGISTRY_PASSWORD"),
 					}).Do(),
 				},
 				Responses: map[string]func(req *http.Response) error{},
@@ -34,7 +37,7 @@ func TestClient(t *testing.T) {
 		},
 	}
 
-	req, _ := http.NewRequest("GET", "registry-1.docker.io", nil)
+	req, _ := http.NewRequest("GET", "https://registry-1.docker.io/v2/", nil)
 	resp, err := router.Do(req)
 
 	fmt.Println(resp, err)
