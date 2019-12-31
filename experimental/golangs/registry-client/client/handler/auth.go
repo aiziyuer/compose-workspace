@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/fanliao/go-promise"
+	"io/ioutil"
+	"k8s.io/client-go/third_party/forked/golang/template"
 	"k8s.io/client-go/util/jsonpath"
 	"net/http"
 	"net/url"
@@ -15,21 +16,20 @@ import (
 type (
 	AuthRequestHandler struct {
 		Client   *http.Client
-		URL      string
 		UserName string
 		Password string
 	}
 )
 
-func (t *AuthRequestHandler) Do() func(req *http.Request) error {
+func (h *AuthRequestHandler) Do() func(req *http.Request) error {
 	return func(req *http.Request) error {
 
 		if len(req.Header.Get("Authorization")) == 0 {
 
+			// get realm info
 			realmTask := func() (r interface{}, err error) {
 
-				// get realm info
-				res, err := t.Client.Do(req)
+				res, err := h.Client.Do(req)
 				if err != nil {
 					return res, err
 				}
@@ -53,9 +53,9 @@ func (t *AuthRequestHandler) Do() func(req *http.Request) error {
 				return ret, nil
 			}
 
+			// get token
 			authTask := func(data interface{}) (r interface{}, err error) {
 
-				// get wBuf
 				realmMap := data.(map[string]string)
 				realmUrl, _ := url.Parse(realmMap["realm"])
 				q := realmUrl.Query()
@@ -69,8 +69,8 @@ func (t *AuthRequestHandler) Do() func(req *http.Request) error {
 				if err != nil {
 					return authReq, err
 				}
-				authReq.SetBasicAuth(t.UserName, t.Password)
-				res, err := t.Client.Do(authReq)
+				authReq.SetBasicAuth(h.UserName, h.Password)
+				res, err := h.Client.Do(authReq)
 				if err != nil {
 					return nil, err
 				}
@@ -84,22 +84,33 @@ func (t *AuthRequestHandler) Do() func(req *http.Request) error {
 					return nil, err
 				}
 
-				wBuf := new(bytes.Buffer)
-				rBuf := new(bytes.Buffer)
-				_, _ = rBuf.ReadFrom(res.Body)
-				var nodesData interface{}
-				err = json.Unmarshal(rBuf.Bytes(), &nodesData)
-				if err != nil {
-					return nil, err
-				}
-				err = j.Execute(wBuf, nodesData)
+				body, err := ioutil.ReadAll(res.Body)
 				if err != nil {
 					return nil, err
 				}
 
-				token := wBuf.String()
+				var o interface{}
+				err = json.Unmarshal(body, &o)
+				if err != nil {
+					return nil, err
+				}
 
-				return token, nil
+				results, err := j.FindResults(o)
+				if err != nil {
+					return nil, err
+				}
+
+				for _, r := range results {
+					for _, v := range r {
+						token, ok := template.PrintableValue(v)
+						if !ok {
+							return nil, fmt.Errorf("can'h print type %s", v.Type())
+						}
+						return token, nil
+					}
+				}
+
+				return nil, errors.New("get token failed")
 			}
 
 			f, ok := promise.Start(realmTask).Pipe(authTask)
