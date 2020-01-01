@@ -1,10 +1,9 @@
 package registry
 
 import (
-	"fmt"
 	"github.com/aiziyuer/registry/client/handler"
+	"github.com/aiziyuer/registry/client/util"
 	"net/http"
-	"regexp"
 )
 
 type Registry struct {
@@ -46,30 +45,12 @@ func (r *Registry) do(req *http.Request) (*http.Response, error) {
 }
 
 func (r *Registry) doWithContext(req *http.Request, context *map[string]string) (*http.Response, error) {
-	return r.Handler.Do(req, context)
-}
-
-func (r *Registry) url(pathTemplate string, args ...interface{}) string {
-
-	tmpUrl := fmt.Sprintf("%s/%s", r.URL, fmt.Sprintf(pathTemplate, args...))
-
-	m := r.regexNamedMatch(tmpUrl, `(?P<schema>^\w+://|^)(?P<host>[^/]+)(?P<path>[\w/]+)`)
-	schema := m["schema"]
-	if schema == "" {
-		schema = "https://"
-	}
-	host := m["host"]
-	path := m["path"]
-
-	tmpSuffix := fmt.Sprintf("%s/%s", host, path)
-	suffix := regexp.MustCompile(`[/]+`).ReplaceAllString(tmpSuffix, `/`)
-	url := fmt.Sprintf("%s%s", schema, suffix)
-	return url
+	return r.Handler.DoWithContext(req, context)
 }
 
 func (r *Registry) Ping() error {
 
-	req, _ := http.NewRequest("GET", r.url("/v2/"), nil)
+	req, _ := http.NewRequest("GET", util.Url(r.URL, "/v2/"), nil)
 	resp, err := r.do(req)
 	if resp != nil {
 		defer func() {
@@ -77,19 +58,4 @@ func (r *Registry) Ping() error {
 		}()
 	}
 	return err
-}
-
-func (r *Registry) regexNamedMatch(input string, pattern string) map[string]string {
-
-	re := regexp.MustCompile(pattern)
-	m := map[string]string{}
-	for i, v := range re.FindStringSubmatch(input) {
-		name := re.SubexpNames()[i]
-		if name == "" {
-			continue
-		}
-		m[name] = v
-	}
-
-	return m
 }

@@ -1,8 +1,8 @@
 package registry
 
 import (
+	"fmt"
 	"github.com/aiziyuer/registry/client/util"
-	"github.com/davecgh/go-spew/spew"
 )
 
 func (r *Registry) Tags(repoName string) (tags []string, err error) {
@@ -13,26 +13,22 @@ func (r *Registry) Tags(repoName string) (tags []string, err error) {
 
 	request := `
 {
-    // django syntax
-    "Schema": "https",
-    "Host": "registry-1.docker.io",
+    // this json syntax is jsonx: https://github.com/danharper/JSONx 
+    // and variable render syntax like django
     "Method": "GET",
     "Path": "/v2/{{ RepoName }}/tags/list",
+    "Schema": "https",
+    "Host": "registry-1.docker.io",
     "Header": {
-        "Token": "{{ Token | default:"123" }}",
+        "Token": "{{ Token | default: "123" }}",
     },
     "Body": "",
 }
 `
 	out, _ := util.TemplateRenderByPong2(request, context)
-	m, err := util.JsonX2Map(out)
+	req, _ := util.WrapperRequest(out)
+	res, _ := r.Handler.DoWithContext(req, &context)
 
-	if err != nil {
-		return nil, err
-	}
-
-	// TODO 反射获取Request中的数据进行渲染
-	spew.Dump(m)
-
+	fmt.Println(res)
 	return nil, nil
 }
