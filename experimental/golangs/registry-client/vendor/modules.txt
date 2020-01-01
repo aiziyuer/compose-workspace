@@ -1,8 +1,14 @@
+# github.com/davecgh/go-spew v1.1.1
+github.com/davecgh/go-spew/spew
 # github.com/fanliao/go-promise v0.0.0-20141029170127-1890db352a72
 github.com/fanliao/go-promise
-# github.com/savaki/jq v0.0.0-20161209013833-0e6baecebbf8
-github.com/savaki/jq
-github.com/savaki/jq/scanner
+# github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4
+github.com/flosch/pongo2
+# github.com/juju/errors v0.0.0-20181118221551-089d3ea4e4d5
+github.com/juju/errors
+# github.com/mkideal/pkg v0.0.0-20170503154153-3e188c9e7ecc
+github.com/mkideal/pkg/encoding
+github.com/mkideal/pkg/encoding/jsonx
 # k8s.io/client-go v11.0.0+incompatible
-k8s.io/client-go/util/jsonpath
 k8s.io/client-go/third_party/forked/golang/template
+k8s.io/client-go/util/jsonpath

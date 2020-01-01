@@ -13,7 +13,7 @@ type Registry struct {
 	Handler *handler.Facade
 }
 
-func DefaultClient(c *http.Client, url string, username string, password string) *Registry {
+func NewClient(c *http.Client, url string, username string, password string) *Registry {
 
 	return &Registry{
 		URL:    url,

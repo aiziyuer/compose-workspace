@@ -8,19 +8,24 @@ import (
 	"testing"
 )
 
-func TestClient(t *testing.T) {
+var client *registry.Registry
 
-	c := &http.Client{
+func init() {
+
+	client = registry.NewClient(&http.Client{
 		Transport: &http.Transport{
-			Proxy:       http.ProxyFromEnvironment,
-			DialContext: nil,
-			DialTLS:     nil,
+			Proxy: http.ProxyFromEnvironment,
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: true,
 			},
 		},
-	}
+	}, "https://registry-1.docker.io", "aiziyuer", os.Getenv("REGISTRY_PASSWORD"))
+}
 
-	client := registry.DefaultClient(c, "https://registry-1.docker.io", "aiziyuer", os.Getenv("REGISTRY_PASSWORD"))
+func TestClient(t *testing.T) {
 	_ = client.Ping()
+}
+
+func TestTags(t *testing.T) {
+	_, _ = client.Tags("aiziyuer/centos")
 }
