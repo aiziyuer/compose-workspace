@@ -6,7 +6,7 @@ import (
 	"regexp"
 )
 
-func WrapperRequest(s string) (*http.Request, error) {
+func Json2Request(s string) (*http.Request, error) {
 
 	m, err := JsonX2Map(s)
 	if err != nil {

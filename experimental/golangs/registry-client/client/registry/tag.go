@@ -2,7 +2,6 @@ package registry
 
 import (
 	"fmt"
-	"github.com/aiziyuer/registry/client/util"
 )
 
 func (r *Registry) Tags(repoName string) (tags []string, err error) {
@@ -25,9 +24,7 @@ func (r *Registry) Tags(repoName string) (tags []string, err error) {
     "Body": "",
 }
 `
-	out, _ := util.TemplateRenderByPong2(request, context)
-	req, _ := util.WrapperRequest(out)
-	res, _ := r.Handler.DoWithContext(req, &context)
+	res, _ := r.Handler.DoWithContextV2(request, &context)
 
 	fmt.Println(res)
 	return nil, nil

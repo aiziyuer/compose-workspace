@@ -21,7 +21,7 @@ func NewClient(c *http.Client, url string, username string, password string) *Re
 			Client: c,
 			Patterns: map[string]handler.Handler{
 				".+": {
-					Requests: map[string]func(*http.Request, *map[string]string) error{
+					Requests: map[string]func(*http.Request, *map[string]interface{}) error{
 						"auth": (&handler.AuthRequestHandler{
 							Client:   c,
 							UserName: username,
@@ -37,14 +37,14 @@ func NewClient(c *http.Client, url string, username string, password string) *Re
 
 func (r *Registry) do(req *http.Request) (*http.Response, error) {
 
-	context := &map[string]string{
+	context := &map[string]interface{}{
 		"URL": r.URL,
 	}
 
 	return r.doWithContext(req, context)
 }
 
-func (r *Registry) doWithContext(req *http.Request, context *map[string]string) (*http.Response, error) {
+func (r *Registry) doWithContext(req *http.Request, context *map[string]interface{}) (*http.Response, error) {
 	return r.Handler.DoWithContext(req, context)
 }
 

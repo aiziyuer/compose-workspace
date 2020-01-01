@@ -21,6 +21,13 @@ type (
 	}
 )
 
+func (h *AuthRequestHandler) FV2() func(interface{}, *map[string]interface{}) error {
+	return func(i interface{}, m *map[string]interface{}) error {
+
+		return nil
+	}
+}
+
 func (h *AuthRequestHandler) F() func(*http.Request, *map[string]interface{}) error {
 	return func(req *http.Request, context *map[string]interface{}) error {
 
