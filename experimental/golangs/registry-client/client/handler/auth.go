@@ -21,8 +21,8 @@ type (
 	}
 )
 
-func (h *AuthRequestHandler) Do() func(req *http.Request) error {
-	return func(req *http.Request) error {
+func (h *AuthRequestHandler) F() func(*http.Request, *map[string]string) error {
+	return func(req *http.Request, context *map[string]string) error {
 
 		if len(req.Header.Get("Authorization")) == 0 {
 

@@ -8,12 +8,12 @@ import (
 
 type (
 	RequestHandler interface {
-		Do() func(req *http.Request) error
+		F() func(*http.Request, *map[string]string) error
 	}
 )
 
 type Handler struct {
-	Requests  map[string]func(req *http.Request) error
+	Requests  map[string]func(req *http.Request, context *map[string]string) error
 	Responses map[string]func(req *http.Response) error
 }
 
@@ -23,7 +23,7 @@ type Facade struct {
 }
 
 // 通用执行函数
-func (r *Facade) Do(req *http.Request) (*http.Response, error) {
+func (r *Facade) Do(req *http.Request, context *map[string]string) (*http.Response, error) {
 
 	// 截取request获得真正的api进行处理函数的查找并执行
 	for pattern, handler := range r.Patterns {
@@ -32,7 +32,7 @@ func (r *Facade) Do(req *http.Request) (*http.Response, error) {
 		if p.MatchString(req.URL.Path) {
 
 			for _, handler := range handler.Requests {
-				err := handler(req)
+				err := handler(req, context)
 				if err != nil {
 					return nil, err
 				}

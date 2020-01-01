@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"github.com/aiziyuer/registry/client/handler"
 	"net/http"
-	"os"
 	"regexp"
 )
 
 type Registry struct {
-	URL    string
-	Client *http.Client
-	Router *handler.Facade
+	URL     string
+	Client  *http.Client
+	Handler *handler.Facade
 }
 
 func DefaultClient(c *http.Client, url string, username string, password string) *Registry {
@@ -19,16 +18,16 @@ func DefaultClient(c *http.Client, url string, username string, password string)
 	return &Registry{
 		URL:    url,
 		Client: c,
-		Router: &handler.Facade{
+		Handler: &handler.Facade{
 			Client: c,
 			Patterns: map[string]handler.Handler{
 				".+": {
-					Requests: map[string]func(req *http.Request) error{
+					Requests: map[string]func(*http.Request, *map[string]string) error{
 						"auth": (&handler.AuthRequestHandler{
 							Client:   c,
-							UserName: "aiziyuer",
-							Password: os.Getenv("REGISTRY_PASSWORD"),
-						}).Do(),
+							UserName: username,
+							Password: password,
+						}).F(),
 					},
 					Responses: map[string]func(req *http.Response) error{},
 				},
@@ -38,7 +37,16 @@ func DefaultClient(c *http.Client, url string, username string, password string)
 }
 
 func (r *Registry) do(req *http.Request) (*http.Response, error) {
-	return r.Router.Do(req)
+
+	context := &map[string]string{
+		"URL": r.URL,
+	}
+
+	return r.doWithContext(req, context)
+}
+
+func (r *Registry) doWithContext(req *http.Request, context *map[string]string) (*http.Response, error) {
+	return r.Handler.Do(req, context)
 }
 
 func (r *Registry) url(pathTemplate string, args ...interface{}) string {
