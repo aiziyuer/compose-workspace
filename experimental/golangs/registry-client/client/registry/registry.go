@@ -11,7 +11,7 @@ import (
 type Registry struct {
 	URL    string
 	Client *http.Client
-	Router *handler.Router
+	Router *handler.Facade
 }
 
 func DefaultClient(c *http.Client, url string, username string, password string) *Registry {
@@ -19,7 +19,7 @@ func DefaultClient(c *http.Client, url string, username string, password string)
 	return &Registry{
 		URL:    url,
 		Client: c,
-		Router: &handler.Router{
+		Router: &handler.Facade{
 			Client: c,
 			Patterns: map[string]handler.Handler{
 				".+": {

@@ -6,13 +6,24 @@ import (
 	"regexp"
 )
 
-type Router struct {
+type (
+	RequestHandler interface {
+		Do() func(req *http.Request) error
+	}
+)
+
+type Handler struct {
+	Requests  map[string]func(req *http.Request) error
+	Responses map[string]func(req *http.Response) error
+}
+
+type Facade struct {
 	Client   *http.Client
 	Patterns map[string]Handler
 }
 
 // 通用执行函数
-func (r *Router) Do(req *http.Request) (*http.Response, error) {
+func (r *Facade) Do(req *http.Request) (*http.Response, error) {
 
 	// 截取request获得真正的api进行处理函数的查找并执行
 	for pattern, handler := range r.Patterns {
