@@ -75,15 +75,20 @@ func (r *apiRequest) Render() (*apiRequest, error) {
 func (r *apiRequest) Wrapper() (*http.Request, error) {
 
 	var body io.Reader
-	switch r.Body.(type) {
+	body = nil
+	switch t := r.Body.(type) {
 	case string:
-		body = strings.NewReader(r.Body.(string))
-	case map[string]string:
-		values := &url.Values{}
-		for k, v := range r.Body.(map[string]string) {
-			values.Set(k, v)
+		if len(t) > 0 {
+			body = strings.NewReader(r.Body.(string))
 		}
-		body = strings.NewReader(values.Encode())
+	case map[string]string:
+		if len(t) > 0 {
+			values := &url.Values{}
+			for k, v := range r.Body.(map[string]string) {
+				values.Set(k, v)
+			}
+			body = strings.NewReader(values.Encode())
+		}
 	default:
 		body = nil
 	}
