@@ -21,14 +21,7 @@ type (
 	}
 )
 
-func (h *AuthRequestHandler) FV2() func(interface{}, *map[string]interface{}) error {
-	return func(i interface{}, m *map[string]interface{}) error {
-
-		return nil
-	}
-}
-
-func (h *AuthRequestHandler) F() func(*http.Request, *map[string]interface{}) error {
+func (h *AuthRequestHandler) RequestHandlerFunc() func(*http.Request, *map[string]interface{}) error {
 	return func(req *http.Request, context *map[string]interface{}) error {
 
 		if len(req.Header.Get("Authorization")) == 0 {

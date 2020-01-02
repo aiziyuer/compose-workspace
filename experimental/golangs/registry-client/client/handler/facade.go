@@ -2,82 +2,90 @@ package handler
 
 import (
 	"errors"
-	"github.com/aiziyuer/registry/client/util"
+	"fmt"
+	. "github.com/aiziyuer/registry/client/util"
+	"github.com/sirupsen/logrus"
+	"io"
 	"net/http"
-	"reflect"
+	"net/url"
 	"regexp"
+	"strings"
 )
 
 type (
 	RequestHandler interface {
-		F() func(*http.Request, *map[string]interface{}) error
-		FV2() func(interface{}, *map[string]interface{}) error
+		RequestHandlerFunc() func(*http.Request, *map[string]interface{}) error
+	}
+
+	Handler struct {
+		Requests  map[string]func(req *http.Request, context *map[string]interface{}) error
+		Responses map[string]func(req *http.Response) error
+	}
+
+	Facade struct {
+		Client   *http.Client
+		Patterns map[string]Handler
+	}
+
+	ApiRequest struct {
+		Input    map[string]interface{}
+		Template string
+		Method   string
+		Path     string
+		Schema   string
+		Host     string
+		URL      string
+		Params   map[string]string
+		Headers  map[string]string
+		Body     interface{}
 	}
 )
 
-type Handler struct {
-	Requests   map[string]func(req *http.Request, context *map[string]interface{}) error
-	Responses  map[string]func(req *http.Response) error
-	RequestsV2 map[string]func(input interface{}, context *map[string]interface{}) error
+func (r *ApiRequest) Render() *ApiRequest {
+
+	output, err := TemplateRenderByPong2(r.Template, r.Input)
+	if err != nil {
+		logrus.Errorf("TemplateRenderByPong2 error: ", err)
+	}
+	_ = JsonX2Object(output, &r)
+
+	r.URL = fmt.Sprintf("%s://%s%s", r.Schema, r.Host, r.Path)
+
+	return r
 }
 
-type Facade struct {
-	Client   *http.Client
-	Patterns map[string]Handler
-}
+func (r *ApiRequest) Wrapper() (*http.Request, error) {
 
-func (r *Facade) DoV2(input *interface{}) (*http.Response, error) {
-	return r.DoWithContextV2(input, &map[string]interface{}{})
-}
-
-func (r *Facade) DoWithContextV2(input interface{}, context *map[string]interface{}) (*http.Response, error) {
-
-	if reflect.TypeOf(input).String() != "string" {
-		return nil, errors.New("not support input(not string)")
+	var body io.Reader
+	switch r.Body.(type) {
+	case string:
+		body = strings.NewReader(r.Body.(string))
+	case map[string]string:
+		values := &url.Values{}
+		for k, v := range r.Body.(map[string]string) {
+			values.Set(k, v)
+		}
+		body = strings.NewReader(values.Encode())
+	default:
+		body = nil
 	}
 
-	requestStr := (input).(string)
-	requestMap, err := util.JsonX2Map(requestStr)
+	req, err := http.NewRequest(r.Method, r.URL, body)
 	if err != nil {
 		return nil, err
 	}
-	path := requestMap["Path"].(string)
 
-	// 截取request获得真正的api进行处理函数的查找并执行
-	for pattern, handler := range r.Patterns {
-
-		p, _ := regexp.Compile(pattern)
-
-		if p.MatchString(path) {
-
-			for _, handler := range handler.RequestsV2 {
-				err := handler(input, context)
-				if err != nil {
-					return nil, err
-				}
-			}
-
-			requestJson, _ := util.TemplateRenderByPong2(requestStr, *context)
-			req, _ := util.Json2Request(requestJson)
-
-			resp, err := r.Client.Do(req)
-			if err != nil {
-				return nil, err
-			}
-
-			for _, handler := range handler.Responses {
-				err := handler(resp)
-				if err != nil {
-					return nil, err
-				}
-			}
-
-			return resp, nil
-		}
-
+	for k, v := range r.Headers {
+		req.Header.Set(k, v)
 	}
 
-	return nil, errors.New("not match any pattern, current pattern: " + path)
+	for k, v := range r.Params {
+		q := req.URL.Query()
+		q.Set(k, v)
+		req.URL.RawQuery = q.Encode()
+	}
+
+	return req, nil
 }
 
 func (r *Facade) Do(req *http.Request) (*http.Response, error) {

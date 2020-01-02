@@ -6,15 +6,26 @@ import (
 	"net/http"
 )
 
-type Registry struct {
-	URL     string
-	Client  *http.Client
-	Handler *handler.Facade
-}
+type (
+	BasicAuth struct {
+		UserName string
+		PassWord string
+	}
+	Registry struct {
+		Auth    *BasicAuth
+		URL     string
+		Client  *http.Client
+		Handler *handler.Facade
+	}
+)
 
 func NewClient(c *http.Client, url string, username string, password string) *Registry {
 
 	return &Registry{
+		Auth: &BasicAuth{
+			UserName: username,
+			PassWord: password,
+		},
 		URL:    url,
 		Client: c,
 		Handler: &handler.Facade{
@@ -26,7 +37,7 @@ func NewClient(c *http.Client, url string, username string, password string) *Re
 							Client:   c,
 							UserName: username,
 							Password: password,
-						}).F(),
+						}).RequestHandlerFunc(),
 					},
 					Responses: map[string]func(req *http.Response) error{},
 				},

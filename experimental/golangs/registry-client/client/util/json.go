@@ -13,6 +13,16 @@ func JsonX2Map(s string) (map[string]interface{}, error) {
 	return ret, nil
 }
 
+func JsonX2Object(s string, v interface{}) error {
+
+	err := jsonx.Unmarshal([]byte(s), &v, jsonx.WithExtraComma(), jsonx.WithComment())
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func JsonFormat(s string) {
 
 }

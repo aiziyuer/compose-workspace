@@ -1,14 +1,18 @@
-# github.com/davecgh/go-spew v1.1.1
-github.com/davecgh/go-spew/spew
 # github.com/fanliao/go-promise v0.0.0-20141029170127-1890db352a72
 github.com/fanliao/go-promise
 # github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4
 github.com/flosch/pongo2
 # github.com/juju/errors v0.0.0-20181118221551-089d3ea4e4d5
 github.com/juju/errors
+# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+github.com/konsorten/go-windows-terminal-sequences
 # github.com/mkideal/pkg v0.0.0-20170503154153-3e188c9e7ecc
 github.com/mkideal/pkg/encoding
 github.com/mkideal/pkg/encoding/jsonx
+# github.com/sirupsen/logrus v1.4.2
+github.com/sirupsen/logrus
+# golang.org/x/sys v0.0.0-20190422165155-953cdadca894
+golang.org/x/sys/unix
 # k8s.io/client-go v11.0.0+incompatible
 k8s.io/client-go/third_party/forked/golang/template
 k8s.io/client-go/util/jsonpath
