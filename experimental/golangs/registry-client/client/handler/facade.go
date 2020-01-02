@@ -1,15 +1,16 @@
 package handler
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	. "github.com/aiziyuer/registry/client/util"
-	"github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
+	textTemplate "text/template"
 )
 
 type (
@@ -27,9 +28,11 @@ type (
 		Patterns map[string]Handler
 	}
 
-	ApiRequest struct {
+	ApiRequestInput map[string]interface{}
+	apiRequest      struct {
 		Input    map[string]interface{}
 		Template string
+		Output   string
 		Method   string
 		Path     string
 		Schema   string
@@ -41,20 +44,35 @@ type (
 	}
 )
 
-func (r *ApiRequest) Render() *ApiRequest {
+func NewApiRequest(input map[string]interface{}, template string) (*apiRequest, error) {
+	return (&apiRequest{
+		Input:    input,
+		Template: template,
+	}).Render()
+}
 
-	output, err := TemplateRenderByPong2(r.Template, r.Input)
+func (r *apiRequest) Render() (*apiRequest, error) {
+
+	var output bytes.Buffer
+	t, err := textTemplate.New("").Parse(r.Template)
 	if err != nil {
-		logrus.Errorf("TemplateRenderByPong2 error: ", err)
+		return nil, err
 	}
-	_ = JsonX2Object(output, &r)
+	if err := t.Execute(&output, r.Input); err != nil {
+		return nil, err
+	}
+
+	r.Output = output.String()
+	if err := JsonX2Object(r.Output, &r); err != nil {
+		return nil, err
+	}
 
 	r.URL = fmt.Sprintf("%s://%s%s", r.Schema, r.Host, r.Path)
 
-	return r
+	return r, nil
 }
 
-func (r *ApiRequest) Wrapper() (*http.Request, error) {
+func (r *apiRequest) Wrapper() (*http.Request, error) {
 
 	var body io.Reader
 	switch r.Body.(type) {
@@ -76,12 +94,16 @@ func (r *ApiRequest) Wrapper() (*http.Request, error) {
 	}
 
 	for k, v := range r.Headers {
-		req.Header.Set(k, v)
+		if k != "" && v != "" {
+			req.Header.Set(k, v)
+		}
 	}
 
 	for k, v := range r.Params {
 		q := req.URL.Query()
-		q.Set(k, v)
+		if k != "" && v != "" {
+			q.Set(k, v)
+		}
 		req.URL.RawQuery = q.Encode()
 	}
 
