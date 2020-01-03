@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"github.com/aiziyuer/registry/client/registry"
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
 	"log"
 	"net/http"
 	"os"
@@ -14,9 +15,9 @@ var client *registry.Registry
 
 func init() {
 
-	err := godotenv.Load(".env.test.test")
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env.test file")
+		log.Fatal("Error loading .env file")
 	}
 
 	client = registry.NewClient(&http.Client{
@@ -40,5 +41,6 @@ func TestClient(t *testing.T) {
 }
 
 func TestTags(t *testing.T) {
-	_, _ = client.Tags("aiziyuer/centos")
+	output, _ := client.TagsWithPretty("aiziyuer/centos")
+	logrus.Info(output)
 }

@@ -1,21 +1,39 @@
 package registry
 
 import (
-	"fmt"
 	"github.com/aiziyuer/registry/client/handler"
+	"github.com/hokaccha/go-prettyjson"
+	"github.com/sirupsen/logrus"
+	"io/ioutil"
 )
 
-func (r *Registry) Tags(repoName string) ([]string, error) {
+func (r *Registry) TagsWithPretty(repoName string) (string, error) {
+	originalJson, err := r.Tags(repoName)
+	if err != nil {
+		return "", nil
+	}
+
+	s, err := prettyjson.Format([]byte(originalJson))
+	if err != nil {
+		return "", nil
+	}
+
+	return string(s), nil
+}
+
+func (r *Registry) Tags(repoName string) (string, error) {
 
 	q, err := handler.NewApiRequest(handler.ApiRequestInput{
+		"Schema":   r.Endpoint.Schema,
+		"Host":     r.Endpoint.Host,
 		"RepoName": repoName,
 		"Token":    "",
 	}, `
 	{
 		"Method": "GET",
 		"Path": "/v2/{{ .RepoName }}/tags/list",
-		"Schema": "https",
-		"Host": "registry-1.docker.io",
+		"Schema": "{{ .Schema }}",
+		"Host": "{{ .Host }}",
 		"Header": {
 			"Content-Type": "application/json; charset=utf-8",
 			"Authorization": "{{ .Token }}",
@@ -24,12 +42,21 @@ func (r *Registry) Tags(repoName string) ([]string, error) {
 	}
 `)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	req, _ := q.Wrapper()
 	res, _ := r.Handler.Do(req)
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			logrus.Errorf("res.Body.Close() error: ", err)
+		}
+	}()
 
-	fmt.Println(res)
-	return nil, nil
+	ret, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return "", nil
+	}
+
+	return string(ret), nil
 }
