@@ -59,10 +59,12 @@ func (h *AuthRequestHandler) RequestHandlerFunc() func(*http.Request, *map[strin
 				realmMap := data.(map[string]string)
 				realmUrl, _ := url.Parse(realmMap["realm"])
 				q := realmUrl.Query()
-				q.Set("offline_token", "true")
+				q.Set("account", h.UserName)
 				q.Set("service", realmMap["service"])
 				if realmMap["scope"] != "" {
 					q.Set("scope", realmMap["scope"])
+				} else {
+					q.Set("offline_token", "true")
 				}
 				realmUrl.RawQuery = q.Encode()
 				authReq, err := http.NewRequest(req.Method, realmUrl.String(), nil)

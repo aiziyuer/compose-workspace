@@ -23,7 +23,6 @@ func (r *Registry) Tags(repoName string) ([]string, error) {
 		"Body": "",
 	}
 `)
-
 	if err != nil {
 		return nil, err
 	}

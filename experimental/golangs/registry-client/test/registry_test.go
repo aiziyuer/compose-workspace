@@ -3,6 +3,8 @@ package test
 import (
 	"crypto/tls"
 	"github.com/aiziyuer/registry/client/registry"
+	"github.com/joho/godotenv"
+	"log"
 	"net/http"
 	"os"
 	"testing"
@@ -12,6 +14,11 @@ var client *registry.Registry
 
 func init() {
 
+	err := godotenv.Load(".env.test.test")
+	if err != nil {
+		log.Fatal("Error loading .env.test file")
+	}
+
 	client = registry.NewClient(&http.Client{
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
@@ -19,7 +26,13 @@ func init() {
 				InsecureSkipVerify: true,
 			},
 		},
-	}, "https://registry-1.docker.io", "aiziyuer", os.Getenv("REGISTRY_PASSWORD"))
+	}, &registry.Endpoint{
+		Schema: os.Getenv("REGISTRY_SCHEMA"),
+		Host:   os.Getenv("REGISTRY_HOST"),
+	}, &registry.BasicAuth{
+		UserName: os.Getenv("REGISTRY_USERNAME"),
+		PassWord: os.Getenv("REGISTRY_PASSWORD"),
+	})
 }
 
 func TestClient(t *testing.T) {

@@ -2,7 +2,6 @@ package registry
 
 import (
 	"github.com/aiziyuer/registry/client/handler"
-	"github.com/aiziyuer/registry/client/util"
 	"net/http"
 )
 
@@ -11,22 +10,31 @@ type (
 		UserName string
 		PassWord string
 	}
+
+	Endpoint struct {
+		Schema string
+		Host   string
+	}
+
 	Registry struct {
-		Auth    *BasicAuth
-		URL     string
-		Client  *http.Client
-		Handler *handler.Facade
+		Auth     *BasicAuth
+		Endpoint *Endpoint
+		Client   *http.Client
+		Handler  *handler.Facade
 	}
 )
 
-func NewClient(c *http.Client, url string, username string, password string) *Registry {
+func NewClient(c *http.Client, endpoint *Endpoint, auth *BasicAuth) *Registry {
 
 	return &Registry{
 		Auth: &BasicAuth{
-			UserName: username,
-			PassWord: password,
+			UserName: auth.UserName,
+			PassWord: auth.PassWord,
 		},
-		URL:    url,
+		Endpoint: &Endpoint{
+			Schema: endpoint.Schema,
+			Host:   endpoint.Host,
+		},
 		Client: c,
 		Handler: &handler.Facade{
 			Client: c,
@@ -35,8 +43,8 @@ func NewClient(c *http.Client, url string, username string, password string) *Re
 					Requests: map[string]func(*http.Request, *map[string]interface{}) error{
 						"auth": (&handler.AuthRequestHandler{
 							Client:   c,
-							UserName: username,
-							Password: password,
+							UserName: auth.UserName,
+							Password: auth.PassWord,
 						}).RequestHandlerFunc(),
 					},
 					Responses: map[string]func(req *http.Response) error{},
@@ -47,22 +55,34 @@ func NewClient(c *http.Client, url string, username string, password string) *Re
 }
 
 func (r *Registry) do(req *http.Request) (*http.Response, error) {
-
-	context := &map[string]interface{}{
-		"URL": r.URL,
-	}
-
-	return r.doWithContext(req, context)
-}
-
-func (r *Registry) doWithContext(req *http.Request, context *map[string]interface{}) (*http.Response, error) {
-	return r.Handler.DoWithContext(req, context)
+	return r.Handler.Do(req)
 }
 
 func (r *Registry) Ping() error {
 
-	req, _ := http.NewRequest("GET", util.Url(r.URL, "/v2/"), nil)
-	resp, err := r.do(req)
+	q, err := handler.NewApiRequest(handler.ApiRequestInput{
+		"Schema": r.Endpoint.Schema,
+		"Host":   r.Endpoint.Host,
+		"Token":  "",
+	}, `
+	{
+		"Method": "GET",
+		"Path": "/v2/",
+		"Schema": "{{ .Schema }}",
+		"Host": "{{ .Host }}",
+		"Header": {
+			"Content-Type": "application/json; charset=utf-8",
+			"Authorization": "{{ .Token }}",
+		},
+		"Body": "",
+	}
+`)
+	if err != nil {
+		return err
+	}
+
+	req, _ := q.Wrapper()
+	resp, _ := r.Handler.Do(req)
 	if resp != nil {
 		defer func() {
 			_ = resp.Body.Close()
