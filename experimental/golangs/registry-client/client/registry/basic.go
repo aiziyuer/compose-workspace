@@ -1,27 +1,26 @@
 package registry
 
 import (
-	"github.com/aiziyuer/registry/client/auth"
+	"github.com/aiziyuer/registry/client/common"
 	"github.com/aiziyuer/registry/client/handler"
 	"net/http"
 )
 
 type (
-
 	Endpoint struct {
 		Schema string
 		Host   string
 	}
 
 	Registry struct {
-		Auth          *auth.BasicAuth
+		Auth          *common.Auth
 		Endpoint      *Endpoint
 		Client        *http.Client
 		HandlerFacade *handler.Facade
 	}
 )
 
-func NewClient(c *http.Client, endpoint *Endpoint, auth *auth.BasicAuth) *Registry {
+func NewClient(c *http.Client, endpoint *Endpoint, auth *common.Auth) *Registry {
 
 	return &Registry{
 		Auth: auth,
@@ -32,23 +31,19 @@ func NewClient(c *http.Client, endpoint *Endpoint, auth *auth.BasicAuth) *Regist
 		Client: c,
 		HandlerFacade: &handler.Facade{
 			Client: c,
-			Patterns: map[string]handler.Handler{
+			PatternHandlerMap: map[string]handler.Handler{
 				".+": {
-					Requests: map[string]func(*http.Request) error{
-						"auth": (&handler.AuthRequestHandler{
-							Client:   c,
-							Auth: auth,
-						}).RequestHandlerFunc(),
+					Requests: map[string]handler.RequestHandlerFunc{
+						"common": (&handler.AuthRequestHandler{
+							Client: c,
+							Auth:   auth,
+						}).RequestHandlerFunc,
 					},
-					Responses: map[string]func(req *http.Response) error{},
+					Responses: map[string]handler.ResponseHandlerFunc{},
 				},
 			},
 		},
 	}
-}
-
-func (r *Registry) do(req *http.Request) (*http.Response, error) {
-	return r.HandlerFacade.Do(req)
 }
 
 func (r *Registry) Ping() error {

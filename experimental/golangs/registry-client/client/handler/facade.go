@@ -14,22 +14,22 @@ import (
 )
 
 type (
-	RequestHandler interface {
-		RequestHandlerFunc() func(*http.Request, *map[string]interface{}) error
-	}
+	RequestHandlerFunc  func(req *http.Request) error
+	ResponseHandlerFunc func(resp *http.Response) error
 
 	Handler struct {
-		Requests  map[string]func(req *http.Request) error
-		Responses map[string]func(req *http.Response) error
+		Requests  map[string]RequestHandlerFunc
+		Responses map[string]ResponseHandlerFunc
 	}
 
 	Facade struct {
-		Client   *http.Client
-		Patterns map[string]Handler
+		Client *http.Client
+		// url => handlers
+		PatternHandlerMap map[string]Handler
 	}
 
 	ApiRequestInput map[string]interface{}
-	apiRequest      struct {
+	ApiRequest      struct {
 		Input    map[string]interface{}
 		Template string
 		Output   string
@@ -44,14 +44,14 @@ type (
 	}
 )
 
-func NewApiRequest(input map[string]interface{}, template string) (*apiRequest, error) {
-	return (&apiRequest{
+func NewApiRequest(input map[string]interface{}, template string) (*ApiRequest, error) {
+	return (&ApiRequest{
 		Input:    input,
 		Template: template,
 	}).Render()
 }
 
-func (r *apiRequest) Render() (*apiRequest, error) {
+func (r *ApiRequest) Render() (*ApiRequest, error) {
 
 	var output bytes.Buffer
 	t, err := textTemplate.New("").Parse(r.Template)
@@ -72,7 +72,7 @@ func (r *apiRequest) Render() (*apiRequest, error) {
 	return r, nil
 }
 
-func (r *apiRequest) Wrapper() (*http.Request, error) {
+func (r *ApiRequest) Wrapper() (*http.Request, error) {
 
 	var body io.Reader
 	body = nil
@@ -119,7 +119,7 @@ func (r *apiRequest) Wrapper() (*http.Request, error) {
 func (r *Facade) Do(req *http.Request) (*http.Response, error) {
 
 	// 截取request获得真正的api进行处理函数的查找并执行
-	for pattern, handler := range r.Patterns {
+	for pattern, handler := range r.PatternHandlerMap {
 
 		p, _ := regexp.Compile(pattern)
 		if p.MatchString(req.URL.Path) {

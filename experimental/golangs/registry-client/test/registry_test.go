@@ -3,7 +3,7 @@ package test
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/aiziyuer/registry/client/auth"
+	"github.com/aiziyuer/registry/client/common"
 	"github.com/aiziyuer/registry/client/registry"
 	"github.com/aiziyuer/registry/client/util"
 	"github.com/joho/godotenv"
@@ -33,7 +33,7 @@ func init() {
 	}, &registry.Endpoint{
 		Schema: os.Getenv("REGISTRY_SCHEMA"),
 		Host:   os.Getenv("REGISTRY_HOST"),
-	}, &auth.BasicAuth{
+	}, &common.Auth{
 		UserName: os.Getenv("REGISTRY_USERNAME"),
 		PassWord: os.Getenv("REGISTRY_PASSWORD"),
 	})

@@ -1,6 +1,6 @@
-package auth
+package common
 
-type BasicAuth struct {
+type Auth struct {
 	UserName string
 	PassWord string
 }
