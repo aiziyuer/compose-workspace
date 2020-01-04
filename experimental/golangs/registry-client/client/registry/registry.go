@@ -34,7 +34,7 @@ func NewClient(c *http.Client, endpoint *Endpoint, auth *auth.BasicAuth) *Regist
 			Client: c,
 			Patterns: map[string]handler.Handler{
 				".+": {
-					Requests: map[string]func(*http.Request, *map[string]interface{}) error{
+					Requests: map[string]func(*http.Request) error{
 						"auth": (&handler.AuthRequestHandler{
 							Client:   c,
 							Auth: auth,

@@ -31,8 +31,8 @@ func init() {
 	}
 }
 
-func (h *AuthRequestHandler) RequestHandlerFunc() func(*http.Request, *map[string]interface{}) error {
-	return func(req *http.Request, context *map[string]interface{}) error {
+func (h *AuthRequestHandler) RequestHandlerFunc() func(*http.Request) error {
+	return func(req *http.Request) error {
 
 		if len(req.Header.Get("Authorization")) == 0 {
 

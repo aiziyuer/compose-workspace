@@ -19,7 +19,7 @@ type (
 	}
 
 	Handler struct {
-		Requests  map[string]func(req *http.Request, context *map[string]interface{}) error
+		Requests  map[string]func(req *http.Request) error
 		Responses map[string]func(req *http.Response) error
 	}
 
@@ -115,12 +115,8 @@ func (r *apiRequest) Wrapper() (*http.Request, error) {
 	return req, nil
 }
 
-func (r *Facade) Do(req *http.Request) (*http.Response, error) {
-	return r.DoWithContext(req, &map[string]interface{}{})
-}
-
 // 通用执行函数
-func (r *Facade) DoWithContext(req *http.Request, context *map[string]interface{}) (*http.Response, error) {
+func (r *Facade) Do(req *http.Request) (*http.Response, error) {
 
 	// 截取request获得真正的api进行处理函数的查找并执行
 	for pattern, handler := range r.Patterns {
@@ -129,7 +125,7 @@ func (r *Facade) DoWithContext(req *http.Request, context *map[string]interface{
 		if p.MatchString(req.URL.Path) {
 
 			for _, handler := range handler.Requests {
-				err := handler(req, context)
+				err := handler(req)
 				if err != nil {
 					return nil, err
 				}
@@ -149,7 +145,6 @@ func (r *Facade) DoWithContext(req *http.Request, context *map[string]interface{
 
 			return resp, nil
 		}
-
 	}
 
 	return nil, errors.New("not match any pattern, current pattern: " + req.URL.Path)
