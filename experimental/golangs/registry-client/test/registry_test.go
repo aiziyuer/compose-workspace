@@ -15,7 +15,8 @@ var client *registry.Registry
 
 func init() {
 
-	err := godotenv.Load()
+	// 测试环境以.env文件为准, 生产环境改成godotenv.Load()
+	err := godotenv.Overload()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}

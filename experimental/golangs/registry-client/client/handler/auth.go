@@ -5,9 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"github.com/fanliao/go-promise"
+	"github.com/joho/godotenv"
 	"io/ioutil"
 	"k8s.io/client-go/third_party/forked/golang/template"
 	"k8s.io/client-go/util/jsonpath"
+	"log"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -20,6 +22,14 @@ type (
 		Password string
 	}
 )
+
+func init() {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
 
 func (h *AuthRequestHandler) RequestHandlerFunc() func(*http.Request, *map[string]interface{}) error {
 	return func(req *http.Request, context *map[string]interface{}) error {

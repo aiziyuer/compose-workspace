@@ -2,36 +2,32 @@ package util
 
 import (
 	"fmt"
-	"net/http"
 	"regexp"
+	"strings"
 )
 
-func Json2Request(s string) (*http.Request, error) {
+func Url(args ...string) string {
 
-	m, err := JsonX2Map(s)
-	if err != nil {
-		return nil, err
+	tmpUrl := strings.Join(args, "")
+
+	m := RegexNamedMatch(tmpUrl, `(?P<schema>^\w+://|^)(?P<host>[^/]+)(?P<path>[\w/]+)`)
+	schema := m["schema"]
+	if schema == "" {
+		schema = "https://"
 	}
+	host := m["host"]
+	path := m["path"]
 
-	prefix := fmt.Sprintf("%s://%s", m["Schema"].(string), m["Host"].(string))
-	realUrl := Url(prefix, m["Path"].(string))
+	tmpSuffix := fmt.Sprintf("%s/%s", host, path)
+	suffix := regexp.MustCompile(`[/]+`).ReplaceAllString(tmpSuffix, `/`)
+	url := fmt.Sprintf("%s%s", schema, suffix)
 
-	r, err := http.NewRequest(
-		m["Method"].(string),
-		realUrl,
-		nil,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	return r, nil
-
+	return url
 }
 
-func Url(prefix string, uri string, args ...interface{}) string {
+func UrlWithSeparator(sep string, args ...string) string {
 
-	tmpUrl := fmt.Sprintf("%s/%s", prefix, fmt.Sprintf(uri, args...))
+	tmpUrl := strings.Join(args, sep)
 
 	m := RegexNamedMatch(tmpUrl, `(?P<schema>^\w+://|^)(?P<host>[^/]+)(?P<path>[\w/]+)`)
 	schema := m["schema"]
