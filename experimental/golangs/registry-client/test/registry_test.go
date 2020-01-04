@@ -2,9 +2,9 @@ package test
 
 import (
 	"crypto/tls"
+	"fmt"
 	"github.com/aiziyuer/registry/client/registry"
 	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
 	"log"
 	"net/http"
 	"os"
@@ -43,5 +43,5 @@ func TestClient(t *testing.T) {
 
 func TestTags(t *testing.T) {
 	output, _ := client.TagsWithPretty("aiziyuer/centos")
-	logrus.Info(output)
+	fmt.Println(output)
 }
