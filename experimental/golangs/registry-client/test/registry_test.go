@@ -3,6 +3,7 @@ package test
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/aiziyuer/registry/client/auth"
 	"github.com/aiziyuer/registry/client/registry"
 	"github.com/aiziyuer/registry/client/util"
 	"github.com/joho/godotenv"
@@ -32,7 +33,7 @@ func init() {
 	}, &registry.Endpoint{
 		Schema: os.Getenv("REGISTRY_SCHEMA"),
 		Host:   os.Getenv("REGISTRY_HOST"),
-	}, &registry.BasicAuth{
+	}, &auth.BasicAuth{
 		UserName: os.Getenv("REGISTRY_USERNAME"),
 		PassWord: os.Getenv("REGISTRY_PASSWORD"),
 	})
@@ -42,7 +43,25 @@ func TestClient(t *testing.T) {
 	_ = client.Ping()
 }
 
-func TestTags(t *testing.T) {
+func TestTagsWithAuth(t *testing.T) {
 	output, _ := client.Tags("aiziyuer/centos")
+	fmt.Println(util.PrettyFormat(output))
+}
+
+func TestTagsWithoutAuth(t *testing.T) {
+
+	client = registry.NewClient(&http.Client{
+		Transport: &http.Transport{
+			Proxy: http.ProxyFromEnvironment,
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		},
+	}, &registry.Endpoint{
+		Schema: os.Getenv("REGISTRY_SCHEMA"),
+		Host:   os.Getenv("REGISTRY_HOST"),
+	}, nil)
+
+	output, _ := client.Tags("library/centos")
 	fmt.Println(util.PrettyFormat(output))
 }

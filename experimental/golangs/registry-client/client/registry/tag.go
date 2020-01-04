@@ -31,7 +31,7 @@ func (r *Registry) Tags(repoName string) (string, error) {
 	}
 
 	req, _ := q.Wrapper()
-	res, _ := r.Handler.Do(req)
+	res, _ := r.HandlerFacade.Do(req)
 	defer func() {
 		if err := res.Body.Close(); err != nil {
 			logrus.Errorf("res.Body.Close() error: ", err)

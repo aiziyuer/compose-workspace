@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/aiziyuer/registry/client/auth"
 	"github.com/fanliao/go-promise"
 	"github.com/joho/godotenv"
 	"io/ioutil"
@@ -17,9 +18,8 @@ import (
 
 type (
 	AuthRequestHandler struct {
-		Client   *http.Client
-		UserName string
-		Password string
+		Client *http.Client
+		Auth   *auth.BasicAuth
 	}
 )
 
@@ -69,7 +69,9 @@ func (h *AuthRequestHandler) RequestHandlerFunc() func(*http.Request, *map[strin
 				realmMap := data.(map[string]string)
 				realmUrl, _ := url.Parse(realmMap["realm"])
 				q := realmUrl.Query()
-				q.Set("account", h.UserName)
+				if h.Auth != nil {
+					q.Set("account", h.Auth.UserName)
+				}
 				q.Set("service", realmMap["service"])
 				if realmMap["scope"] != "" {
 					q.Set("scope", realmMap["scope"])
@@ -81,7 +83,9 @@ func (h *AuthRequestHandler) RequestHandlerFunc() func(*http.Request, *map[strin
 				if err != nil {
 					return authReq, err
 				}
-				authReq.SetBasicAuth(h.UserName, h.Password)
+				if h.Auth != nil {
+					authReq.SetBasicAuth(h.Auth.UserName, h.Auth.PassWord)
+				}
 				res, err := h.Client.Do(authReq)
 				if err != nil {
 					return nil, err
