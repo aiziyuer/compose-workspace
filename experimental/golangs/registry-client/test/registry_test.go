@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/aiziyuer/registry/client/registry"
+	"github.com/aiziyuer/registry/client/util"
 	"github.com/joho/godotenv"
 	"log"
 	"net/http"
@@ -42,6 +43,6 @@ func TestClient(t *testing.T) {
 }
 
 func TestTags(t *testing.T) {
-	output, _ := client.TagsWithPretty("aiziyuer/centos")
-	fmt.Println(output)
+	output, _ := client.Tags("aiziyuer/centos")
+	fmt.Println(util.PrettyFormat(output))
 }

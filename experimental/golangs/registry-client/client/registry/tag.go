@@ -2,24 +2,9 @@ package registry
 
 import (
 	"github.com/aiziyuer/registry/client/handler"
-	"github.com/hokaccha/go-prettyjson"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 )
-
-func (r *Registry) TagsWithPretty(repoName string) (string, error) {
-	originalJson, err := r.Tags(repoName)
-	if err != nil {
-		return "", nil
-	}
-
-	s, err := prettyjson.Format([]byte(originalJson))
-	if err != nil {
-		return "", nil
-	}
-
-	return string(s), nil
-}
 
 func (r *Registry) Tags(repoName string) (string, error) {
 

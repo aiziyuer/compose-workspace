@@ -1,6 +1,10 @@
 package util
 
-import "github.com/mkideal/pkg/encoding/jsonx"
+import (
+	"github.com/hokaccha/go-prettyjson"
+	"github.com/mkideal/pkg/encoding/jsonx"
+	"github.com/sirupsen/logrus"
+)
 
 func JsonX2Map(s string) (map[string]interface{}, error) {
 
@@ -23,6 +27,13 @@ func JsonX2Object(s string, v interface{}) error {
 	return nil
 }
 
-func JsonFormat(s string) {
+func PrettyFormat(s string) string {
 
+	ret, err := prettyjson.Format([]byte(s))
+	if err != nil {
+		logrus.Warn("PrettyFormat with error:", err)
+		return ""
+	}
+
+	return string(ret)
 }
