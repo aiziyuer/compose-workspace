@@ -100,7 +100,13 @@ func (r *ApiRequest) Wrapper() (*http.Request, error) {
 
 	for k, v := range r.Headers {
 		if k != "" && v != "" {
-			req.Header.Set(k, v)
+
+			c := req.Header.Get(k)
+			if c == "" {
+				req.Header.Set(k, v)
+			} else {
+				req.Header.Add(k, v)
+			}
 		}
 	}
 

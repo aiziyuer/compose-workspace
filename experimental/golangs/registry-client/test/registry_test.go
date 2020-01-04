@@ -72,7 +72,26 @@ func TestTagsWithAuth(t *testing.T) {
 }
 
 func TestTagsWithoutAuth(t *testing.T) {
-	output, err := clientWithOutAuth.Tags("library/centos")
+	output, err := clientWithOutAuth.Tags("library/ubuntu")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(util.PrettyFormat(output))
+}
+
+func TestTagsPaginated(t *testing.T) {
+	output, err := clientWithOutAuth.TagsPaginated("library/ubuntu", 1, 3)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(util.PrettyFormat(output))
+}
+
+func TestManifests(t *testing.T) {
+
+	output, err := clientWithOutAuth.Manifests("library/centos:7")
 	if err != nil {
 		fmt.Println(err)
 		return

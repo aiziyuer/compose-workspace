@@ -30,21 +30,6 @@ func UrlWithSeparator(sep string, args ...string) string {
 	return url
 }
 
-func RegexNamedMatch(input string, pattern string) map[string]string {
-
-	re := regexp.MustCompile(pattern)
-	m := map[string]string{}
-	for i, v := range re.FindStringSubmatch(input) {
-		name := re.SubexpNames()[i]
-		if name == "" {
-			continue
-		}
-		m[name] = v
-	}
-
-	return m
-}
-
 func ReadWithDefault(r io.Reader, fallback string) string {
 
 	ret, err := ioutil.ReadAll(r)
