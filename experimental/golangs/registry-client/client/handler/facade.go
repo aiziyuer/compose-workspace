@@ -39,7 +39,7 @@ type (
 		Host     string
 		URL      string
 		Params   map[string]string
-		Headers  map[string]string
+		Headers  map[string]interface{}
 		Body     interface{}
 	}
 )
@@ -100,12 +100,35 @@ func (r *ApiRequest) Wrapper() (*http.Request, error) {
 
 	for k, v := range r.Headers {
 		if k != "" && v != "" {
+			header := req.Header.Get(k)
+			if header == "" {
+				switch v.(type) {
+				case string:
+					x := v.(string)
+					req.Header.Set(k, x)
+				case []interface{}:
+					x := v.([]interface{})
+					if len(x) >= 1 {
+						req.Header.Set(k, x[0].(string))
+						for i := 1; i < len(x); i++ {
+							req.Header.Add(k, x[i].(string))
+						}
+					}
+				}
 
-			c := req.Header.Get(k)
-			if c == "" {
-				req.Header.Set(k, v)
 			} else {
-				req.Header.Add(k, v)
+				switch v.(type) {
+				case string:
+					x := v.(string)
+					req.Header.Add(k, x)
+				case []interface{}:
+					x := v.([]interface{})
+					for i := 0; i < len(x); i++ {
+						req.Header.Add(k, x[i].(string))
+					}
+
+				}
+
 			}
 		}
 	}

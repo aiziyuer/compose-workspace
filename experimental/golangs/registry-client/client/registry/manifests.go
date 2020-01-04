@@ -22,23 +22,25 @@ func (r *Registry) Manifests(imageName string) (string, error) {
 		"TagName":  m["TagName"],
 		"Token":    "",
 	}, `
- 	{
-		"Method": "GET",
-		"Path": "/v2/{{ .RepoName }}/manifests/{{ .TagName }}",
-		"Schema": "{{ .Schema }}",
-		"Host": "{{ .Host }}",
-		"Headers": {
-            "Accept-Encoding": "gzip",
-			"Content-Type": "application/json; charset=utf-8",
-            "User-Agent": "docker/1.13.1 go/go1.10.3 kernel/3.10.0-1062.4.1.el7.x86_64 os/linux arch/amd64 UpstreamClient(Docker-Client/1.13.1 \\(linux\\))",
-            "Accept": "application/json",
-            "Accept": "application/vnd.docker.distribution.manifest.v2+json",
-            "Accept": "application/vnd.docker.distribution.manifest.list.v2+json",
-            "Accept": "application/vnd.docker.distribution.manifest.v1+prettyjws",
-            "Authorization": "{{ .Token }}"
-		},
-		"Body": ""
-	}
+{
+    "Method": "GET",
+    "Path": "/v2/{{ .RepoName }}/manifests/{{ .TagName }}",
+    "Schema": "{{ .Schema }}",
+    "Host": "{{ .Host }}",
+    "Headers": {
+        "Accept-Encoding": "gzip",
+        "Content-Type": "application/json; charset=utf-8",
+        "User-Agent": "docker/1.13.1 go/go1.10.3 kernel/3.10.0-1062.4.1.el7.x86_64 os/linux arch/amd64 UpstreamClient(Docker-Client/1.13.1 \\(linux\\))",
+        "Accept": [
+            "application/json",
+            "application/vnd.docker.distribution.manifest.v2+json",
+            "application/vnd.docker.distribution.manifest.list.v2+json",
+            "application/vnd.docker.distribution.manifest.v1+prettyjws"
+        ],
+        "Authorization": "{{ .Token }}"
+    },
+    "Body": ""
+}
 `)
 	if err != nil {
 		return "", err
