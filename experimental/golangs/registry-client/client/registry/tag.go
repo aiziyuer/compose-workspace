@@ -2,8 +2,8 @@ package registry
 
 import (
 	"github.com/aiziyuer/registry/client/handler"
+	"github.com/aiziyuer/registry/client/util"
 	"github.com/sirupsen/logrus"
-	"io/ioutil"
 )
 
 func (r *Registry) Tags(repoName string) (string, error) {
@@ -31,17 +31,16 @@ func (r *Registry) Tags(repoName string) (string, error) {
 	}
 
 	req, _ := q.Wrapper()
-	res, _ := r.HandlerFacade.Do(req)
+	res, err := r.HandlerFacade.Do(req)
+	if err != nil {
+		return "", err
+	}
+
 	defer func() {
 		if err := res.Body.Close(); err != nil {
 			logrus.Errorf("res.Body.Close() error: ", err)
 		}
 	}()
 
-	ret, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return "", nil
-	}
-
-	return string(ret), nil
+	return util.ReadWithDefault(res.Body, "{}"), nil
 }

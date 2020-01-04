@@ -9,11 +9,14 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"net/http"
-	"os"
 	"testing"
 )
 
-var client *registry.Registry
+// 带认证的, 从环境变量中获取账号信息
+var clientWithAuth *registry.Registry
+
+// 不带认证的, 只能访问公共信息
+var clientWithOutAuth *registry.Registry
 
 func init() {
 
@@ -23,7 +26,7 @@ func init() {
 		log.Fatal("Error loading .env file")
 	}
 
-	client = registry.NewClient(&http.Client{
+	clientWithAuth = registry.NewClient(&http.Client{
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
 			TLSClientConfig: &tls.Config{
@@ -31,37 +34,48 @@ func init() {
 			},
 		},
 	}, &registry.Endpoint{
-		Schema: os.Getenv("REGISTRY_SCHEMA"),
-		Host:   os.Getenv("REGISTRY_HOST"),
+		Schema: util.GetEnvAnyWithDefault("https", "REGISTRY_SCHEMA"),
+		Host:   util.GetEnvAnyWithDefault("registry-1.docker.io", "REGISTRY_HOST"),
 	}, &common.Auth{
-		UserName: os.Getenv("REGISTRY_USERNAME"),
-		PassWord: os.Getenv("REGISTRY_PASSWORD"),
+		UserName: util.GetEnvAnyWithDefault("aiziyuer", "REGISTRY_USERNAME"),
+		PassWord: util.GetEnvAnyWithDefault("Changeme_123", "REGISTRY_PASSWORD"),
 	})
+
+	clientWithOutAuth = registry.NewClient(&http.Client{
+		Transport: &http.Transport{
+			Proxy: http.ProxyFromEnvironment,
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		},
+	}, &registry.Endpoint{
+		Schema: util.GetEnvAnyWithDefault("https", "REGISTRY_SCHEMA"),
+		Host:   util.GetEnvAnyWithDefault("registry-1.docker.io", "REGISTRY_HOST"),
+	}, nil)
 }
 
 func TestClient(t *testing.T) {
-	_ = client.Ping()
+	err := clientWithAuth.Ping()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 func TestTagsWithAuth(t *testing.T) {
-	output, _ := client.Tags("aiziyuer/centos")
+	output, err := clientWithAuth.Tags("aiziyuer/centos")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Println(util.PrettyFormat(output))
 }
 
 func TestTagsWithoutAuth(t *testing.T) {
-
-	client = registry.NewClient(&http.Client{
-		Transport: &http.Transport{
-			Proxy: http.ProxyFromEnvironment,
-			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: true,
-			},
-		},
-	}, &registry.Endpoint{
-		Schema: os.Getenv("REGISTRY_SCHEMA"),
-		Host:   os.Getenv("REGISTRY_HOST"),
-	}, nil)
-
-	output, _ := client.Tags("library/centos")
+	output, err := clientWithOutAuth.Tags("library/centos")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Println(util.PrettyFormat(output))
 }

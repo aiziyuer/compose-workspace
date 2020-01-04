@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aiziyuer/registry/client/common"
+	"github.com/aiziyuer/registry/client/util"
 	"github.com/fanliao/go-promise"
 	"io/ioutil"
 	"k8s.io/client-go/third_party/forked/golang/template"
@@ -79,6 +80,11 @@ func (h *AuthRequestHandler) RequestHandlerFunc(req *http.Request) error {
 			if err != nil {
 				return nil, err
 			}
+
+			if res.StatusCode/100 != 2 {
+				return nil, errors.New(fmt.Sprintf("Authorization failed, status code: %d, result: %s. ", res.StatusCode, util.ReadWithDefault(res.Body, "{}")))
+			}
+
 			defer func() {
 				_ = res.Body.Close()
 			}()
