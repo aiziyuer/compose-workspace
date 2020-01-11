@@ -1,0 +1,14 @@
+redis:
+    image: redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
+
+redis-dump:
+    image: aiziyuer/redis-dump:0.4.0
+    build: 
+        context: redis-dump
+        args:
+            VERSION: 0.4.0
