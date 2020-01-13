@@ -3,9 +3,9 @@ package test
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/aiziyuer/registry/client/common"
-	"github.com/aiziyuer/registry/client/registry"
-	"github.com/aiziyuer/registry/client/util"
+	"github.com/aiziyuer/registryV2/impl/common"
+	"github.com/aiziyuer/registryV2/impl/registry"
+	"github.com/aiziyuer/registryV2/impl/util"
 	"github.com/joho/godotenv"
 	"log"
 	"net/http"
