@@ -12,6 +12,7 @@ require (
 	github.com/mkideal/pkg v0.0.0-20170503154153-3e188c9e7ecc
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
-	github.com/spf13/viper v1.6.1
+	github.com/spf13/viper v1.6.1 // indirect
+	github.com/thoas/go-funk v0.5.0
 	k8s.io/client-go v11.0.0+incompatible
 )

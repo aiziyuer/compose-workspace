@@ -78,3 +78,12 @@ func (r *Registry) Ping() error {
 	}
 	return err
 }
+
+func (r *Registry) Login() error {
+
+	if err := r.Ping(); err != nil {
+		return err
+	}
+
+	return nil
+}

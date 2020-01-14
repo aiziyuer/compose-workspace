@@ -68,7 +68,7 @@ func TestTagsWithAuth(t *testing.T) {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(util.PrettyFormat(output))
+	fmt.Println(util.PrettyJson(output))
 }
 
 func TestTagsWithoutAuth(t *testing.T) {
@@ -77,7 +77,7 @@ func TestTagsWithoutAuth(t *testing.T) {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(util.PrettyFormat(output))
+	fmt.Println(util.PrettyJson(output))
 }
 
 func TestTagsPaginated(t *testing.T) {
@@ -86,7 +86,7 @@ func TestTagsPaginated(t *testing.T) {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(util.PrettyFormat(output))
+	fmt.Println(util.PrettyJson(output))
 }
 
 func TestManifests(t *testing.T) {
@@ -96,5 +96,5 @@ func TestManifests(t *testing.T) {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(util.PrettyFormat(output))
+	fmt.Println(util.PrettyJson(output))
 }

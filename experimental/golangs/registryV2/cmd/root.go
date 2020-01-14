@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-var cfgFile string
-
 var rootCmd = &cobra.Command{
 	Use:              "registryV2",
 	TraverseChildren: true,
