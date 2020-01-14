@@ -3,6 +3,7 @@ module github.com/aiziyuer/registryV2
 go 1.12
 
 require (
+	github.com/Jeffail/gabs v1.4.0
 	github.com/fanliao/go-promise v0.0.0-20141029170127-1890db352a72
 	github.com/fatih/color v1.8.0 // indirect
 	github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4
@@ -10,9 +11,10 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mkideal/pkg v0.0.0-20170503154153-3e188c9e7ecc
+	github.com/oliveagle/jsonpath v0.0.0-20180606110733-2e52cf6e6852 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.6.1 // indirect
-	github.com/thoas/go-funk v0.5.0
+	github.com/thoas/go-funk v0.5.0 // indirect
 	k8s.io/client-go v11.0.0+incompatible
 )
