@@ -27,9 +27,9 @@ func init() {
 		Short: "Search by name",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			c, err2 := getClient()
-			if err2 != nil {
-				return err2
+			c, err := getClient()
+			if err != nil {
+				return err
 			}
 
 			_ = c.Ping()
