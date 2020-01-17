@@ -24,7 +24,7 @@ func init() {
 
 	var imageSearchCmd = &cobra.Command{
 		Use:   "search",
-		Short: "Search by name",
+		Short: "SearchProject by name",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			c, err := getClient()
@@ -32,9 +32,8 @@ func init() {
 				return err
 			}
 
-			_ = c.Ping()
-
 			// TODO 业务逻辑
+			_, _ = c.SearchProject("centos", -1)
 
 			return errors.New("")
 		},
