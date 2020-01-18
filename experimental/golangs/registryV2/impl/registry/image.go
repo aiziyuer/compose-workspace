@@ -27,6 +27,26 @@ type (
 		PageNo        int       `json:"page"`
 		Projects      []Project `json:"results"`
 	}
+
+	PlatForm struct {
+		Architecture string `json:"architecture"`
+	}
+
+	MediaType struct {
+		MediaType string `json:"mediaType"`
+		Size      int    `json:"size"`
+		Digest    string `json:"digest"`
+	}
+
+	ManifestsV2 struct {
+		Digest        string      `json:"digest"`
+		MediaType     string      `json:"mediaType"`
+		Config        *MediaType  `json:"config"`
+		Layers        []MediaType `json:"layers"`
+		Platform      *PlatForm   `json:"platform"`
+		Size          int         `json:"size"`
+		SchemaVersion int         `json:"schemaVersion"`
+	}
 )
 
 func (r *Registry) searchProject(requestInput *handler.ApiRequestInput) (*ProjectSearchResult, error) {
@@ -147,4 +167,9 @@ func (r *Registry) SearchProject(nameQuery string, n int) ([]Project, error) {
 	})
 
 	return projects, nil
+}
+
+func (r *Registry) ManifestV2(imageFullName string) ([]ManifestsV2, error) {
+
+	return nil, nil
 }
