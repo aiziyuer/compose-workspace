@@ -20,17 +20,15 @@ type (
 	}
 
 	ProjectSearchResult struct {
-		PagesNum  int       `json:"num_pages"`
-		ResultNum int       `json:"num_results"`
-		PageSize  int       `json:"page_size"`
-		PageNo    int       `json:"page"`
-		Projects  []Project `json:"results"`
+		PagesTotalNum int       `json:"num_pages"`
+		TotalSize     int       `json:"num_results"`
+		PageSize      int       `json:"page_size"`
+		PageNo        int       `json:"page"`
+		Projects      []Project `json:"results"`
 	}
 )
 
-func (r *Registry) searchProjectProducer(wg *sync.WaitGroup, requestInput *handler.ApiRequestInput, ch chan []Project) {
-
-	defer wg.Done()
+func (r *Registry) searchProject(requestInput *handler.ApiRequestInput) (*ProjectSearchResult, error) {
 
 	if r.Auth != nil {
 		basicAuth := fmt.Sprintf("%s:%s", r.Auth.UserName, r.Auth.PassWord)
@@ -57,7 +55,7 @@ func (r *Registry) searchProjectProducer(wg *sync.WaitGroup, requestInput *handl
 	}
 `)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	req, _ := q.Wrapper()
@@ -70,11 +68,10 @@ func (r *Registry) searchProjectProducer(wg *sync.WaitGroup, requestInput *handl
 
 	var result ProjectSearchResult
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return
+		return nil, err
 	}
 
-	ch <- result.Projects
-
+	return &result, nil
 }
 
 func (r *Registry) SearchProject(nameQuery string, n int) ([]Project, error) {
@@ -92,18 +89,44 @@ func (r *Registry) SearchProject(nameQuery string, n int) ([]Project, error) {
 		}
 	}()
 
+	// 尝试获取服务器的总结果
+	result, err := r.searchProject(&handler.ApiRequestInput{
+		"Schema":    r.Endpoint.Schema,
+		"Host":      "index.docker.io",
+		"NameQuery": nameQuery,
+		"PageSize":  25,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// 请求所有
+	if n == -1 {
+		n = result.TotalSize
+	}
+
 	// 生产协程
-	for i := 0; i < 10; i++ {
+	for i := 0; i < n/result.PageSize+1; i++ {
 
 		wg.Add(1)
 
-		go r.searchProjectProducer(&wg, &handler.ApiRequestInput{
-			"Schema":    r.Endpoint.Schema,
-			"Host":      "index.docker.io",
-			"NameQuery": nameQuery,
-			"PageSize":  25,
-			"PageNo":    i + 1,
-		}, ch)
+		go func() {
+			defer wg.Done()
+
+			result, err := r.searchProject(&handler.ApiRequestInput{
+				"Schema":    r.Endpoint.Schema,
+				"Host":      "index.docker.io",
+				"NameQuery": nameQuery,
+				"PageSize":  result.PageSize,
+				"PageNo":    i + 1,
+			})
+			if err != nil {
+				return
+			}
+
+			ch <- result.Projects
+		}()
+
 	}
 
 	wg.Wait()

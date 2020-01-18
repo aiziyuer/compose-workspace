@@ -27,6 +27,16 @@ func Object2Json(v interface{}) (string, error) {
 	return string(ret), nil
 }
 
+func Object2PrettyJson(v interface{}) (string, error) {
+
+	ret, err := json.Marshal(&v)
+	if err != nil {
+		return "", err
+	}
+
+	return string(PrettyJsonBytes(ret)), nil
+}
+
 func Object2JsonBytes(v interface{}) ([]byte, error) {
 
 	ret, err := json.Marshal(&v)

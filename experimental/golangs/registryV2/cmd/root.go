@@ -17,15 +17,28 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:              "registryV2",
-	TraverseChildren: true,
+	Use: "registryV2",
+	//TraverseChildren: true,
 }
+
+var outputFormat string
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+}
+
+func init() {
+
+	rootCmd.PersistentFlags().StringVarP(
+		&outputFormat,
+		"output", "o", "table",
+		"options output format: table, yaml, json ",
+	)
+
 }
 
 func getClient() (*registry.Registry, error) {
