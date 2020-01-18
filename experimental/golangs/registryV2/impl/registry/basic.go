@@ -33,13 +33,13 @@ func NewClient(c *http.Client, endpoint *Endpoint, auth *common.Auth) *Registry 
 			Client: c,
 			PatternHandlerMap: map[string]handler.Handler{
 				".+": {
-					Requests: map[string]handler.RequestHandlerFunc{
+					RequestFns: map[string]handler.RequestHandlerFunc{
 						"common": (&handler.AuthRequestHandler{
 							Client: c,
 							Auth:   auth,
 						}).RequestHandlerFunc,
 					},
-					Responses: map[string]handler.ResponseHandlerFunc{},
+					ResponseFns: map[string]handler.ResponseHandlerFunc{},
 				},
 			},
 		},

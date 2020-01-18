@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	. "github.com/aiziyuer/registryV2/impl/util"
+	"github.com/sethgrid/pester"
 	"io"
 	"net/http"
 	"net/url"
@@ -18,8 +19,8 @@ type (
 	ResponseHandlerFunc func(resp *http.Response) error
 
 	Handler struct {
-		Requests  map[string]RequestHandlerFunc
-		Responses map[string]ResponseHandlerFunc
+		RequestFns  map[string]RequestHandlerFunc
+		ResponseFns map[string]ResponseHandlerFunc
 	}
 
 	Facade struct {
@@ -153,20 +154,24 @@ func (r *Facade) Do(req *http.Request) (*http.Response, error) {
 		p, _ := regexp.Compile(pattern)
 		if p.MatchString(req.URL.Path) {
 
-			for _, handler := range handler.Requests {
-				err := handler(req)
+			for _, fn := range handler.RequestFns {
+				err := fn(req)
 				if err != nil {
 					return nil, err
 				}
 			}
 
-			resp, err := r.Client.Do(req)
+			//resp, err := r.Client.Do(req)
+			c := pester.NewExtendedClient(r.Client)
+			c.MaxRetries = 3
+			resp, err := c.Do(req)
+
 			if err != nil {
 				return nil, err
 			}
 
-			for _, handler := range handler.Responses {
-				err := handler(resp)
+			for _, fn := range handler.ResponseFns {
+				err := fn(resp)
 				if err != nil {
 					return nil, err
 				}

@@ -29,14 +29,16 @@ github.com/mkideal/pkg/encoding/jsonx
 github.com/mkideal/pkg/encoding
 # github.com/olekukonko/tablewriter v0.0.4
 github.com/olekukonko/tablewriter
+# github.com/pkg/math v0.0.0-20141027224758-f2ed9e40e245
+github.com/pkg/math
+# github.com/sethgrid/pester v0.0.0-20190127155807-68a33a018ad0
+github.com/sethgrid/pester
 # github.com/sirupsen/logrus v1.4.2
 github.com/sirupsen/logrus
 # github.com/spf13/cobra v0.0.5
 github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.3
 github.com/spf13/pflag
-# github.com/ymzuiku/hit v0.0.0-20190525155149-18097f1d08f4
-github.com/ymzuiku/hit
 # golang.org/x/sys v0.0.0-20190422165155-953cdadca894
 golang.org/x/sys/unix
 # k8s.io/client-go v11.0.0+incompatible
