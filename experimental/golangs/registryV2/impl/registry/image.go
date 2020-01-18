@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/aiziyuer/registryV2/impl/handler"
+	"sort"
 	"sync"
 )
 
@@ -107,7 +108,10 @@ func (r *Registry) SearchProject(nameQuery string, n int) ([]Project, error) {
 
 	wg.Wait()
 
-	// TODO 按照start数进行排序
+	// 按照start数进行排序
+	sort.SliceStable(projects, func(i, j int) bool {
+		return projects[i].StartCount > projects[j].StartCount
+	})
 
 	return projects, nil
 }
