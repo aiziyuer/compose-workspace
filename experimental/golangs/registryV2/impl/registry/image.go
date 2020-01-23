@@ -1,14 +1,19 @@
 package registry
 
 import (
+	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/aiziyuer/registryV2/impl/handler"
+	"github.com/aiziyuer/registryV2/impl/util"
 	"github.com/pkg/math"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"sort"
+	"strings"
 	"sync"
 )
 
@@ -30,8 +35,17 @@ type (
 		Projects      []Project `json:"results"`
 	}
 
-	PlatForm struct {
+	Platform struct {
 		Architecture string `json:"architecture"`
+		OS           string `json:"os"`
+	}
+
+	ManifestConfig struct {
+		Architecture string `json:"architecture"`
+		OS           string `json:"os"`
+		MediaType    string `json:"mediaType"`
+		Size         int    `json:"size"`
+		Digest       string `json:"digest"`
 	}
 
 	MediaType struct {
@@ -40,14 +54,26 @@ type (
 		Digest    string `json:"digest"`
 	}
 
-	ManifestsV2 struct {
+	SubManifestsV2 struct {
 		Digest        string      `json:"digest"`
 		MediaType     string      `json:"mediaType"`
 		Config        *MediaType  `json:"config"`
 		Layers        []MediaType `json:"layers"`
-		Platform      *PlatForm   `json:"platform"`
+		Platform      *Platform   `json:"platform"`
 		Size          int         `json:"size"`
 		SchemaVersion int         `json:"schemaVersion"`
+		RawBase64     string      `json:"rawBase64"`
+		RawSha256Sum  string      `json:"rawSha256Sum"`
+	}
+
+	ManifestV2 struct {
+		Digest        string           `json:"digest"`
+		SchemaVersion int              `json:"schemaVersion"`
+		MediaType     string           `json:"mediaType"`
+		Manifests     []SubManifestsV2 `json:"manifests"`
+		Size          int              `json:"size"`
+		RawBase64     string           `json:"rawBase64"`
+		RawSha256Sum  string           `json:"rawSha256Sum"`
 	}
 )
 
@@ -174,7 +200,198 @@ func (r *Registry) SearchProject(nameQuery string, n int) ([]Project, error) {
 	return projects, nil
 }
 
-func (r *Registry) ManifestV2(imageFullName string) ([]ManifestsV2, error) {
+const V2ManifestRequestTemplate = `
+{
+    "Method": "GET",
+    "Path": "/v2/{{ .RepoName}}/manifests/{{ .Index }}",
+    "Schema": "{{ .Schema }}",
+    "Host": "{{ .Host }}",
+    "Headers": {
+        "Accept-Encoding": "gzip",
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": "",
+        "User-Agent": "docker/1.13.1 go/go1.10.3 kernel/3.10.0-1062.4.1.el7.x86_64 os/linux arch/amd64 UpstreamClient(Docker-Client/1.13.1 \\(linux\\))",
+        "Accept": [
+            "application/vnd.docker.distribution.manifest.v2+json",
+            "application/vnd.docker.distribution.manifest.list.v2+json",
+            "application/vnd.docker.distribution.manifest.v1+prettyjws",
+            "application/json"
+        ]
+    }
+}
+`
 
-	return nil, nil
+const V2BlobRequestTemplate = `
+{
+    "Method": "GET",
+    "Path": "/v2/{{ .RepoName}}/blobs/{{ .Index }}",
+    "Schema": "{{ .Schema }}",
+    "Host": "{{ .Host }}",
+    "Headers": {
+        "Accept-Encoding": "identity",
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": "",
+        "User-Agent": "docker/1.13.1 go/go1.10.3 kernel/3.10.0-1062.4.1.el7.x86_64 os/linux arch/amd64 UpstreamClient(Docker-Client/1.13.1 \\(linux\\))"
+    }
+}
+`
+
+func (r *Registry) ManifestV2(imageFullName string) (*ManifestV2, error) {
+
+	manifestV2 := &ManifestV2{
+		Size: 0,
+		Manifests: []SubManifestsV2{
+			{
+				Config: nil,
+				Size:   0,
+			},
+		},
+	}
+
+	m := util.RegexNamedMatch(imageFullName, `(?:(?P<Host>^[^.]+\.[^/]+)/)?(?P<RepoName>[a-z0-9]+(?:[._\-/][a-z0-9]+)*):(?P<TagName>[a-z0-9]+(?:[._\-/][a-z0-9]+)*)`)
+	if len(m) == 0 {
+		return manifestV2, errors.New(fmt.Sprintf("image name(%s) invalid", imageFullName))
+	}
+
+	host := r.Endpoint.Host
+	if m["Host"] != "" {
+		host = m["Host"]
+	}
+
+	ch := make(chan *SubManifestsV2)
+	defer close(ch)
+	var jobWg, dataWg sync.WaitGroup
+
+	// 消费协程
+	go func() {
+
+		for subManifestsV2 := range ch {
+
+			func() {
+
+				defer dataWg.Done()
+
+				var tmpBody string
+				if err := r.Do(
+					V2ManifestRequestTemplate,
+					&handler.ApiRequestInput{
+						"Schema":   r.Endpoint.Schema,
+						"Host":     host,
+						"RepoName": m["RepoName"],
+						"Index":    subManifestsV2.Digest,
+					}, //
+					func(resp *http.Response) error {
+
+						subManifestsV2.Digest = resp.Header.Get("Docker-Content-Digest")
+						subManifestsV2.RawBase64 = base64.RawStdEncoding.EncodeToString([]byte(tmpBody))
+
+						tmpBody = util.ReadWithDefault(resp.Body, "{}")
+						h := sha256.New()
+						h.Write([]byte(tmpBody))
+						subManifestsV2.RawSha256Sum = hex.EncodeToString(h.Sum(nil))
+
+						return nil
+					},
+				); err != nil {
+					logrus.Error(err)
+					return
+				}
+
+				if err := json.Unmarshal([]byte(tmpBody), subManifestsV2); err != nil {
+					logrus.Error(err)
+				}
+
+				subManifestsV2.Size = subManifestsV2.Config.Size
+				for _, layer := range subManifestsV2.Layers {
+					subManifestsV2.Size += layer.Size
+				}
+
+				if err := r.Do(
+					V2BlobRequestTemplate,
+					&handler.ApiRequestInput{
+						"Schema":   r.Endpoint.Schema,
+						"Host":     host,
+						"RepoName": m["RepoName"],
+						"Index":    subManifestsV2.Config.Digest,
+					}, //
+					func(resp *http.Response) error {
+
+						config := ManifestConfig{}
+						if err := json.NewDecoder(resp.Body).Decode(&config); err != nil {
+							return err
+						}
+
+						subManifestsV2.Platform = &Platform{
+							Architecture: config.Architecture,
+							OS:           config.OS,
+						}
+						return nil
+					}, //
+				); err != nil {
+					logrus.Error(err)
+					return
+				}
+
+			}()
+		}
+	}()
+
+	// 生产协程
+	jobWg.Add(1)
+	go func() {
+		defer jobWg.Done()
+
+		var tmpBody string
+		if err := r.Do(
+			V2ManifestRequestTemplate,
+			&handler.ApiRequestInput{
+				"Schema":   r.Endpoint.Schema,
+				"Host":     host,
+				"RepoName": m["RepoName"],
+				"Index":    m["TagName"],
+			}, //
+			func(resp *http.Response) error {
+
+				manifestV2.Digest = resp.Header.Get("Docker-Content-Digest")
+				manifestV2.RawBase64 = base64.RawStdEncoding.EncodeToString([]byte(tmpBody))
+
+				tmpBody = util.ReadWithDefault(resp.Body, "{}")
+				h := sha256.New()
+				h.Write([]byte(tmpBody))
+				manifestV2.RawSha256Sum = hex.EncodeToString(h.Sum(nil))
+
+				return nil
+			},
+		); err != nil {
+			logrus.Error(err)
+			return
+		}
+
+		if strings.Contains(tmpBody, "manifests") {
+
+			if err := util.JsonX2Object(tmpBody, &manifestV2); err != nil {
+				logrus.Error(err)
+				return
+			}
+
+			for i := 0; i < len(manifestV2.Manifests); i++ {
+				dataWg.Add(1)
+				ch <- &manifestV2.Manifests[i]
+			}
+
+		} else {
+
+			manifestV2.Manifests[0].Digest = manifestV2.Digest
+			dataWg.Add(1)
+			ch <- &manifestV2.Manifests[0]
+
+		}
+	}()
+
+	// 等待任务结束
+	jobWg.Wait()
+	// 等待数据处理完
+	dataWg.Wait()
+
+	return manifestV2, nil
 }

@@ -1,6 +1,8 @@
 package registry
 
 import (
+	"encoding/base64"
+	"fmt"
 	"github.com/aiziyuer/registryV2/impl/common"
 	"github.com/aiziyuer/registryV2/impl/handler"
 	"net/http"
@@ -88,12 +90,17 @@ func (r *Registry) Login() error {
 	return nil
 }
 
-type ResponseHandleFunc func(response *http.Response) error
+type ResponseHandleFunc func(resp *http.Response) error
 
 func (r *Registry) Do(template string, input *handler.ApiRequestInput, fn ResponseHandleFunc) error {
 
-	q, err := handler.NewApiRequest(template, *input)
+	if r.Auth != nil {
+		basicAuth := fmt.Sprintf("%s:%s", r.Auth.UserName, r.Auth.PassWord)
+		encoded := base64.StdEncoding.EncodeToString([]byte(basicAuth))
+		(*input)["Authorization"] = fmt.Sprintf("Basic %s", encoded)
+	}
 
+	q, err := handler.NewApiRequest(template, *input)
 	if err != nil {
 		return err
 	}

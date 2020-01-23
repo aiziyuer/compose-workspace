@@ -9,6 +9,7 @@ import (
 	"github.com/aiziyuer/registryV2/impl/registry"
 	"github.com/aiziyuer/registryV2/impl/util"
 	"github.com/mitchellh/go-homedir"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"
@@ -16,9 +17,17 @@ import (
 	"strings"
 )
 
+var isDebug bool
+
 var rootCmd = &cobra.Command{
 	Use: "registryV2",
 	//TraverseChildren: true,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if isDebug {
+			logrus.SetLevel(logrus.DebugLevel)
+			logrus.SetReportCaller(true)
+		}
+	},
 }
 
 var outputFormat string
@@ -33,10 +42,19 @@ func Execute() {
 
 func init() {
 
+	// 默认关闭调试开关
+	isDebug = false
+
 	rootCmd.PersistentFlags().StringVarP(
 		&outputFormat,
 		"output", "o", "table",
 		"options output format: table, yaml, json ",
+	)
+
+	rootCmd.PersistentFlags().BoolVarP(
+		&isDebug,
+		"debug", "d", true,
+		"show verbose log ",
 	)
 
 }

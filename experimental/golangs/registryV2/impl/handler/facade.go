@@ -6,6 +6,7 @@ import (
 	"fmt"
 	. "github.com/aiziyuer/registryV2/impl/util"
 	"github.com/sethgrid/pester"
+	"github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"net/url"
@@ -60,6 +61,9 @@ func (r *ApiRequest) Render() (*ApiRequest, error) {
 		return nil, err
 	}
 	if err := t.Execute(&output, r.Input); err != nil {
+		logrus.Debug("textTemplate render failed")
+		logrus.Debugf("template: %s", r.Template)
+		logrus.Debugf("input: %s", r.Input)
 		return nil, err
 	}
 

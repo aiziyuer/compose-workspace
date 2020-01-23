@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/Jeffail/gabs v1.4.0
-	github.com/docker/distribution v2.7.1+incompatible
+	github.com/docker/distribution v2.7.1+incompatible // indirect
 	github.com/fanliao/go-promise v0.0.0-20141029170127-1890db352a72
 	github.com/fatih/color v1.8.0 // indirect
 	github.com/flosch/pongo2 v0.0.0-20190707114632-bbf5a6c351f4
@@ -21,6 +21,7 @@ require (
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/stretchr/testify v1.4.0 // indirect
+	github.com/xlab/treeprint v1.0.0
 	github.com/ymzuiku/hit v0.0.0-20190525155149-18097f1d08f4 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/yaml.v2 v2.2.4 // indirect
