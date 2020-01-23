@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"github.com/aiziyuer/registryV2/impl/handler"
 	"github.com/pkg/math"
+	"github.com/sirupsen/logrus"
+	"net/http"
 	"sort"
 	"sync"
 )
@@ -49,6 +51,25 @@ type (
 	}
 )
 
+const SearchProjectRequestTemplate = `
+{
+	"Method": "GET",
+	"Path": "/v1/search",
+	"Schema": "{{ .Schema }}",
+	"Host": "{{ .Host }}",
+	"Headers": {
+		"Content-Type": "application/json; charset=utf-8",
+		"Authorization": "{{ .Authorization }}",
+	},
+	"Params": {
+		"q": "{{ .NameQuery }}",
+		"n": "{{ .PageSize }}",
+		"page": "{{ .PageNo }}",
+	},
+	"Body": "",
+}
+`
+
 func (r *Registry) searchProject(requestInput *handler.ApiRequestInput) (*ProjectSearchResult, error) {
 
 	if r.Auth != nil {
@@ -57,38 +78,22 @@ func (r *Registry) searchProject(requestInput *handler.ApiRequestInput) (*Projec
 		(*requestInput)["Authorization"] = fmt.Sprintf("Basic %s", encoded)
 	}
 
-	q, err := handler.NewApiRequest(*requestInput, `
-	{
-		"Method": "GET",
-		"Path": "/v1/search",
-		"Schema": "{{ .Schema }}",
-		"Host": "{{ .Host }}",
-		"Headers": {
-			"Content-Type": "application/json; charset=utf-8",
-			"Authorization": "{{ .Authorization }}",
-		},
-        "Params": {
-            "q": "{{ .NameQuery }}",
-            "n": "{{ .PageSize }}",
-            "page": "{{ .PageNo }}",
-        },
-		"Body": "",
-	}
-`)
-	if err != nil {
-		return nil, err
-	}
-
-	req, _ := q.Wrapper()
-	resp, _ := r.HandlerFacade.Do(req)
-	if resp != nil {
-		defer func() {
-			_ = resp.Body.Close()
-		}()
-	}
-
 	var result ProjectSearchResult
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+
+	if err := r.Do( //
+		SearchProjectRequestTemplate, //
+		requestInput,                 //
+		func(resp *http.Response) error {
+
+			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+				logrus.Error(err)
+				return err
+			}
+
+			return nil
+		}, //
+	); err != nil {
+		logrus.Error(err)
 		return nil, err
 	}
 

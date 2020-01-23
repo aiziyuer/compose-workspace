@@ -8,12 +8,7 @@ import (
 
 func (r *Registry) Tags(repoName string) (string, error) {
 
-	q, err := handler.NewApiRequest(handler.ApiRequestInput{
-		"Schema":   r.Endpoint.Schema,
-		"Host":     r.Endpoint.Host,
-		"RepoName": repoName,
-		"Token":    "",
-	}, `
+	q, err := handler.NewApiRequest(`
 	{
 		"Method": "GET",
 		"Path": "/v2/{{ .RepoName }}/tags/list",
@@ -25,7 +20,12 @@ func (r *Registry) Tags(repoName string) (string, error) {
 		},
 		"Body": "",
 	}
-`)
+`, handler.ApiRequestInput{
+		"Schema":   r.Endpoint.Schema,
+		"Host":     r.Endpoint.Host,
+		"RepoName": repoName,
+		"Token":    "",
+	})
 	if err != nil {
 		return "", err
 	}
@@ -47,14 +47,7 @@ func (r *Registry) Tags(repoName string) (string, error) {
 
 func (r *Registry) TagsPaginated(repoName string, pageNo int, pageSize int) (string, error) {
 
-	q, err := handler.NewApiRequest(handler.ApiRequestInput{
-		"Schema":   r.Endpoint.Schema,
-		"Host":     r.Endpoint.Host,
-		"RepoName": repoName,
-		"PageNo":   pageNo,   // Result set will include values lexically after last.
-		"PageSize": pageSize, // Limit the number of entries in each response. It not present, all entries will be returned.
-		"Token":    "",
-	}, `
+	q, err := handler.NewApiRequest(`
 	{
 		"Method": "GET",
 		"Path": "/v2/{{ .RepoName }}/tags/list",
@@ -70,7 +63,14 @@ func (r *Registry) TagsPaginated(repoName string, pageNo int, pageSize int) (str
 		},
 		"Body": "",
 	}
-`)
+`, handler.ApiRequestInput{
+		"Schema":   r.Endpoint.Schema,
+		"Host":     r.Endpoint.Host,
+		"RepoName": repoName,
+		"PageNo":   pageNo,   // Result set will include values lexically after last.
+		"PageSize": pageSize, // Limit the number of entries in each response. It not present, all entries will be returned.
+		"Token":    "",
+	})
 	if err != nil {
 		return "", err
 	}

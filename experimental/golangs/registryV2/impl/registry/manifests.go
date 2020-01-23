@@ -15,13 +15,7 @@ func (r *Registry) Manifests(imageName string) (string, error) {
 		return "", errors.New(fmt.Sprintf("image name(%s) invalid", imageName))
 	}
 
-	q, err := handler.NewApiRequest(handler.ApiRequestInput{
-		"Schema":   r.Endpoint.Schema,
-		"Host":     r.Endpoint.Host,
-		"RepoName": m["RepoName"],
-		"TagName":  m["TagName"],
-		"Token":    "",
-	}, `
+	q, err := handler.NewApiRequest(`
 {
     "Method": "GET",
     "Path": "/v2/{{ .RepoName }}/manifests/{{ .TagName }}",
@@ -41,7 +35,13 @@ func (r *Registry) Manifests(imageName string) (string, error) {
     },
     "Body": ""
 }
-`)
+`, handler.ApiRequestInput{
+		"Schema":   r.Endpoint.Schema,
+		"Host":     r.Endpoint.Host,
+		"RepoName": m["RepoName"],
+		"TagName":  m["TagName"],
+		"Token":    "",
+	})
 	if err != nil {
 		return "", err
 	}

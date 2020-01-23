@@ -45,7 +45,7 @@ type (
 	}
 )
 
-func NewApiRequest(input map[string]interface{}, template string) (*ApiRequest, error) {
+func NewApiRequest(template string, input map[string]interface{}) (*ApiRequest, error) {
 	return (&ApiRequest{
 		Input:    input,
 		Template: template,

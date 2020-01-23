@@ -48,11 +48,7 @@ func NewClient(c *http.Client, endpoint *Endpoint, auth *common.Auth) *Registry 
 
 func (r *Registry) Ping() error {
 
-	q, err := handler.NewApiRequest(handler.ApiRequestInput{
-		"Schema": r.Endpoint.Schema,
-		"Host":   r.Endpoint.Host,
-		"Token":  "",
-	}, `
+	q, err := handler.NewApiRequest(`
 	{
 		"Method": "GET",
 		"Path": "/v2/",
@@ -64,7 +60,11 @@ func (r *Registry) Ping() error {
 		},
 		"Body": "",
 	}
-`)
+`, handler.ApiRequestInput{
+		"Schema": r.Endpoint.Schema,
+		"Host":   r.Endpoint.Host,
+		"Token":  "",
+	})
 	if err != nil {
 		return err
 	}
@@ -86,4 +86,30 @@ func (r *Registry) Login() error {
 	}
 
 	return nil
+}
+
+type ResponseHandleFunc func(response *http.Response) error
+
+func (r *Registry) Do(template string, input *handler.ApiRequestInput, fn ResponseHandleFunc) error {
+
+	q, err := handler.NewApiRequest(template, *input)
+
+	if err != nil {
+		return err
+	}
+
+	req, _ := q.Wrapper()
+	resp, _ := r.HandlerFacade.Do(req)
+	if resp != nil {
+		defer func() {
+			_ = resp.Body.Close()
+		}()
+	}
+
+	if err := fn(resp); err != nil {
+		return err
+	}
+
+	return nil
+
 }
