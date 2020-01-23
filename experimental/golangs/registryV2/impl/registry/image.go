@@ -369,7 +369,7 @@ func (r *Registry) ManifestV2(imageFullName string) (*ManifestV2, error) {
 
 		if strings.Contains(tmpBody, "manifests") {
 
-			if err := util.JsonX2Object(tmpBody, &manifestV2); err != nil {
+			if err := util.Json2Object(tmpBody, manifestV2); err != nil {
 				logrus.Error(err)
 				return
 			}
@@ -392,6 +392,11 @@ func (r *Registry) ManifestV2(imageFullName string) (*ManifestV2, error) {
 	jobWg.Wait()
 	// 等待数据处理完
 	dataWg.Wait()
+
+	manifestV2.Size = 0
+	for _, manifest := range manifestV2.Manifests {
+		manifestV2.Size += manifest.Size
+	}
 
 	return manifestV2, nil
 }

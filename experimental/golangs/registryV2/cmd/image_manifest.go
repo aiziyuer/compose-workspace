@@ -32,14 +32,14 @@ func init() {
 			}
 
 			tree := treeprint.New()
-			rootTree := tree.AddBranch(fmt.Sprintf("[ROOT] %s %d", ret.Digest, ret.Size))
+			rootTree := tree.AddBranch(fmt.Sprintf("[D] %s %d", ret.Digest, ret.Size))
 
 			for _, m := range ret.Manifests {
-				subTree := rootTree.AddBranch(fmt.Sprintf("[%s/%s] %s %d", m.Platform.Architecture, m.Platform.OS, m.Digest, m.Size))
-				subTree.AddBranch(fmt.Sprintf("[ config] %s %d", m.Config.Digest, m.Config.Size))
-				layerTree := subTree.AddBranch(fmt.Sprintf("[%7d] %s %d", len(m.Layers), "layers", m.Size-m.Config.Size))
+				subTree := rootTree.AddBranch(fmt.Sprintf("[P %s/%s] %s %d", m.Platform.Architecture, m.Platform.OS, m.Digest, m.Size))
+				subTree.AddNode(fmt.Sprintf("[C] %s %d", m.Config.Digest, m.Config.Size))
+				size := len(m.Layers)
 				for i, layer := range m.Layers {
-					layerTree.AddNode(fmt.Sprintf("[%3d] %s %d", i, layer.Digest, layer.Size))
+					subTree.AddNode(fmt.Sprintf("[L %3d] %s %d", size-i, layer.Digest, layer.Size))
 				}
 			}
 

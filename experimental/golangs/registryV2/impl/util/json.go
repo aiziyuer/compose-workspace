@@ -17,6 +17,16 @@ func JsonX2Object(s string, v interface{}) error {
 	return nil
 }
 
+func Json2Object(s string, v interface{}) error {
+
+	err := json.Unmarshal([]byte(s), &v)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func Object2Json(v interface{}) (string, error) {
 
 	ret, err := jsonx.Marshal(v, jsonx.WithExtraComma(), jsonx.WithComment())
