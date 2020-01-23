@@ -35,7 +35,7 @@ func init() {
 			rootTree := tree.AddBranch(fmt.Sprintf("[D] %s %d", ret.Digest, ret.Size))
 
 			for _, m := range ret.Manifests {
-				subTree := rootTree.AddBranch(fmt.Sprintf("[P %s/%s] %s %d", m.Platform.Architecture, m.Platform.OS, m.Digest, m.Size))
+				subTree := rootTree.AddBranch(fmt.Sprintf("[P %s/%s] %s %d", m.Platform.OS, m.Platform.Architecture, m.Digest, m.Size))
 				subTree.AddNode(fmt.Sprintf("[C] %s %d", m.Config.Digest, m.Config.Size))
 				//size := len(m.Layers)
 				for i, layer := range m.Layers {
