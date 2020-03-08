@@ -28,5 +28,5 @@
   systemd:
     name: trojan
     daemon_reload: yes
-    state: started
+    state: restarted
     enabled: yes
