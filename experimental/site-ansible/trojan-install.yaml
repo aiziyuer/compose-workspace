@@ -1,0 +1,7 @@
+---
+- hosts: trojan
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: basic, tags: basic }
+    - { role: nginx, tags: nginx }

@@ -1,0 +1,39 @@
+---
+
+# 初始化
+- name: change hostname
+  shell: |
+    hostnamectl set-hostname "{{ inventory_hostname | replace("_", "-") }}"
+
+- name: turn off selinux
+  selinux:
+   state: disabled
+
+- name: stop and disable firewalld
+  service:
+   name: firewalld
+   state: stopped
+   enabled: False
+
+- name: install nessary dependencies
+  when:
+   - ansible_os_family == "RedHat"
+  yum:
+    state: present
+    update_cache: yes
+    name:
+     - curl
+     - net-tools
+     - unzip
+     - gzip
+     - tar
+     - git
+     - zsh
+     - jq
+     - iptables
+     - conntrack
+     - sysstat
+     - wget
+     - lrzsz
+     - nc
+     - pv
