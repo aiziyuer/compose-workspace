@@ -22,6 +22,7 @@
       # ref: https://www.linode.com/docs/security/ssl/install-lets-encrypt-to-create-ssl-certificates/
       /opt/letsencrypt/letsencrypt-auto certonly --standalone \
          --renew-by-default -n --agree-tos --email ziyu0123456789@gmail.com -d {{ SITE_DOMAIN }}
+  ignore_errors: True
 
 - name: enable and start nginx
   systemd:
