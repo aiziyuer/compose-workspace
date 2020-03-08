@@ -5,7 +5,6 @@
    - ansible_os_family == "RedHat"
   yum:
     state: present
-    update_cache: yes
     name:
      - nginx
 
@@ -13,13 +12,10 @@
   systemd:
     name: nginx
     daemon_reload: yes
-    state: restarted
+    state: started
     enabled: yes
 
 - name: reload nginx
   shell:
     cmd: |
-      cat <<-EOF
-      hello world
-      EOF
       nginx -s reload

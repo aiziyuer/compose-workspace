@@ -15,10 +15,19 @@
     group: root
     mode: '0755'
 
-- name: register ddns cront tasks
+- name: add ddns update crontab job
   shell:
     cmd: |
-     export tmpCrontab="ddns-crontab-`date '+%Y%m%d%H%M%S'`"
+     export tmpCrontab="crontab-`date '+%Y%m%d%H%M%S'`"
      crontab -l >/tmp/${tmpCrontab}
-     echo "00 09 * * 1-5 /usr/local/bin/dynv6-ddns-update.sh" >>/tmp/${tmpCrontab}
+
+     # remove old
+     sed -i '/dynv6-ddns-update.sh/d' /tmp/${tmpCrontab}
+     
+     # add new job
+     cat << 'EOF' >>/tmp/${tmpCrontab}
+     00 09 * * 1-5 /usr/local/bin/dynv6-ddns-update.sh
+     EOF
+
+     # update crontab
      crontab /tmp/${tmpCrontab}

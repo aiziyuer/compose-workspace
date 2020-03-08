@@ -20,7 +20,6 @@
    - ansible_os_family == "RedHat"
   yum:
     state: present
-    update_cache: yes
     name:
      - curl
      - net-tools

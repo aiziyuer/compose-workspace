@@ -5,4 +5,5 @@
   roles:
     - { role: basic, tags: basic }
     - { role: ddns, tags: ddns }
+    - { role: certs, tags: certs }
     - { role: nginx, tags: nginx }
