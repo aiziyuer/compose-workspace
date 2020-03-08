@@ -17,16 +17,16 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   with_items:
-    - { src: "config.json.j2", dest: "/etc/trojan/config.json", mode: "600" }
+    - { src: "server.json.j2", dest: "/etc/trojan/server.json", mode: "600" }
     - {
         src: "trojan.service",
-        dest: "/etc/systemd/system/trojan.service",
+        dest: "/etc/systemd/system/trojan@.service",
         mode: "600",
       }
 
 - name: enable and start trojan
   systemd:
-    name: trojan
+    name: trojan@server
     daemon_reload: yes
     state: restarted
     enabled: yes
