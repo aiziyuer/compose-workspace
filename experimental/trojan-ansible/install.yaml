@@ -4,4 +4,5 @@
   become: yes
   roles:
     - { role: basic, tags: basic }
+    - { role: ddns, tags: ddns }
     - { role: nginx, tags: nginx }
