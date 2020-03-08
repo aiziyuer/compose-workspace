@@ -1,0 +1,25 @@
+---
+
+- name: nginx
+  when:
+   - ansible_os_family == "RedHat"
+  yum:
+    state: present
+    update_cache: yes
+    name:
+     - nginx
+
+- name: enable and start nginx
+  systemd:
+    name: nginx
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+
+- name: reload nginx
+  shell:
+    cmd: |
+      cat <<-EOF
+      hello world
+      EOF
+      nginx -s reload

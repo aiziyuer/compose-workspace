@@ -30,7 +30,7 @@ EOF
 
 ``` bash
 
-ansible-playbook -i inventory/example.ini trojan-install.yaml
+ansible-playbook -i inventory/example.ini install.yaml
 
 ```
 
