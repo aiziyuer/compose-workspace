@@ -1,23 +1,18 @@
-trojan自动安装
+trojan auto apply
 ===
 
-归档一下自动初始化一套trojan系统的编排任务
+archive a trojan ploybook.
 
-### ansible的运行环境
+### prepare
 
 ``` bash
 
-# 当前只支持centos7
 yum install -y \
     gcc python36-devel openssl-devel sshpass openssh-clients
 
-# 恢复类库
 pip3 install -r requirementes.txt
 
-# 清除所有虚环境的包 !! 危险 !!
-#pip3 freeze | xargs pip3 uninstall -y
-
-# ssh_config设置样例
+# prevent from ssh failed
 cat <<'EOF'>/root/.ssh/config
 Host *
     StrictHostKeyChecking no
@@ -26,11 +21,15 @@ EOF
 
 ```
 
-### 部署任务
+### how to use
 
 ``` bash
 
-ansible-playbook -i inventory/example.ini install.yaml
+# fork a config from example
+cp inventory/example.ini inventory/{domain}.ini 
+
+# apply
+ansible-playbook install.yaml -i inventory/{domain}.ini
 
 ```
 

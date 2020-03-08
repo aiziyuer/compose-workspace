@@ -1,12 +1,17 @@
 ---
 
-- name: nginx
+- name: intall nginx binary
   when:
    - ansible_os_family == "RedHat"
   yum:
     state: present
     name:
      - nginx
+
+- name: generate nginx site
+  template:
+    src: nginx-site-template.conf
+    dest: "{{ SITE_DOMAIN }}.conf"
 
 - name: enable and start nginx
   systemd:
@@ -19,3 +24,4 @@
   shell:
     cmd: |
       nginx -s reload
+

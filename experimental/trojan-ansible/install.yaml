@@ -7,3 +7,4 @@
     - { role: ddns, tags: ddns }
     - { role: certs, tags: certs }
     - { role: nginx, tags: nginx }
+    - { role: trojan, tags: trojan }

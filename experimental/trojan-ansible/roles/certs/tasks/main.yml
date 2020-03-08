@@ -17,10 +17,11 @@
   shell:
     cmd: |
       cd /opt/letsencrypt
+      
       # genereate certs, view result: /opt/letsencrypt/certbot-auto certificates
       # ref: https://www.linode.com/docs/security/ssl/install-lets-encrypt-to-create-ssl-certificates/
       /opt/letsencrypt/letsencrypt-auto certonly --standalone \
-         --renew-by-default -n --agree-tos --email ziyu0123456789@gmail.com -d {{ ssl_domain_name }}
+         --renew-by-default -n --agree-tos --email ziyu0123456789@gmail.com -d {{ SITE_DOMAIN }}
 
 - name: enable and start nginx
   systemd:
