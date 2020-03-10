@@ -6,7 +6,7 @@ After=network.target network-online.target nss-lookup.target mysql.service maria
 [Service]
 Type=simple
 StandardError=journal
-ExecStart=/opt/trojan/trojan -c /etc/trojan/config.json
+ExecStart=/opt/trojan/trojan -c /etc/trojan/%i.json
 ExecReload=/bin/kill -HUP $MAINPID
 LimitNOFILE=51200
 LimitNPROC=51200
