@@ -1,0 +1,33 @@
+---
+- name: ensure dir
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+   - "/etc/nginx/conf.d"
+
+- name: intall nginx binary
+  when:
+   - ansible_os_family == "RedHat"
+  yum:
+    state: present
+    name:
+     - nginx
+
+- name: generate nginx site
+  template:
+    src: nginx-site-template.conf
+    dest: "/etc/nginx/conf.d/{{ SITE_DOMAIN }}.conf"
+
+- name: enable and start nginx
+  systemd:
+    name: nginx
+    daemon_reload: yes
+    state: started
+    enabled: yes
+
+- name: reload nginx
+  shell:
+    cmd: |
+      nginx -s reload
+

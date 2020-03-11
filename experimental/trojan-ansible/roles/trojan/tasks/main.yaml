@@ -1,0 +1,32 @@
+---
+- name: ensure dir
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+   - "/etc/trojan"
+
+- name: download trojan release
+  unarchive:
+    src: https://github.com/trojan-gfw/trojan/releases/download/v1.14.1/trojan-1.14.1-linux-amd64.tar.xz
+    dest: /opt/
+    remote_src: yes
+
+- name: config trojan
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "server.json.j2", dest: "/etc/trojan/server.json", mode: "600" }
+    - {
+        src: "trojan.service",
+        dest: "/etc/systemd/system/trojan@.service",
+        mode: "600",
+      }
+
+- name: enable and start trojan
+  systemd:
+    name: trojan@server
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

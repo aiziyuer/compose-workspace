@@ -7,14 +7,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/aiziyuer/registryV2/impl/handler"
-	"github.com/aiziyuer/registryV2/impl/util"
-	"github.com/pkg/math"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"sort"
 	"strings"
 	"sync"
+
+	"github.com/aiziyuer/registryV2/impl/handler"
+	"github.com/aiziyuer/registryV2/impl/util"
+	"github.com/pkg/math"
+	"github.com/sirupsen/logrus"
 )
 
 type (
@@ -258,6 +259,11 @@ func (r *Registry) ManifestV2(imageFullName string) (*ManifestV2, error) {
 		host = m["Host"]
 	}
 
+	repoName := m["RepoName"]
+	if m["Host"] == "" && !strings.HasPrefix(m["RepoName"], "library") {
+		repoName = fmt.Sprintf("library/%s", m["RepoName"])
+	}
+
 	ch := make(chan *SubManifestsV2)
 	defer close(ch)
 	var jobWg, dataWg sync.WaitGroup
@@ -277,7 +283,7 @@ func (r *Registry) ManifestV2(imageFullName string) (*ManifestV2, error) {
 					&handler.ApiRequestInput{
 						"Schema":   r.Endpoint.Schema,
 						"Host":     host,
-						"RepoName": m["RepoName"],
+						"RepoName": repoName,
 						"Index":    subManifestsV2.Digest,
 					}, //
 					func(resp *http.Response) error {
@@ -311,7 +317,7 @@ func (r *Registry) ManifestV2(imageFullName string) (*ManifestV2, error) {
 					&handler.ApiRequestInput{
 						"Schema":   r.Endpoint.Schema,
 						"Host":     host,
-						"RepoName": m["RepoName"],
+						"RepoName": repoName,
 						"Index":    subManifestsV2.Config.Digest,
 					}, //
 					func(resp *http.Response) error {
@@ -347,7 +353,7 @@ func (r *Registry) ManifestV2(imageFullName string) (*ManifestV2, error) {
 			&handler.ApiRequestInput{
 				"Schema":   r.Endpoint.Schema,
 				"Host":     host,
-				"RepoName": m["RepoName"],
+				"RepoName": repoName,
 				"Index":    m["TagName"],
 			}, //
 			func(resp *http.Response) error {

@@ -1,0 +1,33 @@
+---
+
+- name: ensure cron service
+  systemd:
+    name: crond
+    daemon_reload: yes
+    state: started
+    enabled: yes
+
+- name: generate ddns crontab update task
+  template:
+    src: dynv6-ddns-update.sh
+    dest: /usr/local/bin/dynv6-ddns-update.sh
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: add ddns update crontab job
+  shell:
+    cmd: |
+     export tmpCrontab="crontab-`date '+%Y%m%d%H%M%S'`"
+     crontab -l >/tmp/${tmpCrontab}
+
+     # remove old
+     sed -i '/dynv6-ddns-update.sh/d' /tmp/${tmpCrontab}
+     
+     # add new job
+     cat << 'EOF' >>/tmp/${tmpCrontab}
+     00 09 * * 1-5 /usr/local/bin/dynv6-ddns-update.sh
+     EOF
+
+     # update crontab
+     crontab /tmp/${tmpCrontab}

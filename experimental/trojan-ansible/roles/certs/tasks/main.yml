@@ -1,0 +1,49 @@
+---
+
+- name: download letsencrypt cli tools
+  git:
+    repo: 'https://github.com/certbot/certbot'
+    dest: /opt/letsencrypt
+    update: yes
+
+- name: enable and start nginx
+  systemd:
+    name: nginx
+    daemon_reload: yes
+    state: stopped
+    enabled: yes
+
+- name: genereate key and certificates
+  shell:
+    cmd: |
+      cd /opt/letsencrypt
+      
+      # genereate certs, view result: /opt/letsencrypt/certbot-auto certificates
+      # ref: https://www.linode.com/docs/security/ssl/install-lets-encrypt-to-create-ssl-certificates/
+      /opt/letsencrypt/letsencrypt-auto certonly --standalone \
+         --renew-by-default -n --agree-tos --email ziyu0123456789@gmail.com -d {{ SITE_DOMAIN }}
+  ignore_errors: True
+
+- name: enable and start nginx
+  systemd:
+    name: nginx
+    daemon_reload: yes
+    state: started
+    enabled: yes
+
+- name: add ddns update crontab job
+  shell:
+    cmd: |
+     export tmpCrontab="crontab-`date '+%Y%m%d%H%M%S'`"
+     crontab -l >/tmp/${tmpCrontab}
+
+     # remove old
+     sed -i '/letsencrypt-auto renew/d' /tmp/${tmpCrontab}
+     
+     # add a job "do it per month"
+     cat << 'EOF' >>/tmp/${tmpCrontab}
+     0 0 1 * * cd /opt/letsencrypt && git pull; /opt/letsencrypt/letsencrypt-auto renew; nginx -s reload
+     EOF
+
+     # update crontab
+     crontab /tmp/${tmpCrontab}
