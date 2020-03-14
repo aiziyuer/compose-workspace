@@ -1,4 +1,10 @@
 ---
+- name: ensure dir
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+   - "/etc/nginx/conf.d"
 
 - name: intall nginx binary
   when:
@@ -11,7 +17,7 @@
 - name: generate nginx site
   template:
     src: nginx-site-template.conf
-    dest: "{{ SITE_DOMAIN }}.conf"
+    dest: "/etc/nginx/conf.d/{{ SITE_DOMAIN }}.conf"
 
 - name: enable and start nginx
   systemd:

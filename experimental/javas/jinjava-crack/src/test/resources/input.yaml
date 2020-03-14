@@ -1,0 +1,14 @@
+DEPLOY_META:
+  COMPONENTS:
+    ECS:
+      - hostname: ecs0001
+        ip: 1.1.1.1
+        eip: 100.95.11.11
+        vip: 1.1.1.3
+      - hostname: ecs002
+        ip: 1.1.1.2
+        eip: 100.95.11.12
+        vip: 1.1.1.3
+    CSE:
+      serviceEnadpoint:
+         configCenter: 234
