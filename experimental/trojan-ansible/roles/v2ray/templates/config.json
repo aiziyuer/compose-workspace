@@ -3,7 +3,7 @@
     "protocol": "vmess",
     "settings": {
       "clients": [{
-        "id": "自行生成 UUID",
+        "id": "{{ SITE_DOMAIN }}",
         "alterId": 64
        }]
     },
@@ -11,14 +11,14 @@
       "network":"http",
       "security": "tls",
       "httpSettings":{
-        "host": ["在这里填写伪装域名，也可以不填写，直接去掉双引号"],
-        "path": "在这里填写网页路径，以 / 开头，例如 /abcde/xyz"
+        "host": ["{{ SITE_DOMAIN }}"],
+        "path": "{{ SITE_DOMAIN }}"
       },
       "tlsSettings": {
-        "serverName": "填写域名，如：xxx.com",
+        "serverName": "{{ SITE_DOMAIN }}",
         "certificates": [{
-          "certificateFile": "公钥文件绝对路径，如：/path/to/xxx.com.crt",
-          "keyFile": "私钥文件绝对路径，如：/path/to/xxx.com.key"
+          "certificateFile": "/etc/letsencrypt/live/{{ SITE_DOMAIN }}/fullchain.pem",
+          "keyFile": "/etc/letsencrypt/live/{{ SITE_DOMAIN }}/privkey.pem"
         }]
       }
     }

@@ -1,7 +1,7 @@
 ---
 
 # 安装示例:
-# 
+# ansible-playbook install-v2ray-server.yaml -i inventory/example.ini
 - hosts: server
   gather_facts: yes
   become: yes

@@ -1,26 +1,39 @@
 ---
+
+# ansible-playbook install-v2ray-server.yaml -i inventory/change.dynv6.net.ini --tags v2ray
 - name: ensure dir
-    file:
+  file:
     path: "{{ item }}"
     state: directory
-    with_items:
-    - "/etc/trojan"
+  with_items:
+    - "/etc/v2ray"
 
 - name: download trojan release
-    unarchive:
+  unarchive:
     src: https://github.com/v2ray/v2ray-core/releases/download/v4.22.1/v2ray-linux-64.zip
-    dest: /opt/
+    dest: /tmp/
     remote_src: yes
 
-- name: config trojan
-    template:
+- name: get v2ray binary
+  shell: |
+    cp -v /tmp/v2ray /usr/bin/v2ray
+    chmod +x /usr/bin/v2ray
+
+- name: config v2ray
+  template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    with_items:
-    - { src: "server.json.j2", dest: "/etc/trojan/server.json", mode: "600" }
+  with_items:
+    - { src: "config.json.j2", dest: "/etc/v2ray/config.json", mode: "600" }
     - {
-        src: "trojan.service",
-        dest: "/etc/systemd/system/trojan@.service",
+        src: "v2ray.service",
+        dest: "/etc/systemd/system/v2ray.service",
         mode: "600",
-        }
-    
+      }
+
+- name: enable and start v2ray
+  systemd:
+    name: v2ray
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
