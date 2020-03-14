@@ -152,8 +152,6 @@ RUN set -eux; \
 	/usr/libexec/podman/conmon --help >/dev/null; \
 	slirp4netns --help >/dev/null; \
 	fuse-overlayfs --help >/dev/null;
-COPY entrypoint.sh /
-ENTRYPOINT [ "/entrypoint.sh" ]
 VOLUME /podman/.local/share/containers/storage
 WORKDIR /podman
 ENV HOME=/podman
