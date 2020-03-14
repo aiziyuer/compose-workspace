@@ -24,7 +24,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   with_items:
-    - { src: "config.json.j2", dest: "/etc/v2ray/config.json", mode: "600" }
+    - { src: "config.json", dest: "/etc/v2ray/config.json", mode: "600" }
     - {
         src: "v2ray.service",
         dest: "/etc/systemd/system/v2ray.service",
