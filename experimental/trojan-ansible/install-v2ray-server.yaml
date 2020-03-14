@@ -1,0 +1,13 @@
+---
+
+# 安装示例:
+# 
+- hosts: server
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: basic, tags: basic }
+    - { role: ddns, tags: ddns }
+    - { role: certs, tags: certs }
+    - { role: nginx, tags: nginx }
+    - { role: v2ray, tags: v2ray }

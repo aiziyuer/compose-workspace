@@ -1,0 +1,26 @@
+---
+- name: ensure dir
+    file:
+    path: "{{ item }}"
+    state: directory
+    with_items:
+    - "/etc/trojan"
+
+- name: download trojan release
+    unarchive:
+    src: https://github.com/v2ray/v2ray-core/releases/download/v4.22.1/v2ray-linux-64.zip
+    dest: /opt/
+    remote_src: yes
+
+- name: config trojan
+    template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    with_items:
+    - { src: "server.json.j2", dest: "/etc/trojan/server.json", mode: "600" }
+    - {
+        src: "trojan.service",
+        dest: "/etc/systemd/system/trojan@.service",
+        mode: "600",
+        }
+    
