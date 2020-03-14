@@ -1,5 +1,5 @@
 ---
-- hosts: trojan
+- hosts: server
   gather_facts: yes
   become: yes
   roles:
