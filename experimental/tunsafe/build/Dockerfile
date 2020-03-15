@@ -50,7 +50,7 @@ RUN \
 
 WORKDIR /opt/llvm
 RUN cmake /opt/llvm-src
-RUN cmake --build . 
+RUN cmake --build . --config Release -- -j 4
 RUN cmake -DCMAKE_INSTALL_PREFIX=/usr -P cmake_install.cmake
 
 # RUN yum install -y \
