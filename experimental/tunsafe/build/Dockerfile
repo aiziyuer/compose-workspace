@@ -53,9 +53,6 @@ RUN cmake /opt/llvm-src
 RUN cmake --build . --config Release -- -j 4
 RUN cmake -DCMAKE_INSTALL_PREFIX=/usr -P cmake_install.cmake
 
-# RUN yum install -y \
-#         libedit-dev ncurses ncurses-devel libxml2 libxml2-devel
-
 # install 
 # RUN \
 #       git clone https://github.com/TunSafe/TunSafe.git \
