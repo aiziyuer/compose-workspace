@@ -1,0 +1,9 @@
+version: '2.1'
+
+services:
+
+  build:
+    build: build
+    image: aiziyuer/centos7:clang-6.0
+
+  

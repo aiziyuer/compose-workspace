@@ -1,6 +1,5 @@
 FROM centos:7
 
-
 RUN \
     yum group install -y "Development Tools" 
 
@@ -10,14 +9,16 @@ RUN \
     | tar zx --keep-old-files --strip-components=1 -C /usr
 
 # install llvm
+WORKDIR /opt/llvm-src
 RUN \
-   mkdir -p /opt/llvm-src /opt/llvm; \
    curl -sL https://releases.llvm.org/6.0.1/llvm-6.0.1.src.tar.xz \
-    | tar xJ --strip-components=1 -C /opt/llvm-src \
-   cd /opt/llvm; \
-   cmake /opt/llvm-src; \
-   cmake --build . ; \
-   cmake -DCMAKE_INSTALL_PREFIX=/tmp/llvm -P cmake_install.cmake
+    | tar xJ --strip-components=1 -C .
+WORKDIR /opt/llvm
+RUN cmake /opt/llvm-src
+
+RUN cmake --build . 
+
+RUN cmake -DCMAKE_INSTALL_PREFIX=/tmp/llvm -P cmake_install.cmake
 
 # install 
 # RUN \
