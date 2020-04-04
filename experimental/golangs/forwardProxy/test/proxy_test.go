@@ -10,6 +10,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 	"testing"
 )
 
@@ -56,6 +57,7 @@ func TestSocketProxy2HttpUpstream(t *testing.T) {
 
 			return d.Dial(network, addr)
 		},
+		Logger: log.New(os.Stdout, "", log.LstdFlags),
 	}
 	server, _ := socks5.New(conf)
 
@@ -63,17 +65,30 @@ func TestSocketProxy2HttpUpstream(t *testing.T) {
 	log.Fatal(server.ListenAndServe("tcp", ":8080"))
 }
 
+// DNSResolver uses the system DNS to resolve host names
+type DNSResolver struct{}
+
+func (d DNSResolver) Resolve(ctx context.Context, name string) (context.Context, net.IP, error) {
+
+	addr, err := net.ResolveIPAddr("ip", name)
+	if err != nil {
+		return ctx, nil, err
+	}
+
+	return context.WithValue(ctx, "name", name), addr.IP, err
+}
+
 func TestSocketProxy2SocketUpstream(t *testing.T) {
 
-	conf := &socks5.Config{
+	server, _ := socks5.New(&socks5.Config{
 		Dial: func(ctx context.Context, network, addr string) (conn net.Conn, err error) {
 
 			d, _ := proxy.SOCKS5("tcp", "10.10.10.254:1080", nil, proxy.Direct)
 
 			return d.Dial(network, addr)
 		},
-	}
-	server, _ := socks5.New(conf)
+		Resolver: &DNSResolver{},
+	})
 
 	// curl -vI -x socks5h://127.0.0.1:8080 https://www.google.com
 	log.Fatal(server.ListenAndServe("tcp", ":8080"))
