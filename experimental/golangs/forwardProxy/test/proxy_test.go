@@ -93,3 +93,27 @@ func TestSocketProxy2SocketUpstream(t *testing.T) {
 	// curl -vI -x socks5h://127.0.0.1:8080 https://www.google.com
 	log.Fatal(server.ListenAndServe("tcp", ":8080"))
 }
+
+type TransparentAddressRewriter struct {
+}
+
+func (d TransparentAddressRewriter) Rewrite(ctx context.Context, request *socks5.Request) (context.Context, *socks5.AddrSpec) {
+	return ctx, request.DestAddr
+}
+
+func TestTransparentProxy2SocketUpstream(t *testing.T) {
+
+	server, _ := socks5.New(&socks5.Config{
+		Dial: func(ctx context.Context, network, addr string) (conn net.Conn, err error) {
+
+			d, _ := proxy.SOCKS5("tcp", "10.10.10.254:1080", nil, proxy.Direct)
+
+			return d.Dial(network, addr)
+		},
+		Resolver: &DNSResolver{},
+		Rewriter: &TransparentAddressRewriter{},
+	})
+
+	// curl -vI -x socks5h://127.0.0.1:8080 https://www.google.com
+	log.Fatal(server.ListenAndServe("tcp", ":8080"))
+}
