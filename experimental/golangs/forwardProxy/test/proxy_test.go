@@ -101,6 +101,7 @@ func (d TransparentAddressRewriter) Rewrite(ctx context.Context, request *socks5
 	return ctx, request.DestAddr
 }
 
+// 参考: https://ymmt2005.hatenablog.com/entry/2016/03/13/Transparent_SOCKS_proxy_in_Go_to_replace_NAT
 func TestTransparentProxy2SocketUpstream(t *testing.T) {
 
 	server, _ := socks5.New(&socks5.Config{
