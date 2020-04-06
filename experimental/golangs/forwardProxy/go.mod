@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5
+	github.com/cybozu-go/transocks v1.1.1
 	github.com/mwitkow/go-http-dialer v0.0.0-20161116154839-378f744fb2b8
 	golang.org/x/crypto v0.0.0-20200403201458-baeed622b8d8 // indirect
 	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e

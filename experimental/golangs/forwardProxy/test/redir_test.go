@@ -15,6 +15,7 @@ import (
 func TestRedir2SocketUpstream(t *testing.T) {
 
 	l, _ := net.Listen("tcp", ":8080")
+
 	for {
 		conn, _ := l.Accept()
 		go func(src net.Conn) {
@@ -40,18 +41,5 @@ func TestRedir2SocketUpstream(t *testing.T) {
 
 		}(conn)
 	}
-
-	//server, _ := transocks.NewServer(&transocks.Config{
-	//	Addr:            "",
-	//	ProxyURL:        nil,
-	//	Mode:            "",
-	//	ShutdownTimeout: 0,
-	//	Dialer:          nil,
-	//	Logger:          nil,
-	//	Env:             nil,
-	//})
-	//
-	//l, _ := net.Listen("tcp", ":8080")
-	//server.Serve(l)
 
 }
