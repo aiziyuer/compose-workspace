@@ -1,31 +1,16 @@
 package test
 
 import (
+	"github.com/aiziyuer/forwardProxy/dns/dhsclient"
 	"github.com/gogf/gf/encoding/gparser"
 	"github.com/gogf/gf/util/gconv"
-	"github.com/likexian/doh-go"
-	dohdns "github.com/likexian/doh-go/dns"
 	"github.com/miekg/dns"
 	"github.com/sirupsen/logrus"
-	"golang.org/x/net/context"
 	"log"
 	"net"
 	"testing"
 	"time"
 )
-
-func TestTCPDnsForward(t *testing.T) {
-
-	h := dns.NewServeMux()
-	h.HandleFunc(".", func(response dns.ResponseWriter, message *dns.Msg) {
-
-		logrus.Info(gparser.MustToJsonString(message))
-
-	})
-
-	log.Fatal(dns.ListenAndServe("0.0.0.0:10053", "tcp", h))
-
-}
 
 func defaultResolver(protocol string, q *dns.Question, resp *dns.Msg) {
 
@@ -53,6 +38,7 @@ func defaultResolver(protocol string, q *dns.Question, resp *dns.Msg) {
 	resp.Answer = append(resp.Answer, ret.Answer[0])
 }
 
+// FAQ: https://github.com/d2g/dnsforwarder/blob/master/server.go
 func TestUDPDnsForward(t *testing.T) {
 
 	handleFunc := func(protocol string) func(rw dns.ResponseWriter, req *dns.Msg) {
@@ -63,9 +49,6 @@ func TestUDPDnsForward(t *testing.T) {
 			r.RecursionAvailable = req.RecursionDesired
 			r.Authoritative = true
 			r.SetRcode(req, dns.RcodeSuccess)
-
-			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-			defer cancel()
 
 			for _, q := range req.Question {
 				switch q.Qtype {
@@ -83,21 +66,43 @@ func TestUDPDnsForward(t *testing.T) {
 					}
 				case dns.TypeA:
 					// DoH
-					client := doh.Use(doh.CloudflareProvider, doh.Quad9Provider, doh.GoogleProvider)
-					ret, _ := client.Query(ctx, dohdns.Domain(q.Name), dohdns.TypeA)
+					client := dhsclient.NewCloudFlareDNS(func(option *dhsclient.DoHOption) {
+						option.BaseURL = "https://1.1.1.1/dns-query"
+					})
+					ret := client.Lookup(q.Name, q.Qtype)
+					logrus.Debugf(
+						"A q.Name: %s, q.Qtype: %s, ret: %s",
+						gconv.String(q.Name), gconv.String(q.Qtype),
+						gparser.MustToJsonString(ret),
+					)
 					for _, answer := range ret.Answer {
 						r.Answer = append(r.Answer, &dns.A{
-							Hdr: dns.RR_Header{Name: dns.Fqdn(q.Name), Rrtype: q.Qtype, Class: dns.ClassINET, Ttl: gconv.Uint32(answer.TTL)},
-							A:   net.ParseIP(answer.Data),
+							Hdr: dns.RR_Header{
+								Name:   dns.Fqdn(q.Name),
+								Rrtype: q.Qtype,
+								Class:  dns.ClassINET,
+								Ttl:    gconv.Uint32(answer.TTL),
+							},
+							A: net.ParseIP(answer.Data),
 						})
 					}
 				case dns.TypeAAAA:
 					// DoH
-					client := doh.Use(doh.CloudflareProvider, doh.Quad9Provider, doh.GoogleProvider)
-					ret, _ := client.Query(ctx, dohdns.Domain(q.Name), dohdns.TypeAAAA)
+					client := dhsclient.NewCloudFlareDNS(dhsclient.WithBaseURL("https://1.1.1.1/dns-query"))
+					ret := client.Lookup(q.Name, q.Qtype)
+					logrus.Debugf(
+						"AAAA q.Name: %s, q.Qtype: %s, ret: %s",
+						gconv.String(q.Name), gconv.String(q.Qtype),
+						gparser.MustToJsonString(ret),
+					)
 					for _, answer := range ret.Answer {
 						r.Answer = append(r.Answer, &dns.AAAA{
-							Hdr:  dns.RR_Header{Name: dns.Fqdn(q.Name), Rrtype: q.Qtype, Class: dns.ClassINET, Ttl: gconv.Uint32(answer.TTL)},
+							Hdr: dns.RR_Header{
+								Name:   dns.Fqdn(q.Name),
+								Rrtype: q.Qtype,
+								Class:  dns.ClassINET,
+								Ttl:    gconv.Uint32(answer.TTL),
+							},
 							AAAA: net.ParseIP(answer.Data),
 						})
 					}
