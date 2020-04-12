@@ -2,11 +2,14 @@ package test
 
 import (
 	"github.com/gogf/gf/encoding/gparser"
+	"github.com/gogf/gf/util/gconv"
 	"github.com/miekg/dns"
+	"github.com/sensepost/godoh/dnsclient"
 	"github.com/sirupsen/logrus"
 	"log"
 	"net"
 	"testing"
+	"time"
 )
 
 // 参考: https://ymmt2005.hatenablog.com/entry/2016/03/13/Transparent_SOCKS_proxy_in_Go_to_replace_NAT
@@ -32,22 +35,56 @@ func TestUDPDnsForward(t *testing.T) {
 
 		r := new(dns.Msg)
 		r.SetReply(req)
+		r.RecursionAvailable = req.RecursionDesired
 		r.SetRcode(req, dns.RcodeSuccess)
 
 		for _, q := range req.Question {
 			switch q.Qtype {
 			default:
-				r.SetRcode(req, dns.RcodeNameError)
+				defaultResolver := &dns.Client{
+					Net:          "tcp",
+					ReadTimeout:  1000 * time.Second,
+					WriteTimeout: 1000 * time.Second,
+				}
+
+				ret, _, err := defaultResolver.Exchange(
+					new(dns.Msg).SetQuestion(q.Name, q.Qtype),
+					"114.114.114.114:53",
+				)
+				// handle failed
+				if err != nil {
+					r.SetRcode(req, dns.RcodeServerFailure)
+					logrus.Printf("Error: DNS:" + err.Error())
+					continue
+				}
+				// domain not found
+				if ret != nil && (ret.Rcode != dns.RcodeSuccess || len(ret.Answer) == 0) {
+					r.SetRcode(req, dns.RcodeNameError)
+					continue
+				}
+				r.Answer = append(r.Answer, ret.Answer[0])
 			case dns.TypeA:
+				// DoH
+				client := &dnsclient.CloudflareDNS{BaseURL: "https://1.1.1.1/dns-query"}
+				tmpResp := client.Lookup(q.Name, q.Qtype)
+				logrus.Debugf("query from cloudflare: %s", gparser.MustToJsonString(tmpResp))
+
 				a := &dns.A{
-					Hdr: dns.RR_Header{Name: q.Name, Rrtype: q.Qtype, Class: dns.ClassINET, Ttl: 0},
-					A:   net.ParseIP("0.0.0.0").To4(),
+					Hdr: dns.RR_Header{Name: dns.Fqdn(q.Name), Rrtype: q.Qtype, Class: dns.ClassINET, Ttl: gconv.Uint32(tmpResp.TTL)},
+					A:   net.ParseIP(tmpResp.Data).To4(),
 				}
 				r.Answer = append(r.Answer, a)
 			case dns.TypeAAAA:
-				r.SetRcode(req, dns.RcodeNotImplemented)
-			case dns.TypeDS:
-				r.SetRcode(req, dns.RcodeNotImplemented)
+				// DoH
+				client := &dnsclient.CloudflareDNS{BaseURL: "https://1.1.1.1/dns-query"}
+				tmpResp := client.Lookup(q.Name, q.Qtype)
+				logrus.Debugf("query from cloudflare: %s", gparser.MustToJsonString(tmpResp))
+
+				a := &dns.AAAA{
+					Hdr:  dns.RR_Header{Name: dns.Fqdn(q.Name), Rrtype: q.Qtype, Class: dns.ClassINET, Ttl: gconv.Uint32(tmpResp.TTL)},
+					AAAA: net.ParseIP(tmpResp.Data),
+				}
+				r.Answer = append(r.Answer, a)
 			}
 		}
 

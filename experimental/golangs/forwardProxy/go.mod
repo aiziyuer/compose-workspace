@@ -6,8 +6,11 @@ require (
 	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5
 	github.com/cybozu-go/transocks v1.1.1
 	github.com/gogf/gf v1.12.1
+	github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a // indirect
+	github.com/likexian/doh-go v0.6.4 // indirect
 	github.com/miekg/dns v1.1.29
 	github.com/mwitkow/go-http-dialer v0.0.0-20161116154839-378f744fb2b8
+	github.com/sensepost/godoh v0.0.0-20191023141503-a10879c1ec15
 	github.com/sirupsen/logrus v1.5.0
 	golang.org/x/crypto v0.0.0-20200403201458-baeed622b8d8 // indirect
 	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
