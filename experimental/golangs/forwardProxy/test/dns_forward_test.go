@@ -2,12 +2,9 @@ package test
 
 import (
 	"github.com/aiziyuer/forwardProxy/dns/dhsclient"
-	"github.com/gogf/gf/encoding/gparser"
-	"github.com/gogf/gf/util/gconv"
 	"github.com/miekg/dns"
 	"github.com/sirupsen/logrus"
 	"log"
-	"net"
 	"testing"
 	"time"
 )
@@ -64,48 +61,10 @@ func TestUDPDnsForward(t *testing.T) {
 					} else {
 						defaultResolver(protocol, &q, r)
 					}
-				case dns.TypeA:
+				case dns.TypeA, dns.TypeAAAA:
 					// DoH
-					client := dhsclient.NewCloudFlareDNS(func(option *dhsclient.DoHOption) {
-						option.BaseURL = "https://1.1.1.1/dns-query"
-					})
-					ret := client.Lookup(q.Name, q.Qtype)
-					logrus.Debugf(
-						"A q.Name: %s, q.Qtype: %s, ret: %s",
-						gconv.String(q.Name), gconv.String(q.Qtype),
-						gparser.MustToJsonString(ret),
-					)
-					for _, answer := range ret.Answer {
-						r.Answer = append(r.Answer, &dns.A{
-							Hdr: dns.RR_Header{
-								Name:   dns.Fqdn(q.Name),
-								Rrtype: q.Qtype,
-								Class:  dns.ClassINET,
-								Ttl:    gconv.Uint32(answer.TTL),
-							},
-							A: net.ParseIP(answer.Data),
-						})
-					}
-				case dns.TypeAAAA:
-					// DoH
-					client := dhsclient.NewCloudFlareDNS(dhsclient.WithBaseURL("https://1.1.1.1/dns-query"))
-					ret := client.Lookup(q.Name, q.Qtype)
-					logrus.Debugf(
-						"AAAA q.Name: %s, q.Qtype: %s, ret: %s",
-						gconv.String(q.Name), gconv.String(q.Qtype),
-						gparser.MustToJsonString(ret),
-					)
-					for _, answer := range ret.Answer {
-						r.Answer = append(r.Answer, &dns.AAAA{
-							Hdr: dns.RR_Header{
-								Name:   dns.Fqdn(q.Name),
-								Rrtype: q.Qtype,
-								Class:  dns.ClassINET,
-								Ttl:    gconv.Uint32(answer.TTL),
-							},
-							AAAA: net.ParseIP(answer.Data),
-						})
-					}
+					doh := dhsclient.NewCloudFlareDNS(dhsclient.WithBaseURL("https://1.1.1.1/dns-query"))
+					doh.LookupAppend(r, q.Name, q.Qtype)
 				}
 			}
 

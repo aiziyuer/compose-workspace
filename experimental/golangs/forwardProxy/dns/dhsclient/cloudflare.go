@@ -2,9 +2,11 @@ package dhsclient
 
 import (
 	"encoding/json"
+	"github.com/gogf/gf/util/gconv"
 	"github.com/miekg/dns"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"time"
 )
@@ -13,7 +15,16 @@ type CloudflareDNS struct {
 	BaseURL string
 }
 
-func (c *CloudflareDNS) Lookup(name string, rType uint16) RequestResponse {
+func (c *CloudflareDNS) Lookup(name string, rType uint16) *dns.Msg {
+
+	ret := new(dns.Msg)
+	ret.SetQuestion(name, rType)
+	c.LookupAppend(ret, name, rType)
+
+	return ret
+}
+
+func (c *CloudflareDNS) LookupAppend(r *dns.Msg, name string, rType uint16) {
 
 	client := http.Client{
 		Timeout: time.Second * 20,
@@ -49,5 +60,36 @@ func (c *CloudflareDNS) Lookup(name string, rType uint16) RequestResponse {
 		log.Fatal(err)
 	}
 
-	return resp
+	for _, answer := range resp.Answer {
+
+		var rr dns.RR
+
+		switch gconv.Uint16(answer.Type) {
+		case dns.TypeA:
+			rr = &dns.A{
+				Hdr: dns.RR_Header{
+					Name:   dns.Fqdn(answer.Name),
+					Rrtype: gconv.Uint16(answer.Type),
+					Class:  dns.ClassINET,
+					Ttl:    gconv.Uint32(answer.TTL),
+				},
+				A: net.ParseIP(answer.Data),
+			}
+		case dns.TypeAAAA:
+			rr = &dns.AAAA{
+				Hdr: dns.RR_Header{
+					Name:   dns.Fqdn(answer.Name),
+					Rrtype: gconv.Uint16(answer.Type),
+					Class:  dns.ClassINET,
+					Ttl:    gconv.Uint32(answer.TTL),
+				},
+				AAAA: net.ParseIP(answer.Data),
+			}
+		}
+
+		if rr != nil {
+			r.Answer = append(r.Answer, rr)
+		}
+	}
+
 }

@@ -1,8 +1,11 @@
 package dhsclient
 
+import "github.com/miekg/dns"
+
 // Client is an interface all clients should conform to.
 type Client interface {
-	Lookup(name string, rType uint16) RequestResponse
+	Lookup(name string, rType uint16) *dns.Msg
+	LookupAppend(r *dns.Msg, name string, rType uint16)
 }
 
 func NewCloudFlareDNS(modOptions ...ModDoHOption) *CloudflareDNS {
