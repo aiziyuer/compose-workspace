@@ -1,0 +1,128 @@
+
+# 创建自己的namespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-lb
+
+############## vscode start  #################
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: external-lb
+  name: vscode
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  namespace: external-lb
+  name: vscode
+subsets:
+  - addresses:
+      - ip: 10.10.10.156
+    ports:
+      - port: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: external-lb
+  name: vscode
+spec:
+  rules:
+  - host: vscode.aiziyuer.synology.me
+    http:
+      paths:
+      - backend:
+          serviceName: vscode
+          servicePort: 80
+############## vscode end   #################
+
+############# transmission start #################
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: external-lb
+  name: transmission
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  namespace: external-lb
+  name: transmission
+subsets:
+  - addresses:
+      - ip: 10.10.10.202
+    ports:
+      - port: 9091
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: external-lb
+  name: transmission
+spec:
+  rules:
+  - host: transmission.aiziyuer.synology.me
+    http:
+      paths:
+      - backend:
+          serviceName: transmission
+          servicePort: 9091
+############# transmission end  #################
+
+############# vmware start #################
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: external-lb
+  name: vmware
+spec:
+  ports:
+    - port: 443
+      targetPort: 443
+      protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  namespace: external-lb
+  name: vmware
+subsets:
+  - addresses:
+      - ip: 10.10.10.10
+    ports:
+      - port: 443
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: external-lb
+  name: vmware
+spec:
+  tls:
+  - hosts:
+    - vmware.aiziyuer.synology.me
+    secretName: cafe-secret
+  rules:
+  - host: vmware.aiziyuer.synology.me
+    http:
+      paths:
+      - backend:
+          serviceName: vmware
+          servicePort: 443
+############# vmware end  #################
