@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+    jupyter:
+      build: ./jupyter
+      image: aiziyuer/jupyterlab
+      # command: sh -c "while true; do sleep 1; done"
+      network_mode: "host"
