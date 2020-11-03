@@ -6,3 +6,5 @@ services:
       image: aiziyuer/jupyterlab
       # command: sh -c "while true; do sleep 1; done"
       network_mode: "host"
+      volumes:
+       - "./jupyter:/data"
