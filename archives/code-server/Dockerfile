@@ -22,7 +22,7 @@ RUN \
 # 常用的工具
 RUN \
     yum install -y \
-        vim net-tools git \
+        vim net-tools git224 \
         tcpdump openssh-clients \
         zsh zip unzip telnet \
         lsof wget curl \
