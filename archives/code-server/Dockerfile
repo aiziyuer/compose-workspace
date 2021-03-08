@@ -21,7 +21,8 @@ RUN \
 
 # 常用的工具
 RUN \
-    yum install -y \
+    yum remove -y git* \
+    && yum install -y \
         vim net-tools git224 \
         tcpdump openssh-clients \
         zsh zip unzip telnet \
